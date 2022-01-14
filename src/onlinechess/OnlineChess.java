@@ -28,9 +28,14 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 public class OnlineChess extends JFrame{
 
     OnlineChess(){
+        
+        int chose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 1, 1, chessico);
+//        if(exit == 0) {System.exit(0);} //yes
+//        else if(exit == 1) {}//no
+        
         setLayout(new GridLayout(8,8));
         
-        initBoard();
+        initBoard(chose);
 
         setTitle("Online Chess");
         setIconImage(chessico.getImage());
@@ -66,55 +71,62 @@ public class OnlineChess extends JFrame{
         timer.start(); 
     }
     
-    private void initBoard(){
+    private void initBoard(int chose){
         boolean cell = true;
-        for(int i=1,j=0;i<65;i++){
-            ++j;
-            ImageIcon icon = new ImageIcon("img/n.png");
-            if(j==1||j==8){icon = new ImageIcon("img/torre.png");}
+        if(chose == 0){
+            for(int i=1,j=0;i<65;i++){
+                ++j;
+                ImageIcon icon = pieces(j);
+
+                JButton btn = new JButton(String.valueOf(j),icon);
+
+                if((i%2==0 && cell)||(i%2!=0 && !cell)){btn.setBackground(Color.blue);}
+                else{btn.setBackground(Color.gray);}
+                if(i%8==0){cell=!cell;}
+                add(btn);            
+            }
+        } else {for(int i=1,j=65;i<65;i++){
+                --j;
+                ImageIcon icon = pieces(j);
+
+                JButton btn = new JButton(String.valueOf(j),icon);
+
+                if((i%2==0 && cell)||(i%2!=0 && !cell)){btn.setBackground(Color.blue);}
+                else{btn.setBackground(Color.gray);}
+                if(i%8==0){cell=!cell;}
+                add(btn);
+            }
+        }
+    }
+    
+    private ImageIcon pieces(int j){
+        ImageIcon icon = new ImageIcon("img/n.png");
+        if(j==1||j==8){icon = new ImageIcon("img/torre.png");}
             else if(j==2||j==7){icon = new ImageIcon("img/caballo.png");}
             else if(j==3||j==6){icon = new ImageIcon("img/alfil.png");}
             else if(j==4){icon = new ImageIcon("img/reina.png");}
             else if(j==5){icon = new ImageIcon("img/rei.png");}
             else if(j>8 && j<17){icon = new ImageIcon("img/peon.png");}
             
-            else if(j==1+56||j==8+56){icon = new ImageIcon("img/torre.png");}
-            else if(j==2+56||j==7+56){icon = new ImageIcon("img/caballo.png");}
-            else if(j==3+56||j==6+56){icon = new ImageIcon("img/alfil.png");}
-            else if(j==4+56){icon = new ImageIcon("img/reina.png");}
-            else if(j==5+56){icon = new ImageIcon("img/rei.png");}
-            else if(j>8+40 && j<17+40){icon = new ImageIcon("img/peon.png");}
-            
-            JButton btn = new JButton(String.valueOf(j),icon);
-            
-            if((i%2==0 && cell)||(i%2!=0 && !cell)){btn.setBackground(Color.blue);}
-            else{btn.setBackground(Color.gray);}
-            if(i%8==0){cell=!cell;}
-            
-            add(btn);
-        }
+            else if(j==1+56||j==8+56){icon = new ImageIcon("img/wtorre.png");}
+            else if(j==2+56||j==7+56){icon = new ImageIcon("img/wcaballo.png");}
+            else if(j==3+56||j==6+56){icon = new ImageIcon("img/walfil.png");}
+            else if(j==4+56){icon = new ImageIcon("img/wreina.png");}
+            else if(j==5+56){icon = new ImageIcon("img/wrei.png");}
+            else if(j>8+40 && j<17+40){icon = new ImageIcon("img/wpeon.png");}
+        return icon;
     }
     
     private void exit(){        
         int exit = JOptionPane.showConfirmDialog(this, "Tienes partidas en curso. Seguro que quiere salir?", "Salir", 1, 1, chessico);
-        if(exit == 0) {System.exit(0);} //no
-        else if(exit == 1) {}//yes
-               
-        //        if(parkedTicket){
-        //            int exit = JOptionPane.showConfirmDialog(this, "Tienes partidas en curso. Seguro que quiere salir?", "Salir", 1, 1, chessico);
-        //            if(exit == 1) {System.exit(0);} //no
-        //            else if(exit == 0) {//yes
-        //                if(recupTicket() == 0){
-        //                    ticketGen();
-        //                    return;
-        //                }
-        //            }
-        //        }
+        if(exit == 0) {System.exit(0);} //yes
+        else if(exit == 1) {}//no
     }
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try{
