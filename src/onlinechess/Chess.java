@@ -30,8 +30,22 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
  * @author Javier Palacios Botejara
  */
 public class Chess extends JFrame{
+        
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try{
+                    new Chess().setVisible(true);
+                } catch(Throwable e){LogGen.error(e.getMessage());}
+            }
+        });
+    }
     
-    Chess(){
+    public Chess(){
         
 //        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 1, 1, chessico);
 //        if(exit == 0) {System.exit(0);} //yes
@@ -43,12 +57,13 @@ public class Chess extends JFrame{
         board = new Board(8,8, start);
         add(board);
         
+        new GameChess();
+        
         setTitle("Online Chess");
         setIconImage(chessico.getImage());
         setSize(500,500);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setVisible(true);
-//        setResizable(false);
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -81,20 +96,6 @@ public class Chess extends JFrame{
         int exit = JOptionPane.showConfirmDialog(this, "Tienes partidas en curso. Seguro que quiere salir?", "Salir", 1, 1, chessico);
         if(exit == 0) {System.exit(0);} //yes
         else if(exit == 1) {}//no
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try{
-                    new Chess().setVisible(true);
-                } catch(Throwable e){LogGen.error(e.getMessage());}
-            }
-        });
     }
     
     // VARIABLE DECLARATION
