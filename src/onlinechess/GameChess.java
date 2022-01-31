@@ -32,24 +32,25 @@ public class GameChess implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-        Icon cell = btn.getIcon(); //to check for empty cells
+         String piecetemp = btn.getIcon().toString().replaceAll("(img/)|(.png)","");
+//        Icon cell = btn.getIcon(); //to check for empty cells
         int to = Integer.parseInt(btn.getText());
                
         i++;
         
-        if(selected && allowedMove(to, !piece.equals(null))){
+        if(selected && allowedMove(to, !piecetemp.equals("n"))){
             prev.setBackground(background);
-            prev.setIcon(null);
+            prev.setIcon(new ImageIcon("img/n.png"));
             btn.setIcon(icon);
             selected = false;
             Chess.board.storeState(); 
             
-        }else if(!selected && !cell.equals(null)){
+        }else if(!selected && !piecetemp.equals("n")){
             prev = btn;
-            icon = cell;
             selected = true;
+            piece = piecetemp;
+            icon = btn.getIcon();
             background = prev.getBackground();
-            piece = cell.toString().replaceAll("(img/)|(.png)","");
             prev.setBackground(Color.red);
         }
         

@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -61,7 +62,7 @@ public class Board extends JPanel{
             String[] icons = state.split("");
             for (int i = 0; i < getComponentCount(); i++){
                 ImageIcon icon = new ImageIcon("img/"+icons[i]+".png");
-                if(icons[i].contains("n")){icon = null;}
+//                if(icons[i].contains("n")){icon = null;}
 
                 JButton btn = (JButton) getComponents()[i];
                 btn.setIcon(icon);
@@ -76,8 +77,10 @@ public class Board extends JPanel{
         //Get buttons as array and get positions
         for (int i = 0; i < getComponentCount(); i++){
             JButton btn = (JButton) getComponents()[i];
-            String imgName = btn.getIcon().toString();
-            board += imgName.replaceAll("(img/)|(.png)","");
+            //this gives problems
+//            if(btn.getIcon().equals(null)){board += "n";}
+//            else{board += btn.getIcon().toString().replaceAll("(img/)|(.png)","");}
+            board += btn.getIcon().toString().replaceAll("(img/)|(.png)","");
         }
         plays.add(board);
     }
