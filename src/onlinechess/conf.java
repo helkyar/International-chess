@@ -4,31 +4,36 @@
  */
 package onlinechess;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+
+//May be highly inneficient
 
 /**
  *
  * @author Javier Palacios Botejara
  */
-public class Cnf {
+public class conf {
 
+    public static Dimension context; 
     public static Map<String, Integer> board;
     public static Map<String, String> img;
-    public static String[] start = new String[1];
+    public static Map<String, String> start;
+    
+    //Types of plays:
+    private static int choose = 0;
+    String std = "rhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHR";
+    String pawn = "pppkpppppppppppppppppppp----------------PPPPPPPPPPPPPPPPPPPPKPPP";
+    String out = "pppppppprhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHRPPPPPPPP"; 
+                                                                                                          
+    public conf (){
+        context = new Dimension(600,500);
         
-    public Cnf (){
-        board = new HashMap<String, Integer>() {};
-        board.put("h",8);
-        board.put("w",8);
-        
-        start[0] = (
-            "rhbkqbhr"+"pppppppp"+
-            "nnnnnnnn"+"nnnnnnnn"+
-            "nnnnnnnn"+"nnnnnnnn"+
-            "PPPPPPPP"+"RHBQKBHR"
-        );
-                
+        board = new HashMap<>();
+        board.put("h", 18);
+        board.put("w", 8);
+         
         img = new HashMap<>();
         img.put("R", "img/T.png");
         img.put("H", "img/H.png");
@@ -43,6 +48,11 @@ public class Cnf {
         img.put("k", "img/L.png");
         img.put("p", "img/O.png");
         img.put("n", "null");
+        
+        start = new HashMap<>();
+        start.put("standart", std);
+        start.put("pawnbattle", pawn);  
+        start.put("outofbounds", out);
     }   
     
     public static String getImg(String s){
@@ -55,6 +65,6 @@ public class Cnf {
     }
     
     public static String init(){
-        return start[0];
+        return start.values().toArray()[choose].toString();
     }
 }

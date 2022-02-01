@@ -54,6 +54,7 @@ public class Board extends JPanel{
                 //Set pieces through button text
                 JButton btn = new JButton();
                 try{btn.setText(icons[tile]);}catch(Exception e){}
+                finally{btn.setText("-");}
                 //Set tiles color pattern (alternated). Int cast for precision
                 if (((int)tile + alt) % 2 == 0){btn.setBackground(Color.blue);}
                 else {btn.setBackground(Color.gray);}
@@ -70,13 +71,17 @@ public class Board extends JPanel{
         String[] tile = state.split("");
         
         for (int i = 0; i < getComponentCount(); i++){
-            JButton btn = (JButton) getComponents()[i];
-                     
-            ImageIcon icon = null;
-            if(!tile[i].equals("n")){icon = new ImageIcon(Cnf.getImg(tile[i]));}
-               
-            try{btn.setText(tile[i]);}catch(Exception e){}
-            try{btn.setIcon(icon);}catch(Exception e){}
+            try{         
+                JButton btn = (JButton) getComponents()[i];
+                
+                ImageIcon icon = null;
+                boolean full = !tile[i].equals("-");
+                if(full){icon = new ImageIcon(conf.getImg(tile[i]));}
+
+                btn.setText(tile[i]);
+                btn.setIcon(icon);
+                
+            }catch(Exception e){}
         }
     }
     

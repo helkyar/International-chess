@@ -53,7 +53,7 @@ public class Chess extends JFrame{
 
         setLayout(new BorderLayout());
         
-        new Cnf();
+        new conf();
         add(new GameChess(isWhite));
         
         setTitle("Online Chess");
