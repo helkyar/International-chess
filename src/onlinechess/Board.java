@@ -22,17 +22,20 @@ import onlinechess.helpers.LogGen;
  */
 public class Board extends JPanel{
     
-    private int h;
-    private int w;
+    static int h;
+    static int w;
     private String state;
-    public static ArrayList<String> plays;
+    private boolean isWhite;
+    public static ArrayList<String> record;
     
-    public Board (int h, int w, String state){
+    public Board (int h, int w, String state, boolean isWhite){
         this.h = h;
         this.w = w;
+        
+        this.isWhite = isWhite;
+        record = new ArrayList<String>();
         this.state = state;
-        plays = new ArrayList<String>();
-        plays.add(state);
+        record.add(state);
         
         setLayout(new GridLayout(h, w));
         
@@ -42,13 +45,17 @@ public class Board extends JPanel{
     }    
     
     private void initBoard(int h, int w){
-        // create a reverse board? d
-        for(int row = 0, col = 1; row < h; col++){                
-            //Set btn id.
-            JButton btn = new JButton(String.valueOf(row*w+col));
+        // create a reverse board 
+        int r = 0;
+        if(!isWhite){r=65;}
+        
+        for(int row = 0, col = 1; row < h; col++){                  
+            //Set btn id.            
+            String id = String.valueOf(Math.abs((row * w + col) - r));
+            JButton btn = new JButton(id);
                 
-            //Set cells color pattern (alterned).
-            if (((int)row+col) % 2 == 0){btn.setBackground(Color.blue);}
+            //Set cells color pattern (alternated). Int cast for precision
+            if (((int)row + col) % 2 == 0){btn.setBackground(Color.blue);}
             else {btn.setBackground(Color.gray);}
             add(btn);
             
@@ -57,16 +64,20 @@ public class Board extends JPanel{
         }
     }
     public void setState(String state){
-        //Get buttons as array and set pieces
+        
         try{
+            //Reverse board for whites
+            if(isWhite){state = new StringBuilder(state).reverse().toString();}
+            //Get buttons as array and set pieces
             String[] icons = state.split("");
+            
             for (int i = 0; i < getComponentCount(); i++){
                 ImageIcon icon = new ImageIcon("img/"+icons[i]+".png");
-//                if(icons[i].contains("n")){icon = null;}
 
                 JButton btn = (JButton) getComponents()[i];
                 btn.setIcon(icon);
             }
+            
         }catch(Exception e){
             LogGen.error("Number of pieces and board size don't match");
         }
@@ -74,15 +85,14 @@ public class Board extends JPanel{
     
     public void storeState(){
         String board = "";
-        //Get buttons as array and get positions
+        //Get buttons as array and store positions
         for (int i = 0; i < getComponentCount(); i++){
             JButton btn = (JButton) getComponents()[i];
-            //this gives problems
-//            if(btn.getIcon().equals(null)){board += "n";}
-//            else{board += btn.getIcon().toString().replaceAll("(img/)|(.png)","");}
             board += btn.getIcon().toString().replaceAll("(img/)|(.png)","");
         }
-        plays.add(board);
+        //WHY?????????? why i need to do this? comment line below to see shit happen
+        if(isWhite){board = new StringBuilder(board).reverse().toString();}
+        record.add(board);
     }
     
     public void startBoard(ActionListener e){

@@ -47,21 +47,16 @@ public class Chess extends JFrame{
     
     public Chess(){
         
-//        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 1, 1, chessico);
-//        if(exit == 0) {System.exit(0);} //yes
-//        else if(exit == 1) {}//no
+        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 1, 1, chessico);
+        if(choose == 0) {isWhite = true;} //yes
+        else if(choose == 1) {isWhite = false;}//no
 
-        setLayout(new BorderLayout());
-        
-        String start = "THBQKBHTPPPPPPPPnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnOOOOOOOOYJVWLVJY";
-        board = new Board(8,8, start);
-        add(board);
-        
-        new GameChess();
+        setLayout(new BorderLayout());     
+        add(new GameChess(isWhite));
         
         setTitle("Online Chess");
         setIconImage(chessico.getImage());
-        setSize(500,500);
+        setSize(800,800);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setVisible(true);
 
@@ -101,7 +96,7 @@ public class Chess extends JFrame{
     // VARIABLE DECLARATION
     private ImageIcon chessico = new ImageIcon("img/chessico.png");
     
-    public static Board board;
+    public static boolean isWhite;
     
     private JTextField dateText = new JTextField();
     private DateFormat timeFormat = new SimpleDateFormat("  kk:mm:ss  dd/MM/yyyy  ");  

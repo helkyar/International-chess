@@ -11,67 +11,88 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author admin
  */
-public class GameChess implements ActionListener{
+public class GameChess extends JPanel implements ActionListener{
     private static JButton prev;
     private static boolean selected;
     private static Color background;
     private static String piece;
     private static Icon icon;
     
-    private static int i;
+    private static Board board;
     
-    public GameChess(){
-        Chess.board.startBoard(this);
+    //Future ENUM
+    private String init = "YJVWLVJYOOOOOOOOnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnPPPPPPPPTHBQKBHT";
+    private int height = 8;
+    private int width = 8;
+    
+    public GameChess(boolean isWhite){
+        board = new Board(height,width, init, isWhite);
+        board.startBoard(this);
+        add(board);
+        
+    //test ------------------------------------
+        JButton btn = new JButton("T", new ImageIcon("m"));
+        btn.addActionListener(this);  
+        add(btn);
+    //----------------------------------------
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-         String piecetemp = btn.getIcon().toString().replaceAll("(img/)|(.png)","");
-//        Icon cell = btn.getIcon(); //to check for empty cells
-        int to = Integer.parseInt(btn.getText());
-               
-        i++;
+        String cell = btn.getIcon().toString().replaceAll("(img/)|(.png)","");
+          
+        if(e.getActionCommand().equals("T")){test();}
         
-        if(selected && allowedMove(to, !piecetemp.equals("n"))){
-            prev.setBackground(background);
+        else if(selected && allowedMove(btn, cell)){
             prev.setIcon(new ImageIcon("img/n.png"));
+            prev.setBackground(background);
             btn.setIcon(icon);
             selected = false;
-            Chess.board.storeState(); 
+            board.storeState(); 
             
-        }else if(!selected && !piecetemp.equals("n")){
+        }else if(!selected && !cell.equals("n")){
             prev = btn;
             selected = true;
-            piece = piecetemp;
+            piece = cell;
             icon = btn.getIcon();
             background = prev.getBackground();
             prev.setBackground(Color.red);
-        }
-        
-        if(i == 10){
-            i = 0;
-            String choose = JOptionPane.showInputDialog(Chess.board, "mimi");
-            Chess.board.setState(Chess.board.plays.get(Integer.parseInt(choose)));
-        }
-        
+        }        
     }    
     
-    private boolean allowedMove(int to, boolean targed){
-        
+    private boolean allowedMove(JButton btn, String targed){
+        int to = Integer.parseInt(btn.getText());
         int from = Integer.parseInt(prev.getText());
-        if(piece.equals("T")||piece.equals("Y")){return true;}
-        else if(piece.equals("H")||piece.equals("J")){return true;}
-        else if(piece.equals("B")||piece.equals("V")){return true;}
-        else if(piece.equals("Q")||piece.equals("W")){return true;}
-        else if(piece.equals("K")||piece.equals("L")){return true;}
-        else if(piece.equals("P")||piece.equals("O")){return new Pawn(from, to, targed).allowed();}
         
+        //Pieces allowed moves
+        if(piece.equals("T")||piece.equals("Y"))
+            {return true;}
+        else if(piece.equals("H")||piece.equals("J"))
+            {return true;}
+        else if(piece.equals("B")||piece.equals("V"))
+            {return true;}
+        else if(piece.equals("Q")||piece.equals("W"))
+            {return true;}
+        else if(piece.equals("K")||piece.equals("L"))
+            {return true;}
+        else if(piece.equals("P")||piece.equals("O"))
+            {return new Pawn(from, to, piece, targed).allowed();}
+        //Game allowed moves
+            //path closed by other pieces
+            //check posibility (but who knows)
+            //enroque
         return false;
+    }
+
+    private void test() {
+        String choose = JOptionPane.showInputDialog(board, "Set state");
+        board.setState(board.record.get(Integer.parseInt(choose)));
     }
 }
