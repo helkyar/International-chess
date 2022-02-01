@@ -20,7 +20,7 @@ public class Cnf {
     }
     
     public Cnf (){
-        map = new HashMap<String, String>();
+        map = new HashMap<>();
         map.put("R", "img/T.png");
         map.put("H", "img/H.png");
         map.put("B", "img/B.png");
@@ -33,6 +33,6 @@ public class Cnf {
         map.put("q", "img/W.png");
         map.put("k", "img/L.png");
         map.put("p", "img/O.png");
-        map.put("n", "img/null.png");
+        map.put("n", "null");
     }
 }
