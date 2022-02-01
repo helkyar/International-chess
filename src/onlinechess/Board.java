@@ -76,7 +76,7 @@ public class Board extends JPanel{
 //                ImageIcon icon = new ImageIcon("img/"+icons[i]+".png");
                 System.out.println(Cnf.get(icons[i]));
                 
-                ImageIcon icon = new ImageIcon(new Cnf().map.get(icons[i]).toString());
+                ImageIcon icon = new ImageIcon(Cnf.get(icons[i]));
 
                 JButton btn = (JButton) getComponents()[i];
                 btn.setIcon(icon);
