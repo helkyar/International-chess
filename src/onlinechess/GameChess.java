@@ -20,19 +20,14 @@ import javax.swing.JPanel;
 public class GameChess extends JPanel implements ActionListener{
     private static JButton prev;
     private static boolean selected;
-    private static Color background;
     private static String piece;
     private static Icon icon;
+    private static Color bg;
     
     private static Board board;
     
-    //Future ENUM
-    private String init = "rhbkqbhrppppppppnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnPPPPPPPPRHBQKBHR";
-    private int height = 8;
-    private int width = 8;
-    
     public GameChess(boolean isWhite){
-        board = new Board(height,width, init, isWhite);
+        board = new Board(Cnf.size(), Cnf.init(), isWhite);
         board.startBoard(this);
         add(board);
         
@@ -46,14 +41,20 @@ public class GameChess extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-        String tile = btn.getIcon().toString().replaceAll("(img/)|(.png)","");
+        String tile = e.getActionCommand();
+        
+        System.out.println(board.getPosition(btn));//nice
         
         if(e.getActionCommand().equals("T")){test();}
         
+        //Move piece system
         else if(selected && allowedMove(btn, tile)){
-            prev.setIcon(new ImageIcon("img/n.png"));
-            prev.setBackground(background);
+            prev.setBackground(bg);
+            prev.setIcon(null);
+            prev.setText("n");
+            btn.setText(piece);
             btn.setIcon(icon);
+            
             selected = false;
             board.storeState(); 
             
@@ -62,28 +63,29 @@ public class GameChess extends JPanel implements ActionListener{
             selected = true;
             piece = tile;
             icon = btn.getIcon();
-            background = prev.getBackground();
+            bg = prev.getBackground();
             prev.setBackground(Color.red);
         }        
     }    
     
     private boolean allowedMove(JButton btn, String targed){
-        int to = Integer.parseInt(btn.getText());
-        int from = Integer.parseInt(prev.getText());
+        int to = board.getPosition(btn);
+        int from = board.getPosition(prev);
         
         //Pieces allowed moves
-        if(piece.equals("T")||piece.equals("Y"))
+        if(piece.equalsIgnoreCase("R"))
             {return true;}
-        else if(piece.equals("H")||piece.equals("J"))
+        else if(piece.equalsIgnoreCase("H"))
             {return true;}
-        else if(piece.equals("B")||piece.equals("V"))
+        else if(piece.equalsIgnoreCase("B"))
             {return true;}
-        else if(piece.equals("Q")||piece.equals("W"))
+        else if(piece.equalsIgnoreCase("Q"))
             {return true;}
-        else if(piece.equals("K")||piece.equals("L"))
+        else if(piece.equalsIgnoreCase("K"))
             {return true;}
-        else if(piece.equals("P")||piece.equals("O"))
-            {return new Pawn(from, to, piece, targed).allowed();}
+        else if(piece.equalsIgnoreCase("P"))
+        {return new Pawn(from, to, piece, targed).allowed();}
+            
         //Game allowed moves
             //path closed by other pieces
             //check posibility (but who knows)

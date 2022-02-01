@@ -28,9 +28,9 @@ public class Board extends JPanel{
     private boolean isWhite;
     public static ArrayList<String> record;
     
-    public Board (int h, int w, String state, boolean isWhite){
-        this.h = h;
-        this.w = w;
+    public Board (int[] size, String state, boolean isWhite){
+        this.h = size[0];
+        this.w = size[1];
         
         this.isWhite = isWhite;
         record = new ArrayList<String>();
@@ -45,45 +45,38 @@ public class Board extends JPanel{
     }    
     
     private void initBoard(int h, int w){
-        // create a reverse board 
-        int r = 0;
-        if(!isWhite){r=65;}
+        //Reverse board for whites
+        if(isWhite){state = new StringBuilder(state).reverse().toString();}
+        //Get pieces as array and set pieces
+        String[] icons = state.split("");
         
-        for(int row = 0, col = 1; row < h; col++){                  
-            //Set btn id.            
-            String id = String.valueOf(Math.abs((row * w + col) - r));
-            JButton btn = new JButton(id);
-                
-            //Set tiles color pattern (alternated). Int cast for precision
-            if (((int)row + col) % 2 == 0){btn.setBackground(Color.blue);}
-            else {btn.setBackground(Color.gray);}
-            add(btn);
-            
-            //Reseter to avoid nested loops. 
-            if(col == w){col = 0; row += 1;}
+        for(int tile = 0, alt = 0; tile < h*w; tile++){                                     
+                //Set pieces through button text
+                JButton btn = new JButton();
+                try{btn.setText(icons[tile]);}catch(Exception e){}
+                //Set tiles color pattern (alternated). Int cast for precision
+                if (((int)tile + alt) % 2 == 0){btn.setBackground(Color.blue);}
+                else {btn.setBackground(Color.gray);}
+                add(btn);     
+
+                if(tile % w == 0){alt++;}
         }
     }
+    
     public void setState(String state){
+        //Reverse board for whites
+        if(isWhite){state = new StringBuilder(state).reverse().toString();}
+        //Get pieces as array and set pieces
+        String[] tile = state.split("");
         
-        try{
-            //Reverse board for whites
-            if(isWhite){state = new StringBuilder(state).reverse().toString();}
-            //Get buttons as array and set pieces
-            String[] icons = state.split("");
-            
-            for (int i = 0; i < getComponentCount(); i++){
-                //Asociate piece enum to image (B: whitebishop.png)
-//                ImageIcon icon = new ImageIcon("img/"+icons[i]+".png");
-                System.out.println(Cnf.get(icons[i]));
-                
-                ImageIcon icon = new ImageIcon(Cnf.get(icons[i]));
-
-                JButton btn = (JButton) getComponents()[i];
-                btn.setIcon(icon);
-            }
-            
-        }catch(Exception e){
-            LogGen.error("Number of pieces and board size don't match");
+        for (int i = 0; i < getComponentCount(); i++){
+            JButton btn = (JButton) getComponents()[i];
+                     
+            ImageIcon icon = null;
+            if(!tile[i].equals("n")){icon = new ImageIcon(Cnf.getImg(tile[i]));}
+               
+            try{btn.setText(tile[i]);}catch(Exception e){}
+            try{btn.setIcon(icon);}catch(Exception e){}
         }
     }
     
@@ -91,10 +84,10 @@ public class Board extends JPanel{
         String board = "";
         //Get buttons as array and store positions
         for (int i = 0; i < getComponentCount(); i++){
-            JButton btn = (JButton) getComponents()[i];
-            board += btn.getIcon().toString().replaceAll("(img/)|(.png)","");
+            JButton btn = (JButton) getComponents()[i];         
+            board += btn.getText();
         }
-        //WHY?????????? why i need to do this? comment line below to see shit happen
+        //Store same string independent of color played
         if(isWhite){board = new StringBuilder(board).reverse().toString();}
         record.add(board);
     }
@@ -106,8 +99,11 @@ public class Board extends JPanel{
         }
     }
     
-    public String getTile(int i){
-        JButton t = (JButton) getComponent(i);
-        return t.getText();
+    public int getPosition(JButton b){
+          for (int i = 0; i < getComponentCount(); i++){
+            JButton btn = (JButton) getComponents()[i];
+            if(b == btn){return i+1;}
+          }
+          return -1;
     }
 }
