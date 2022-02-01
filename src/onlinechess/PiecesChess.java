@@ -28,7 +28,7 @@ class Pawn{
         if(Math.abs(from - to) % Board.h == 0 ){return true;} 
         else {return false;}
         
-        //Know if targed cell is full (v)
+        //Know if targed tile is full (v)
         //Know if targed cell is fiend/foe (v)
         //Aboid bumping into other pieces
     }

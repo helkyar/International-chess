@@ -54,7 +54,7 @@ public class Board extends JPanel{
             String id = String.valueOf(Math.abs((row * w + col) - r));
             JButton btn = new JButton(id);
                 
-            //Set cells color pattern (alternated). Int cast for precision
+            //Set tiles color pattern (alternated). Int cast for precision
             if (((int)row + col) % 2 == 0){btn.setBackground(Color.blue);}
             else {btn.setBackground(Color.gray);}
             add(btn);
@@ -72,7 +72,11 @@ public class Board extends JPanel{
             String[] icons = state.split("");
             
             for (int i = 0; i < getComponentCount(); i++){
-                ImageIcon icon = new ImageIcon("img/"+icons[i]+".png");
+                //Asociate piece enum to image (B: whitebishop.png)
+//                ImageIcon icon = new ImageIcon("img/"+icons[i]+".png");
+                System.out.println(Cnf.get(icons[i]));
+                
+                ImageIcon icon = new ImageIcon(new Cnf().map.get(icons[i]).toString());
 
                 JButton btn = (JButton) getComponents()[i];
                 btn.setIcon(icon);
@@ -100,5 +104,10 @@ public class Board extends JPanel{
             JButton btn = (JButton) getComponents()[i];
             btn.addActionListener(e);
         }
+    }
+    
+    public String getTile(int i){
+        JButton t = (JButton) getComponent(i);
+        return t.getText();
     }
 }

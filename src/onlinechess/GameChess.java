@@ -27,7 +27,7 @@ public class GameChess extends JPanel implements ActionListener{
     private static Board board;
     
     //Future ENUM
-    private String init = "YJVWLVJYOOOOOOOOnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnPPPPPPPPTHBQKBHT";
+    private String init = "rhbkqbhrppppppppnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnPPPPPPPPRHBQKBHR";
     private int height = 8;
     private int width = 8;
     
@@ -46,21 +46,21 @@ public class GameChess extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-        String cell = btn.getIcon().toString().replaceAll("(img/)|(.png)","");
-          
+        String tile = btn.getIcon().toString().replaceAll("(img/)|(.png)","");
+        
         if(e.getActionCommand().equals("T")){test();}
         
-        else if(selected && allowedMove(btn, cell)){
+        else if(selected && allowedMove(btn, tile)){
             prev.setIcon(new ImageIcon("img/n.png"));
             prev.setBackground(background);
             btn.setIcon(icon);
             selected = false;
             board.storeState(); 
             
-        }else if(!selected && !cell.equals("n")){
+        }else if(!selected && !tile.equals("n")){
             prev = btn;
             selected = true;
-            piece = cell;
+            piece = tile;
             icon = btn.getIcon();
             background = prev.getBackground();
             prev.setBackground(Color.red);

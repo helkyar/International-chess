@@ -51,7 +51,9 @@ public class Chess extends JFrame{
         if(choose == 0) {isWhite = true;} //yes
         else if(choose == 1) {isWhite = false;}//no
 
-        setLayout(new BorderLayout());     
+        setLayout(new BorderLayout());
+        
+        new Cnf();
         add(new GameChess(isWhite));
         
         setTitle("Online Chess");
