@@ -36,7 +36,8 @@ public static void start(String msg) {
             File f = new File("log");
             f.mkdir();  //creates folder if none exists
         } catch (Exception ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
+            System.out.println("Folder generation faliure");
         }
             writer(line,"\tSession\t\t", msg);
     }
@@ -65,7 +66,8 @@ public static void start(String msg) {
             fileWriter.flush();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
+            System.out.print("Log write faliure");
         }
     }
 }
