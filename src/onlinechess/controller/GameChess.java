@@ -37,7 +37,7 @@ public class GameChess extends JPanel implements ActionListener{
     private static Icon icon;
     private static Color bg;
     
-    private static Board board;
+    public static Board board;
     private static boolean blackTurn;
     
     public GameChess(boolean isWhite){

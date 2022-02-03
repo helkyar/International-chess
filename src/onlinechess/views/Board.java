@@ -111,14 +111,7 @@ public class Board extends JPanel{
             btn.addActionListener(e);
         }
     }
-    
-    public int getPosition(JButton b){
-          for (int i = 0; i < getComponentCount(); i++){
-            JButton btn = (JButton) getComponents()[i];
-            if(b == btn){return i+1;}
-          }
-          return -1;
-    }
+  
     /**
      * Resource eater! bunch of "if" statements bound togheder by some dark magic,
      * checking for possible tiles to hold the source piece and marking them with
@@ -150,6 +143,21 @@ public class Board extends JPanel{
 
                 if(i % w == 0){alt++;}
         }
+    }
+    
+      
+    public int getPosition(JButton b){
+          for (int i = 0; i < getComponentCount(); i++){
+            JButton btn = (JButton) getComponents()[i];
+            if(b == btn){return i+1;}
+          }
+          return -1;
+    }
+    
+    public boolean tileEmpty(int tile){
+        JButton btn = (JButton) getComponents()[tile];
+        System.out.println(btn.getText().equals("-"));
+        return btn.getText().equals("-");
     }
     
 }

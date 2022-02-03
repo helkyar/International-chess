@@ -19,16 +19,17 @@ public class Horse extends PiecesChess{
         //Board out of bounds
         //"-1" avoids problems with rigth side
         int row = (from-1) / Board.w * Board.w; 
-        boolean inBounds = ((to - Board.w) > row && to <= row + Board.w) || ((to + Board.w) > row && to <= row + Board.w);
-//        boolean uBound = to > row + Board.w && to <= row + Board.w*2;
-//        boolean dBound = to > row - Board.w && to != row+1;
+        boolean inBound = (to > row + Board.w && to <= row + Board.w*2) || (to > row - Board.w && to <= row);
+        boolean rigthBound = to >= row + Board.w && to <= row + Board.w - Board.w;
+        boolean uBound = (to > row + Board.w*2 && to <= row + Board.w*3);
+        boolean dBound = (to > row - Board.w*2 && to <= row + Board.w);
         
         //Piece logical moves
-        if((to == from + 2 + Board.w || to == from + 2 - Board.w) && inBounds){return true;} //Rigth
-        else if((to == from - 2 + Board.w || to == from - 2 - Board.w) && inBounds){return true;} //Left      
-        else if(to == from + 2 * Board.w  + 1|| to == from + 2 * Board.w - 1){return true;} //up       
-        else if(to == from - 2 * Board.w + 1|| to == from - 2 * Board.w - 1){return true;} //down
-        
+        if((to == from + 2 + Board.w || to == from + 2 - Board.w) && inBound){return true;} //Rigth
+        else if((to == from - 2 + Board.w || to == from - 2 - Board.w) && inBound){return true;} //Left      
+        else if((to == from + 2 * Board.w  + 1|| to == from + 2 * Board.w - 1) && uBound){return true;} //up       
+        else if((to == from - 2 * Board.w + 1|| to == from - 2 * Board.w - 1)&& dBound){return true;} //down
+
         return false;
         //Know if target tile is full (v)
         //Know if target cell is fiend/foe (v)

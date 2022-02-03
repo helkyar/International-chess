@@ -22,6 +22,7 @@ public class PiecesChess {
         
         return (pieceTeam != targetTeam)|| target.equals("-");         
     }
+    
 }
 
 //    private String target;

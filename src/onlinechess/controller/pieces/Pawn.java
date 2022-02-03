@@ -4,6 +4,7 @@
  */
 package onlinechess.controller.pieces;
 
+import onlinechess.controller.GameChess;
 import static onlinechess.controller.pieces.PiecesChess.isDiffTeam;
 import onlinechess.helpers.conf;
 import onlinechess.views.Board;
@@ -31,7 +32,7 @@ public class Pawn extends PiecesChess{
     
     public static boolean allowed(int from, int to, String piece, String target){
         if(!isDiffTeam(piece, target)){return false;}
-                   
+                
         boolean side = conf.WHITES.contains(piece);
         if(Chess.isWhite){return checkOnlyForward(side, from, to, piece);}
         else             {return checkOnlyForward(side, from, to, piece);}
