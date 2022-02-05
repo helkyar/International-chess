@@ -4,7 +4,6 @@
  */
 package onlinechess.controller.pieces;
 
-import static onlinechess.controller.pieces.PiecesChess.isDiffTeam;
 import onlinechess.views.Board;
 
 /**

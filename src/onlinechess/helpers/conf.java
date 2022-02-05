@@ -23,6 +23,8 @@ public class conf {
     //tile color
     public static final Color wTile = Color.gray;
     public static final Color bTile = Color.darkGray; 
+    public static final Color slct = Color.red;     
+    public static final Color allw = Color.cyan; 
     //piece team reference
     public static final String WHITES = "pqkbhr";
     public static final String BLACKS = "PQKBHR";
@@ -32,9 +34,9 @@ public class conf {
     protected static Map<String, String> start;
     
     //Types of plays:
-    private static int choose = 2;
+    private static int choose = 1;
     String std = "rhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHR";
-    String p = "rhbkqbh-pppppppk-----------h-------H------------KPPPPPPP-HBQKBHR";
+    String p = "rhbkqbh-pppppppk-----------r-------R------------KPPPPPPP-HBQKBHR";
     String pawn = "pppkpppppppppppppppppppp----------------PPPPPPPPPPPPPPPPPPPPKPPP";
     String out = "pppppppprhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHRPPPPPPPP"; 
                                                                                                          

@@ -59,32 +59,32 @@ public class GameChess extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
         String tile = btn.getText();
+        //Test -----------------------------------------------------------------
+        System.out.println(board.getPosition(btn));      
+        System.out.println(board.getTilePiece(board.getPosition(btn)-1));
+        if(e.getActionCommand().equals("T")){test();return;}
+        
                 
+        //Turn checker ---------------------------------------------------------
         boolean correctTurn = (
             (conf.WHITES.contains(tile) && !blackTurn)||
             (conf.BLACKS.contains(tile) && blackTurn)
         );
         
-        if(e.getActionCommand().equals("T")){test();}
-        
         //Select tile ----------------------------------------------------------
-        else if(!selected && !tile.equals("-") && correctTurn){ 
+        if(!selected && !tile.equals("-") && correctTurn){ 
             prev = btn;
             piece = tile;
             icon = btn.getIcon();
-            prev.setBackground(Color.red);            
+            prev.setBackground(conf.slct);            
+            prev.setForeground(conf.slct);  
                       
             selected = true;
             board.paint(prev);  
             blackTurn = !blackTurn;
             
         //Move piece if allowed ------------------------------------------------
-        } else if(selected && allowedMove(btn, tile)){            
-            boolean friendF = board.getPosition(btn) <= Board.w;
-            boolean foeF = board.getPosition(btn) > Board.w*Board.h-Board.h;
-            boolean isPawn = piece.equalsIgnoreCase("P");
-            if((friendF || foeF) && isPawn){transformPiece();}
-            
+        } else if(selected && allowedMove(btn, tile)){  
             prev.setIcon(null);
             prev.setText("-");
             btn.setText(piece);
@@ -93,6 +93,8 @@ public class GameChess extends JPanel implements ActionListener{
             selected = false;
             board.storeState(); 
             board.unPaint();
+            
+            isPawnInTheEnd(btn);
             
         //deselect without move ------------------------------------------------   
         } else if (selected) {
@@ -109,6 +111,7 @@ public class GameChess extends JPanel implements ActionListener{
         //Game allowed moves
             //check posibility (but who knows)
             //enroque        
+            //win condition
             
         //Pieces allowed moves
         if(piece.equalsIgnoreCase("R"))     {return Rook.allowed(from, to, piece, targed);}            
@@ -121,7 +124,14 @@ public class GameChess extends JPanel implements ActionListener{
         return false;
     }
     
-    private void transformPiece(){System.out.println("Maybe you should write something");}
+    private void isPawnInTheEnd(JButton btn){
+        boolean firstRow = board.getPosition(btn) <= Board.w;
+        boolean finalRow = board.getPosition(btn) > Board.w*Board.h-Board.w;
+        boolean isPawn = piece.equalsIgnoreCase("P");
+        if((firstRow || finalRow) && isPawn){
+           System.out.println("Maybe you should write something"); 
+        }
+    }
 
     private void test() {
         String choose = JOptionPane.showInputDialog(board, "Set state");

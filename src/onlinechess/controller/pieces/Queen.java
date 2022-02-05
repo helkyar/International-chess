@@ -4,8 +4,6 @@
  */
 package onlinechess.controller.pieces;
 
-import static onlinechess.controller.pieces.PiecesChess.isDiffTeam;
-
 /**
  *
  * @author admin
