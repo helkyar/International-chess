@@ -36,7 +36,7 @@ public class conf {
     protected static Map<String, String> start;
     
     //Types of plays:
-    private static int choose = 0;
+    private static int choose = 1;
     String std = "rhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHR";
     String p = "rhbkqbh-pppppppk-----------r-------R------------KPPPPPPP-HBQKBHR";
     String pawn = "pppkpppppppppppppppppppp----------------PPPPPPPPPPPPPPPPPPPPKPPP";

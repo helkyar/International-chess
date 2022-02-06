@@ -29,22 +29,23 @@ public class Bishop extends PiecesChess{
         int a = 0, b = 0, c = 0, d = 0;
         boolean dL=false, dR=false, uL=false, uR=false;
         //Separation to allow wasting resources
-        if(from-to>0){//up
+        if((from-to)>0){//up
             for(int i = 1; i < (int)Board.w*Board.h/4; i++){
-                int upLeft = (from - (Board.w - 1)*i);
-                int upRigth = (from - (Board.w + 1)*i);
+                int upLeft = from - (Board.w - 1)*i;
+                int upRigth = from - (Board.w + 1)*i;             
                 //Aboid board out of bounds
                 if(upRigth % Board.w == 0 || uR){c++;}
                 if((upLeft-1) % Board.w == 0 || uL){d++;}
                 //Piece logical moves
-                else if(to == upRigth && c < 1){return true;} 
-                else if(to == upLeft && d < 1){return true;}
+                if((to == upRigth) && (c < 1)){return true;} 
+                else if((to == upLeft) && (d < 1)){return true;}
+                System.out.println(to == upRigth && c < 1);
                 //Collisions updated last to mark target pieces as allowed move
                 uL = !Game.board.isTileEmpty(upLeft);
                 uR = !Game.board.isTileEmpty(upRigth);
             }
         }
-        else if(from-to<0){//down
+        else if((from-to)<0){//down
             for(int i = 1; i < (int)Board.w*Board.h/4; i++){
                 int downLeft = (from + (Board.w - 1)*i);    
                 int downRigth = (from + (Board.w + 1)*i);
