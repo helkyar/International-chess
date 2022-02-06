@@ -25,6 +25,8 @@ public class conf {
     public static final Color bTile = Color.darkGray; 
     public static final Color slct = Color.red;     
     public static final Color allw = Color.cyan; 
+    public static final Color check = Color.magenta; 
+    
     //piece team reference
     public static final String WHITES = "pqkbhr";
     public static final String BLACKS = "PQKBHR";

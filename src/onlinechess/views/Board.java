@@ -4,7 +4,6 @@
  */
 package onlinechess.views;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
@@ -92,6 +91,10 @@ public class Board extends JPanel{
                 
             }catch(Exception e){}
         }
+    }    
+        
+    public String getState(){        
+        return state;
     }
     
     public void storeState(){
@@ -103,6 +106,7 @@ public class Board extends JPanel{
         }
         //Store same string independent of color played
         if(isWhite){board = new StringBuilder(board).reverse().toString();}
+        state = board;
         record.add(board);
     }
     
@@ -151,7 +155,11 @@ public class Board extends JPanel{
         }
     }
     
-      
+    public void paintCheck(int pos){
+        JButton btn = (JButton) getComponents()[pos-1];
+        btn.setBackground(conf.check);
+    }
+    
     public int getPosition(JButton b){
           for (int i = 0; i < getComponentCount(); i++){
             JButton btn = (JButton) getComponents()[i];

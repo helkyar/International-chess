@@ -95,8 +95,9 @@ public class GameChess extends JPanel implements ActionListener{
             board.storeState(); 
             board.unPaint();
             
+            isThereaWinner();
             isPawnInTheEnd(btn);
-            if(isCheck()){JOptionPane.showMessageDialog(this, "You're fucked mate");}
+            isCheck();
             
         //deselect without move ------------------------------------------------   
         } else if (selected) {
@@ -130,7 +131,7 @@ public class GameChess extends JPanel implements ActionListener{
         return false;
     }
     
-    private boolean isCheck(){
+    private void isCheck(){
         
         boolean check = false;
         
@@ -141,6 +142,7 @@ public class GameChess extends JPanel implements ActionListener{
         }
         
         for(int pos : king.keySet()){
+            
             for(int i = 1; i <= Board.w*Board.h; i++){
                 String tile = board.getTilePiece(i);
 
@@ -152,7 +154,9 @@ public class GameChess extends JPanel implements ActionListener{
                     else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
                     else if(tile.equalsIgnoreCase("Q")){check = Queen.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
                     else if(tile.equalsIgnoreCase("K")){check = King.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos)) ? true : check;}                
+                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos)) ? true : check;}
+                    if(check){board.paintCheck(pos);}
+                    check = false;
                 }  
                 
                  if(!GameChess.board.isTileEmpty(i) && 
@@ -163,11 +167,12 @@ public class GameChess extends JPanel implements ActionListener{
                     else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
                     else if(tile.equalsIgnoreCase("Q")){check = Queen.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
                     else if(tile.equalsIgnoreCase("K")){check = King.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos)) ? true : check;}                
+                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos)) ? true : check;} 
+                    if(check){board.paintCheck(pos);}
+                    check = false;
                 } 
             } 
         }
-        return check;
     }
     
     private void isPawnInTheEnd(JButton btn){
@@ -183,5 +188,16 @@ public class GameChess extends JPanel implements ActionListener{
         String choose = JOptionPane.showInputDialog(board, "Set state");
         board.setState(board.record.get(Integer.parseInt(choose)));
         if(Integer.parseInt(choose) % 2 == 0){blackTurn = false;}
+    }
+
+    private void isThereaWinner() {
+        if(!board.getState().contains("k")){JOptionPane.showMessageDialog(this, "Black Wins!");reset();}        
+        if(!board.getState().contains("K")){JOptionPane.showMessageDialog(this, "White Wins!");reset();}
+        
+        System.out.println(board.getState());
+    }
+    private void reset(){
+        board.setState(board.record.get(0));
+        blackTurn = false;
     }
 }
