@@ -18,14 +18,16 @@ public class Pawn extends PiecesChess{
     private static boolean checkOnlyForward(boolean side, int from, int to, String piece){
         
         //Pawns can't eat pieces on it's path "(+/-)Board.w" must be aplied to the method
-        boolean collisionUp = upDownCollisions(from, to+Board.w);
-        boolean collisionDown = upDownCollisions(from, to-Board.w);
+        boolean collisionDown = upDownCollisions(from, to+Board.w);
+        boolean collisionUp = upDownCollisions(from, to-Board.w);
         
-        if(side && collisionDown){            
+        if(side && collisionUp){
+            if((from-to == Board.w+1 || from-to == Board.w-1) && !GameChess.board.isTileEmpty(to)){return true;}
             if(from-to == Board.w*2 && from > Board.w*(Board.h-2)){return true;}
             else if(from - to == Board.w){return true;} //only down
             
-        } else if(!side && collisionUp){
+        } else if(!side && collisionDown){            
+            if((from-to == -Board.w+1 || from-to == -Board.w-1) && !GameChess.board.isTileEmpty(to)){return true;}
             if(from - to == -Board.w*2 && from <= Board.w*2){return true;}
             else if(from - to == -Board.w){return true;} //only up
         }

@@ -10,7 +10,7 @@ import onlinechess.controller.pieces.Queen;
 import onlinechess.controller.pieces.Pawn;
 import onlinechess.controller.pieces.Bishop;
 import onlinechess.controller.pieces.Horse;
-
+ 
 import onlinechess.views.Board;
 import onlinechess.helpers.conf;
 
@@ -18,6 +18,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -58,13 +61,12 @@ public class GameChess extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-        String tile = btn.getText();
+        String tile = btn.getName();
         //Test -----------------------------------------------------------------
         System.out.println(board.getPosition(btn));      
-        System.out.println(board.getTilePiece(board.getPosition(btn)-1));
+        System.out.println(board.getTilePiece(board.getPosition(btn)));
         if(e.getActionCommand().equals("T")){test();return;}
         
-                
         //Turn checker ---------------------------------------------------------
         boolean correctTurn = (
             (conf.WHITES.contains(tile) && !blackTurn)||
@@ -76,8 +78,7 @@ public class GameChess extends JPanel implements ActionListener{
             prev = btn;
             piece = tile;
             icon = btn.getIcon();
-            prev.setBackground(conf.slct);            
-            prev.setForeground(conf.slct);  
+            prev.setBackground(conf.slct);    
                       
             selected = true;
             board.paint(prev);  
@@ -86,8 +87,8 @@ public class GameChess extends JPanel implements ActionListener{
         //Move piece if allowed ------------------------------------------------
         } else if(selected && allowedMove(btn, tile)){  
             prev.setIcon(null);
-            prev.setText("-");
-            btn.setText(piece);
+            prev.setName("-");
+            btn.setName(piece);
             btn.setIcon(icon);
             
             selected = false;
@@ -95,6 +96,7 @@ public class GameChess extends JPanel implements ActionListener{
             board.unPaint();
             
             isPawnInTheEnd(btn);
+            if(isCheck()){JOptionPane.showMessageDialog(this, "You're fucked mate");}
             
         //deselect without move ------------------------------------------------   
         } else if (selected) {
@@ -104,24 +106,68 @@ public class GameChess extends JPanel implements ActionListener{
         }
     }    
     
-    private boolean allowedMove(JButton btn, String targed){
+    /**
+     * Returns true if the move is allowed in the game 
+     * @param btn source button clicked
+     * @param target tile to move to.
+     * @return 
+     */
+    private boolean allowedMove(JButton btn, String target){
         int to = board.getPosition(btn);
         int from = board.getPosition(prev);
-        
-        //Game allowed moves
-            //check posibility (but who knows)
+
             //enroque        
             //win condition
             
         //Pieces allowed moves
-        if(piece.equalsIgnoreCase("R"))     {return Rook.allowed(from, to, piece, targed);}            
-        else if(piece.equalsIgnoreCase("H")){return Horse.allowed(from, to, piece, targed);}            
-        else if(piece.equalsIgnoreCase("B")){return Bishop.allowed(from, to, piece, targed);}            
-        else if(piece.equalsIgnoreCase("Q")){return Queen.allowed(from, to, piece, targed);}            
-        else if(piece.equalsIgnoreCase("K")){return King.allowed(from, to, piece, targed);}            
-        else if(piece.equalsIgnoreCase("P")){return Pawn.allowed(from, to, piece, targed);}
+        if(piece.equalsIgnoreCase("R"))     {return Rook.allowed(from, to, piece, target);}            
+        else if(piece.equalsIgnoreCase("H")){return Horse.allowed(from, to, piece, target);}            
+        else if(piece.equalsIgnoreCase("B")){return Bishop.allowed(from, to, piece, target);}            
+        else if(piece.equalsIgnoreCase("Q")){return Queen.allowed(from, to, piece, target);}            
+        else if(piece.equalsIgnoreCase("K")){return King.allowed(from, to, piece, target);}            
+        else if(piece.equalsIgnoreCase("P")){return Pawn.allowed(from, to, piece, target);}
             
         return false;
+    }
+    
+    private boolean isCheck(){
+        
+        boolean check = false;
+        
+        Map<Integer, String> king = new HashMap<>();
+        for(int i = 1; i <= Board.w*Board.h; i++){            
+            String tile = board.getTilePiece(i);            
+            if(tile.equalsIgnoreCase("K")) {king.put(i,tile);}
+        }
+        
+        for(int pos : king.keySet()){
+            for(int i = 1; i <= Board.w*Board.h; i++){
+                String tile = board.getTilePiece(i);
+
+                if(!GameChess.board.isTileEmpty(i) && 
+                    conf.WHITES.contains(tile) && king.get(pos).equals("K"))
+                {         
+                    if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("H")){check = Horse.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("Q")){check = Queen.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("K")){check = King.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos)) ? true : check;}                
+                }  
+                
+                 if(!GameChess.board.isTileEmpty(i) && 
+                    conf.BLACKS.contains(tile) && king.get(pos).equals("k"))
+                {        
+                    if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("H")){check = Horse.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("Q")){check = Queen.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("K")){check = King.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
+                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos)) ? true : check;}                
+                } 
+            } 
+        }
+        return check;
     }
     
     private void isPawnInTheEnd(JButton btn){
