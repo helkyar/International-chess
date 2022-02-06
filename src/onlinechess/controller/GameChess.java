@@ -63,8 +63,8 @@ public class GameChess extends JPanel implements ActionListener{
         JButton btn = (JButton) e.getSource();
         String tile = btn.getName();
         //Test -----------------------------------------------------------------
-        System.out.println(board.getPosition(btn));      
-        System.out.println(board.getTilePiece(board.getPosition(btn)));
+//        System.out.println(board.getPosition(btn));      
+//        System.out.println(board.getTilePiece(board.getPosition(btn)));
         if(e.getActionCommand().equals("T")){test();return;}
         
         //Turn checker ---------------------------------------------------------
@@ -179,8 +179,11 @@ public class GameChess extends JPanel implements ActionListener{
         boolean firstRow = board.getPosition(btn) <= Board.w;
         boolean finalRow = board.getPosition(btn) > Board.w*Board.h-Board.w;
         boolean isPawn = piece.equalsIgnoreCase("P");
-        if((firstRow || finalRow) && isPawn){
-           System.out.println("Maybe you should write something"); 
+        if((firstRow || finalRow) && isPawn){  
+           JOptionPane.showMessageDialog(prev, new Transformer(piece)); 
+           String select = Transformer.getSelectedPiece();
+           btn.setName(select);
+           btn.setIcon(new ImageIcon(conf.getImg(select)));
         }
     }
 

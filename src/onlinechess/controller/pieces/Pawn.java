@@ -22,11 +22,17 @@ public class Pawn extends PiecesChess{
         boolean collisionUp = upDownCollisions(from, to-Board.w);
         
         if(side && collisionUp){
-            if((from-to == Board.w+1 || from-to == Board.w-1) && !GameChess.board.isTileEmpty(to)){return true;}
-            if(from-to == Board.w*2 && from > Board.w*(Board.h-2)){return true;}
+            //Aboid board out of bounds
+            if(from - (Board.w + 1)-1 % Board.w == 0 || (from - (Board.w - 1)) % Board.w == 0){return false;}
+            //Piece logical moves   
+            else if((from-to == Board.w+1 || from-to == Board.w-1) && !GameChess.board.isTileEmpty(to)){return true;}
+            else if(from-to == Board.w*2 && from > Board.w*(Board.h-2)){return true;}
             else if(from - to == Board.w){return true;} //only down
             
         } else if(!side && collisionDown){            
+            //Aboid board out of bounds
+            if(from + (Board.w - 1) % Board.w == 0 || (from + (Board.w + 1)-1) % Board.w == 0){return false;}
+            //Piece logical moves   
             if((from-to == -Board.w+1 || from-to == -Board.w-1) && !GameChess.board.isTileEmpty(to)){return true;}
             if(from - to == -Board.w*2 && from <= Board.w*2){return true;}
             else if(from - to == -Board.w){return true;} //only up
