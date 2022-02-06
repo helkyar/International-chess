@@ -98,7 +98,7 @@ public class Chess extends JFrame{
     }
     
     // VARIABLE DECLARATION
-    private ImageIcon chessico = new ImageIcon("img/chessico.png");
+    public static ImageIcon chessico = new ImageIcon("img/chessico.png");
     
     public static boolean isWhite;
     

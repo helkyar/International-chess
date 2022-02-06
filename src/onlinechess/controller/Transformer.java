@@ -19,7 +19,7 @@ import onlinechess.helpers.conf;
  * @author admin
  */
 public class Transformer extends JPanel implements ActionListener{
-    private String pawn;
+    private static String pawn;
     private static String selectedPiece;
     
     public Transformer (String pawn){
@@ -54,7 +54,7 @@ public class Transformer extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
         selectedPiece = btn.getName();
-       Window[] windows = Window.getWindows();
+        Window[] windows = Window.getWindows();
                 for (Window window : windows) {
                     if (window instanceof JDialog) {
                         JDialog dialog = (JDialog) window;
@@ -67,6 +67,6 @@ public class Transformer extends JPanel implements ActionListener{
     }
     
     public static String getSelectedPiece(){
-        return selectedPiece;
+        return !selectedPiece.equals(null) ? selectedPiece : pawn;
     }
 }

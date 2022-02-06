@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import onlinechess.views.Chess;
 
 /**
  *
@@ -180,7 +181,7 @@ public class GameChess extends JPanel implements ActionListener{
         boolean finalRow = board.getPosition(btn) > Board.w*Board.h-Board.w;
         boolean isPawn = piece.equalsIgnoreCase("P");
         if((firstRow || finalRow) && isPawn){  
-           JOptionPane.showMessageDialog(prev, new Transformer(piece)); 
+           JOptionPane.showOptionDialog(this, new Transformer(piece), "Select a piece", 1, 1, Chess.chessico, new Object[]{},null);
            String select = Transformer.getSelectedPiece();
            btn.setName(select);
            btn.setIcon(new ImageIcon(conf.getImg(select)));
