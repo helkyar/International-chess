@@ -5,7 +5,7 @@ package onlinechess.controller.pieces;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-import onlinechess.controller.GameChess;
+import onlinechess.controller.Game;
 import onlinechess.views.Board;
 
 /**
@@ -40,8 +40,8 @@ public class Bishop extends PiecesChess{
                 else if(to == upRigth && c < 1){return true;} 
                 else if(to == upLeft && d < 1){return true;}
                 //Collisions updated last to mark target pieces as allowed move
-                uL = !GameChess.board.isTileEmpty(upLeft);
-                uR = !GameChess.board.isTileEmpty(upRigth);
+                uL = !Game.board.isTileEmpty(upLeft);
+                uR = !Game.board.isTileEmpty(upRigth);
             }
         }
         else if(from-to<0){//down
@@ -55,8 +55,8 @@ public class Bishop extends PiecesChess{
                 if(to == downRigth && a < 1){return true;} 
                 else if(to == downLeft && b < 1){return true;}
                 //Collisions updated last to mark target pieces as allowed move
-                dL = !GameChess.board.isTileEmpty(downLeft);
-                dR = !GameChess.board.isTileEmpty(downRigth);
+                dL = !Game.board.isTileEmpty(downLeft);
+                dR = !Game.board.isTileEmpty(downRigth);
             }
         }
         return false;

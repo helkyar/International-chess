@@ -4,7 +4,7 @@
  */
 package onlinechess.controller.pieces;
 
-import onlinechess.controller.GameChess;
+import onlinechess.controller.Game;
 import onlinechess.views.Board;
 
 //Board borders
@@ -41,12 +41,12 @@ public class PiecesChess {
         int up=from-Board.w*Board.h,down=from+Board.w*Board.h,stpd=0,stpu=0;
         for(int i = 1; i < (int)Math.abs((from-to)/Board.w); i++){                
             try{                   
-                if(stpu <= 0&&!GameChess.board.isTileEmpty((int)from-Board.w*i)){
+                if(stpu <= 0&&!Game.board.isTileEmpty((int)from-Board.w*i)){
                     up = from-Board.w*i;
                     stpu++; //avoid further actualization
                 }; }catch(Exception e){}
             try{
-                if(stpd<=0 && !GameChess.board.isTileEmpty((int)from+Board.w*i)){
+                if(stpd<=0 && !Game.board.isTileEmpty((int)from+Board.w*i)){
                     down = from+Board.w*i;
                     stpd++; //avoid further actualization
                 }; } catch (Exception e){}
@@ -69,12 +69,12 @@ public class PiecesChess {
             int left=row,rigth=row+Board.w,stpl=0,stpr=0;
             for(int i = 1; i <  Board.w; i++){                
                 try{                    
-                    if(stpl <= 0&&!GameChess.board.isTileEmpty(from-1*i)){
+                    if(stpl <= 0&&!Game.board.isTileEmpty(from-1*i)){
                         left = from-1*i;
                         stpl++; //avoid further actualization
                     }; }catch(Exception e){}
                 try{
-                    if(stpr<=0 && !GameChess.board.isTileEmpty(from+1*i)){
+                    if(stpr<=0 && !Game.board.isTileEmpty(from+1*i)){
                         rigth = from+1*i;
                         stpr++; //avoid further actualization
                     }; } catch (Exception e){}

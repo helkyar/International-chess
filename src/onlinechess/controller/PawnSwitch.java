@@ -18,11 +18,11 @@ import onlinechess.helpers.conf;
  *
  * @author admin
  */
-public class Transformer extends JPanel implements ActionListener{
+public class PawnSwitch extends JPanel implements ActionListener{
     private static String pawn;
     private static String selectedPiece;
     
-    public Transformer (String pawn){
+    public PawnSwitch (String pawn){
         this.pawn = pawn;
         initButtons();
     }

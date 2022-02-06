@@ -23,7 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import onlinechess.controller.GameChess;
+import onlinechess.controller.Game;
 import onlinechess.helpers.conf;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
@@ -31,7 +31,7 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
  *
  * @author Javier Palacios Botejara
  */
-public class Chess extends JFrame{
+public class ChessApp extends JFrame{
         
     /**
      * @param args the command line arguments
@@ -41,13 +41,13 @@ public class Chess extends JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try{
-                    new Chess().setVisible(true);
+                    new ChessApp().setVisible(true);
                 } catch(Throwable e){LogGen.error(e.getMessage());}
             }
         });
     }
     
-    public Chess(){
+    public ChessApp(){
         
         int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 1, 1, chessico);
         if(choose == 0) {isWhite = true;} //yes
@@ -56,7 +56,7 @@ public class Chess extends JFrame{
         setLayout(new BorderLayout());
         
         new conf();
-        add(new GameChess(isWhite));
+        add(new Game(isWhite));
         
         setTitle("Online Chess");
         setIconImage(chessico.getImage());

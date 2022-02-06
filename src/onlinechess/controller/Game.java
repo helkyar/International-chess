@@ -28,13 +28,13 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import onlinechess.views.Chess;
+import onlinechess.views.ChessApp;
 
 /**
  *
  * @author Javier Palacios Botejara
  */
-public class GameChess extends JPanel implements ActionListener{
+public class Game extends JPanel implements ActionListener{
     private static JButton prev;
     private static boolean selected;
     private static String piece;
@@ -44,7 +44,7 @@ public class GameChess extends JPanel implements ActionListener{
     public static Board board;
     private static boolean blackTurn;
     
-    public GameChess(boolean isWhite){
+    public Game(boolean isWhite){
         board = new Board(conf.size(), conf.init(), isWhite);
         board.startBoard(this);
         
@@ -117,10 +117,7 @@ public class GameChess extends JPanel implements ActionListener{
     private boolean allowedMove(JButton btn, String target){
         int to = board.getPosition(btn);
         int from = board.getPosition(prev);
-
-            //enroque        
-            //win condition
-            
+     
         //Pieces allowed moves
         if(piece.equalsIgnoreCase("R"))     {return Rook.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("H")){return Horse.allowed(from, to, piece, target);}            
@@ -147,7 +144,7 @@ public class GameChess extends JPanel implements ActionListener{
             for(int i = 1; i <= Board.w*Board.h; i++){
                 String tile = board.getTilePiece(i);
 
-                if(!GameChess.board.isTileEmpty(i) && 
+                if(!Game.board.isTileEmpty(i) && 
                     conf.WHITES.contains(tile) && king.get(pos).equals("K"))
                 {         
                     if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
@@ -160,7 +157,7 @@ public class GameChess extends JPanel implements ActionListener{
                     check = false;
                 }  
                 
-                 if(!GameChess.board.isTileEmpty(i) && 
+                 if(!Game.board.isTileEmpty(i) && 
                     conf.BLACKS.contains(tile) && king.get(pos).equals("k"))
                 {        
                     if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos)) ? true : check;}            
@@ -181,11 +178,24 @@ public class GameChess extends JPanel implements ActionListener{
         boolean finalRow = board.getPosition(btn) > Board.w*Board.h-Board.w;
         boolean isPawn = piece.equalsIgnoreCase("P");
         if((firstRow || finalRow) && isPawn){  
-           JOptionPane.showOptionDialog(this, new Transformer(piece), "Select a piece", 1, 1, Chess.chessico, new Object[]{},null);
-           String select = Transformer.getSelectedPiece();
+           JOptionPane.showOptionDialog(this, new PawnSwitch(piece), "Select a piece", 1, 1, ChessApp.chessico, new Object[]{},null);
+           String select = PawnSwitch.getSelectedPiece();
            btn.setName(select);
            btn.setIcon(new ImageIcon(conf.getImg(select)));
         }
+    }
+    
+    private void isThereaWinner() {
+        if(!board.getState().contains("k")){
+            JOptionPane.showMessageDialog(this, "Black Wins!");
+            board.setState(board.record.get(0));
+            blackTurn = false;
+        }else if(!board.getState().contains("K")){
+            JOptionPane.showMessageDialog(this, "White Wins!");
+            board.setState(board.record.get(0));
+            blackTurn = false;
+        }
+        
     }
 
     private void test() {
@@ -194,14 +204,10 @@ public class GameChess extends JPanel implements ActionListener{
         if(Integer.parseInt(choose) % 2 == 0){blackTurn = false;}
     }
 
-    private void isThereaWinner() {
-        if(!board.getState().contains("k")){JOptionPane.showMessageDialog(this, "Black Wins!");reset();}        
-        if(!board.getState().contains("K")){JOptionPane.showMessageDialog(this, "White Wins!");reset();}
-        
-        System.out.println(board.getState());
-    }
-    private void reset(){
-        board.setState(board.record.get(0));
-        blackTurn = false;
-    }
 }
+
+/**
+ * Pawn bounds
+ * Bishop bugs
+ * Castling **
+ */
