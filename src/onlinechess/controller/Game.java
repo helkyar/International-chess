@@ -50,13 +50,13 @@ public class Game extends JPanel implements ActionListener{
     public static boolean enPessant; //en pessant possibility
     public static int posPessant; //position of phantom pawn
     private int tgPessant; //position of phantom pawn Parent(*)
-    private int z; //counter(*)
+    private int reset; //counter(*)
     
     private static Map<Integer, String> king;
     public static ArrayList<Integer> checkPos;
     public static Map<Integer, Integer> castlingAllowed;
     private static Map<Integer, Integer> castlingDef;
-    private static int i = 0;
+    private static boolean initializing = true;
     
     public Game(boolean isWhite){
         board = new Board(conf.size(), conf.init(), isWhite);
@@ -104,8 +104,8 @@ public class Game extends JPanel implements ActionListener{
             
         //Move piece if allowed ------------------------------------------------
         } else if(selected && allowedMove(btn, tile)){  
-            if(enPessant && z==0){enPessant = false;}
-            z = 0;
+            if(enPessant && reset==0){enPessant = false;}
+            reset = 0;
             prev.setIcon(null);
             prev.setName("-");
             btn.setName(piece);
@@ -167,7 +167,7 @@ public class Game extends JPanel implements ActionListener{
     private boolean pawnWithEnpessant(int from, int to, String pawn, String target) {
         if(Math.abs(from-to)==16){
             enPessant=true; posPessant=(from+to)/2; pawnPessant=pawn; tgPessant=to; 
-            z=1;
+            reset=1;
             
         } else if(enPessant && to == posPessant && !piece.equals(pawnPessant)){
             Game.board.setTilePiece(tgPessant, "-");
@@ -227,18 +227,19 @@ public class Game extends JPanel implements ActionListener{
                 storeCastlingPairs(king.get(pos), pos);
             } 
         }
-            if(i>0){
+            if(!initializing){
                 castlingAllowed.clear();
                 castlingAllowed.putAll(castlingDef);
                 castlingDef.clear();
-                i++;
+                
             }
+            initializing = false;
     }
     
 
     private static void storeCastlingPairs(String k, int pos) {
         //Store castling pairs
-        if(castlingAllowed.size() < king.size()){
+        if(initializing){
             if(board.getTilePiece(pos-3).equalsIgnoreCase("R") && !PiecesChess.isDiffTeam(k, Game.board.getTilePiece(pos - 3)))
             {castlingAllowed.put(pos, pos-3);}
             if(board.getTilePiece(pos+3).equalsIgnoreCase("R") && !PiecesChess.isDiffTeam(k, Game.board.getTilePiece(pos + 3)))
