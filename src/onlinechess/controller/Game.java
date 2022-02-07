@@ -85,7 +85,7 @@ public class Game extends JPanel implements ActionListener{
             prev = btn;
             piece = tile;
             icon = btn.getIcon();
-            prev.setBackground(conf.slct);    
+            prev.setBackground(conf.slct);  
                       
             selected = true;
             board.paint(prev);  
@@ -93,6 +93,8 @@ public class Game extends JPanel implements ActionListener{
             
         //Move piece if allowed ------------------------------------------------
         } else if(selected && allowedMove(btn, tile)){  
+            if(enPessant && posPessant==0){enPessant = false;}
+            posPessant = 0;
             prev.setIcon(null);
             prev.setName("-");
             btn.setName(piece);
@@ -101,7 +103,6 @@ public class Game extends JPanel implements ActionListener{
             selected = false;
             board.storeState(); 
             board.unPaint();
-            sttPessant= board.getState();
             
             isThereaWinner();
             isPawnInTheEnd(btn);
@@ -124,21 +125,15 @@ public class Game extends JPanel implements ActionListener{
     private boolean allowedMove(JButton btn, String target){
         int to = board.getPosition(btn);
         int from = board.getPosition(prev);
-        
-        if(enPessant){
-            if(board.getState().equals(sttPessant)){enPessant = false;}
-            if(piece.equalsIgnoreCase("P") && to == posPessant && !piece.equals(pawnPessant)){
-                Game.board.setTilePiece(tgPessant, "-");
-                return true;
-            }
-        }
+     
         //Pieces allowed moves
         if(piece.equalsIgnoreCase("R"))     {return Rook.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("H")){return Horse.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("B")){return Bishop.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("Q")){return Queen.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("K")){return King.allowed(from, to, piece, target);}            
-        else if(piece.equalsIgnoreCase("P")){
+        else if(piece.equalsIgnoreCase("P")){               
+            if(enPessant && executeEnPessant(to)){return true;}
             if(Math.abs(from-to)==16){setEnPessant(from, to, piece);}
             return Pawn.allowed(from, to, piece, target);
         }
@@ -147,22 +142,42 @@ public class Game extends JPanel implements ActionListener{
     }
     
     private void setEnPessant(int from, int to, String pawn) {
-        enPessant = true; posPessant=(from+to)/2; pawnPessant=pawn;
-        tgPessant = to;
+        enPessant=true; posPessant=(from+to)/2; pawnPessant=pawn; tgPessant=to;
     }
-
+    
+    private boolean executeEnPessant(int to){
+        if(to == posPessant && !piece.equals(pawnPessant)){
+                Game.board.setTilePiece(tgPessant, "-");
+                return true;
+        }
+        return false;
+    }    
+       
+    private void isPawnInTheEnd(JButton btn){
+        boolean firstRow = board.getPosition(btn) <= Board.w;
+        boolean finalRow = board.getPosition(btn) > Board.w*Board.h-Board.w;
+        boolean isPawn = piece.equalsIgnoreCase("P");
+        if((firstRow || finalRow) && isPawn){  
+           JOptionPane.showOptionDialog(this, new PawnSwitch(piece), "Select a piece", 1, 1, ChessApp.chessico, new Object[]{},null);
+           String select = PawnSwitch.getSelectedPiece();
+           btn.setName(select);
+           btn.setIcon(new ImageIcon(conf.getImg(select)));
+        }
+    }
+    
     private void isCheck(){
         
         boolean check = false;
         
+        //Get a Record of all kings and positions
         Map<Integer, String> king = new HashMap<>();
         for(int i = 1; i <= Board.w*Board.h; i++){            
             String tile = board.getTilePiece(i);            
             if(tile.equalsIgnoreCase("K")) {king.put(i,tile);}
         }
         
-        for(int pos : king.keySet()){
-            
+        //Foer every king check if is in danger
+        for(int pos : king.keySet()){            
             for(int i = 1; i <= Board.w*Board.h; i++){
                 String tile = board.getTilePiece(i);
 
@@ -194,19 +209,7 @@ public class Game extends JPanel implements ActionListener{
             } 
         }
     }
-    
-    private void isPawnInTheEnd(JButton btn){
-        boolean firstRow = board.getPosition(btn) <= Board.w;
-        boolean finalRow = board.getPosition(btn) > Board.w*Board.h-Board.w;
-        boolean isPawn = piece.equalsIgnoreCase("P");
-        if((firstRow || finalRow) && isPawn){  
-           JOptionPane.showOptionDialog(this, new PawnSwitch(piece), "Select a piece", 1, 1, ChessApp.chessico, new Object[]{},null);
-           String select = PawnSwitch.getSelectedPiece();
-           btn.setName(select);
-           btn.setIcon(new ImageIcon(conf.getImg(select)));
-        }
-    }
-    
+
     private void isThereaWinner() {
         if(!board.getState().contains("k")){
             JOptionPane.showMessageDialog(this, "Black Wins!");
