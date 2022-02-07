@@ -39,7 +39,6 @@ public class Bishop extends PiecesChess{
                 //Piece logical moves
                 if((to == upRigth) && (c < 1)){return true;} 
                 else if((to == upLeft) && (d < 1)){return true;}
-                System.out.println(to == upRigth && c < 1);
                 //Collisions updated last to mark target pieces as allowed move
                 uL = !Game.board.isTileEmpty(upLeft);
                 uR = !Game.board.isTileEmpty(upRigth);

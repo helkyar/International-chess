@@ -134,8 +134,7 @@ public class Board extends JPanel{
             else if(piece.equalsIgnoreCase("B")){if(Bishop.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
             else if(piece.equalsIgnoreCase("Q")){if(Queen.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
             else if(piece.equalsIgnoreCase("K")){if(King.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
-            else if(piece.equalsIgnoreCase("P")){if(Pawn.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
-           
+            else if(piece.equalsIgnoreCase("P")){if(Pawn.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}}      
         }
     }
     
@@ -180,5 +179,16 @@ public class Board extends JPanel{
             JButton btn = (JButton) getComponents()[tile-1];
             return btn.getName();
         }catch(Exception e){return "?";}
+    }
+    
+    public void setTilePiece(int tile, String piece){
+        JButton btn = (JButton) getComponents()[tile-1];
+        
+        ImageIcon icon = null;
+        boolean full = !piece.equals("-");
+        if(full){icon = new ImageIcon(conf.getImg(piece));}
+
+        btn.setIcon(icon); 
+        btn.setName(piece);
     }
 }

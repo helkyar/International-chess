@@ -44,6 +44,12 @@ public class Game extends JPanel implements ActionListener{
     public static Board board;
     private static boolean blackTurn;
     
+    private String pawnPessant;
+    private String sttPessant;
+    private boolean enPessant;
+    private int posPessant;
+    private int tgPessant;
+    
     public Game(boolean isWhite){
         board = new Board(conf.size(), conf.init(), isWhite);
         board.startBoard(this);
@@ -95,6 +101,7 @@ public class Game extends JPanel implements ActionListener{
             selected = false;
             board.storeState(); 
             board.unPaint();
+            sttPessant= board.getState();
             
             isThereaWinner();
             isPawnInTheEnd(btn);
@@ -117,18 +124,33 @@ public class Game extends JPanel implements ActionListener{
     private boolean allowedMove(JButton btn, String target){
         int to = board.getPosition(btn);
         int from = board.getPosition(prev);
-     
+        
+        if(enPessant){
+            if(board.getState().equals(sttPessant)){enPessant = false;}
+            if(piece.equalsIgnoreCase("P") && to == posPessant && !piece.equals(pawnPessant)){
+                Game.board.setTilePiece(tgPessant, "-");
+                return true;
+            }
+        }
         //Pieces allowed moves
         if(piece.equalsIgnoreCase("R"))     {return Rook.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("H")){return Horse.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("B")){return Bishop.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("Q")){return Queen.allowed(from, to, piece, target);}            
         else if(piece.equalsIgnoreCase("K")){return King.allowed(from, to, piece, target);}            
-        else if(piece.equalsIgnoreCase("P")){return Pawn.allowed(from, to, piece, target);}
-            
+        else if(piece.equalsIgnoreCase("P")){
+            if(Math.abs(from-to)==16){setEnPessant(from, to, piece);}
+            return Pawn.allowed(from, to, piece, target);
+        }
+    
         return false;
     }
     
+    private void setEnPessant(int from, int to, String pawn) {
+        enPessant = true; posPessant=(from+to)/2; pawnPessant=pawn;
+        tgPessant = to;
+    }
+
     private void isCheck(){
         
         boolean check = false;
@@ -203,7 +225,6 @@ public class Game extends JPanel implements ActionListener{
         board.setState(board.record.get(Integer.parseInt(choose)));
         if(Integer.parseInt(choose) % 2 == 0){blackTurn = false;}
     }
-
 }
 
 /**
