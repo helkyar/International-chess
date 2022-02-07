@@ -36,10 +36,11 @@ public class conf {
     protected static Map<String, String> start;
     
     //Types of plays:
-    private static int choose = 1;
+    private static int choose = 4;
     String std = "rhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHR";
     String p = "rhbkqbh-pppppppk-----------r-------R------------KPPPPPPP-HBQKBHR";
     String pawn = "pppkpppppppppppppppppppp----------------PPPPPPPPPPPPPPPPPPPPKPPP";
+    String cstl = "r--kk--rk--rr--kR--KK--RK--RR--Kr--kk--rk--rr--kR--KK--RK--RR--K";
     String out = "pppppppprhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHRPPPPPPPP"; 
                                                                                                          
     public conf (){
@@ -64,6 +65,7 @@ public class conf {
         start.put(std, "8,8");
         start.put(p,"8,8");
         start.put(pawn, "8,8");  
+        start.put(cstl, "8,8");
         start.put(out, "10,8");
         
         String[] s = start.values().toArray()[choose].toString().split(",");

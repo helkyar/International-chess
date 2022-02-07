@@ -12,6 +12,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import onlinechess.controller.Game;
 
 import onlinechess.controller.pieces.Bishop;
 import onlinechess.controller.pieces.Horse;
@@ -129,12 +130,17 @@ public class Board extends JPanel{
         String piece = source.getName();
         for (int i = 0; i < getComponentCount(); i++){
             JButton btn = (JButton) getComponents()[i];
-            if(piece.equalsIgnoreCase("R"))     {if(Rook.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}}            
-            else if(piece.equalsIgnoreCase("H")){if(Horse.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}}            
-            else if(piece.equalsIgnoreCase("B")){if(Bishop.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
-            else if(piece.equalsIgnoreCase("Q")){if(Queen.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
-            else if(piece.equalsIgnoreCase("K")){if(King.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}} 
-            else if(piece.equalsIgnoreCase("P")){if(Pawn.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}}      
+            if(piece.equalsIgnoreCase("R") && Rook.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}            
+            else if(piece.equalsIgnoreCase("H") && Horse.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}           
+            else if(piece.equalsIgnoreCase("B") && Bishop.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);} 
+            else if(piece.equalsIgnoreCase("Q") && Queen.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);} 
+            else if(piece.equalsIgnoreCase("K") && King.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);} 
+            else if(piece.equalsIgnoreCase("P") && Pawn.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}   
+            //enPessant
+            if(piece.equalsIgnoreCase("P") && !piece.equals(Game.pawnPessant) && Game.enPessant && i+1==Game.posPessant && 
+            (from+w-1==Game.posPessant || from+w+1==Game.posPessant || from-w+1==Game.posPessant || from-w-1==Game.posPessant)){
+                btn.setBackground(conf.allw);
+            }
         }
     }
     

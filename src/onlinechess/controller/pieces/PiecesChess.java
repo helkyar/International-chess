@@ -22,7 +22,7 @@ public class PiecesChess {
     * @param target  Piece of the target file
     * @return boolean indicating if the path is blocked
     */
-    protected static boolean isDiffTeam(String piece, String target){
+    public static boolean isDiffTeam(String piece, String target){
         
         boolean pieceTeam = piece.equals(piece.toUpperCase());
         boolean targetTeam = target.equals(target.toUpperCase());

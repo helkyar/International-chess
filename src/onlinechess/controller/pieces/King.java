@@ -4,6 +4,7 @@
  */
 package onlinechess.controller.pieces;
 
+import onlinechess.controller.Game;
 import onlinechess.views.Board;
 
 /**
@@ -26,14 +27,28 @@ public class King extends PiecesChess{
         else if((to == from + Board.w -1 || to == from + Board.w +1) && uBound){return true;}
         else if((to == from - Board.w -1 || to == from - Board.w +1) && dBound){return true;}
         
-        //Crazy board(on edge KILL: [to == from + Board.w +1 || to == from - Board.w -1])
+        //Crazy board: on edge -> KILL (to == from + Board.w +1 || to == from - Board.w -1)
         //else if(to == from + Board.w*2 -1 || to == from - Board.w*2 +1){return true;}
+
+        //Castling limitation
+        if(Game.checkPos.contains(from)){return false;} //king in check
+        if(!Game.castlingAllowed.containsKey(from)){return false;} //king or rook moved
+        //Castling logical move
+        return castlingLogicalMove(from, to, piece);
+
+    }
+
+    private static boolean castlingLogicalMove(int from, int to, String piece) {
+        if(Game.board.getTilePiece(from + 1).equals("-") && Game.board.getTilePiece(from + 2).equals("-") &&
+        Game.board.getTilePiece(from + 3).equalsIgnoreCase("R") && to == from + 2){
+            if(!isDiffTeam(piece, Game.board.getTilePiece(from + 3))){return true;}
+        }
         
-        //Board out of bounds
-        
+        else if(Game.board.getTilePiece(from - 1).equals("-") && Game.board.getTilePiece(from - 2).equals("-") &&
+        Game.board.getTilePiece(from - 3).equalsIgnoreCase("R") && to == from - 2){
+            if(!isDiffTeam(piece, Game.board.getTilePiece(from - 3))){return true;}
+        }
+                
         return false;
-        //Know if target tile is full (v)
-        //Know if target cell is fiend/foe (v)
-        //Aboid bumping into other pieces
     }
 }
