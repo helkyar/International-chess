@@ -53,7 +53,7 @@ public class ChessApp extends JFrame{
         setLayout(new GridLayout(1,2));
         
         add(new Game());
-        add(new Game()); //piece selector must be in game
+        add(new Game()); 
         
         setTitle("Online Chess");
         setIconImage(chessico.getImage());

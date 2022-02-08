@@ -30,14 +30,16 @@ import onlinechess.helpers.LogGen;
  * @author admin
  */
 public class Board extends JPanel{
+    private Conf conf;
     
     public int h;
     public int w;
     private String state;
-    private boolean isWhite;
+    public boolean isWhite;
     public ArrayList<String> record;
     
-    public Board (int[] size, String state, boolean isWhite){
+    public Board (int[] size, String state, boolean isWhite, Conf conf){
+        this.conf = conf;
         this.h = size[0];
         this.w = size[1];
         
@@ -66,8 +68,8 @@ public class Board extends JPanel{
                 catch(Exception e){btn.setName("-");}                 
                 
                 //Set tiles color pattern (alternated). Int cast for precision
-                if (((int)tile + alt) % 2 == 0){btn.setBackground(Conf.bTile);}
-                else {btn.setBackground(Conf.wTile);}
+                if (((int)tile + alt) % 2 == 0){btn.setBackground(conf.BTILE);}
+                else {btn.setBackground(conf.WTILE);}
                 add(btn);     
 
                 if(tile % w == 0){alt++;}
@@ -86,7 +88,7 @@ public class Board extends JPanel{
                 
                 ImageIcon icon = null;
                 boolean full = !tile[i].equals("-");
-                if(full){icon = new ImageIcon(Conf.getImg(tile[i]));}
+                if(full){icon = new ImageIcon(conf.getImg(tile[i]));}
 
                 btn.setIcon(icon);     
                 btn.setName(tile[i]);                           
@@ -131,16 +133,16 @@ public class Board extends JPanel{
         String piece = source.getName();
         for (int i = 0; i < getComponentCount(); i++){
             JButton btn = (JButton) getComponents()[i];
-            if(piece.equalsIgnoreCase("R") && Rook.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(Conf.allw);}            
-            else if(piece.equalsIgnoreCase("H") && Horse.allowed(from, i+1, piece, btn.getName(), w, h)){btn.setBackground(Conf.allw);}           
-            else if(piece.equalsIgnoreCase("B") && Bishop.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(Conf.allw);} 
-            else if(piece.equalsIgnoreCase("Q") && Queen.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(Conf.allw);} 
-            else if(piece.equalsIgnoreCase("K") && King.allowed(from, i+1, piece, btn.getName(), w, h, board, check, castling)){btn.setBackground(Conf.allw);} 
-            else if(piece.equalsIgnoreCase("P") && Pawn.allowed(from, i+1, piece, btn.getName(), w, h, board, conf)){btn.setBackground(Conf.allw);}   
+            if(piece.equalsIgnoreCase("R") && Rook.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(conf.ALLW);}            
+            else if(piece.equalsIgnoreCase("H") && Horse.allowed(from, i+1, piece, btn.getName(), w, h)){btn.setBackground(conf.ALLW);}           
+            else if(piece.equalsIgnoreCase("B") && Bishop.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(conf.ALLW);} 
+            else if(piece.equalsIgnoreCase("Q") && Queen.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(conf.ALLW);} 
+            else if(piece.equalsIgnoreCase("K") && King.allowed(from, i+1, piece, btn.getName(), w, h, board, check, castling)){btn.setBackground(conf.ALLW);} 
+            else if(piece.equalsIgnoreCase("P") && Pawn.allowed(from, i+1, piece, btn.getName(), w, h, board, conf)){btn.setBackground(conf.ALLW);}   
             //enPessant
             if(piece.equalsIgnoreCase("P") && !piece.equals(pP) && eP && i+1==posP && 
             (from+w-1 == posP || from+w+1 == posP || from-w+1 == posP || from-w-1 == posP)){
-                btn.setBackground(conf.allw);
+                btn.setBackground(conf.ALLW);
             }
         }
     }
@@ -150,11 +152,11 @@ public class Board extends JPanel{
             JButton btn = (JButton) getComponents()[i-1];
             //Set tiles color pattern (alternated). Int cast for precision
             if (((int)i + alt) % 2 == 0){
-                btn.setBackground(Conf.bTile);
-                btn.setForeground(Conf.bTile);
+                btn.setBackground(conf.BTILE);
+                btn.setForeground(conf.BTILE);
             } else {
-                btn.setBackground(Conf.wTile);
-                btn.setForeground(Conf.wTile);
+                btn.setBackground(conf.WTILE);
+                btn.setForeground(conf.WTILE);
             }
 
             if(i % w == 0){alt++;}
@@ -163,7 +165,7 @@ public class Board extends JPanel{
     
     public void paintCheck(int pos){
         JButton btn = (JButton) getComponents()[pos-1];
-        btn.setBackground(Conf.check);
+        btn.setBackground(conf.CHECK);
     }
     
     public int getPosition(JButton b){
@@ -193,7 +195,7 @@ public class Board extends JPanel{
         
         ImageIcon icon = null;
         boolean full = !piece.equals("-");
-        if(full){icon = new ImageIcon(Conf.getImg(piece));}
+        if(full){icon = new ImageIcon(conf.getImg(piece));}
 
         btn.setIcon(icon); 
         btn.setName(piece);

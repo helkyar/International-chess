@@ -21,29 +21,31 @@ public class Conf {
     private final int rows = 0; //extra-minus rows
     private final int cols = 0; //extra-minus columns; 
     //tile color
-    public static final Color wTile = Color.gray;
-    public static final Color bTile = Color.darkGray; 
-    public static final Color slct = Color.red;     
-    public static final Color allw = Color.cyan; 
-    public static final Color check = Color.magenta; 
+    public static final Color WTILE = Color.gray;
+    public static final Color BTILE = Color.darkGray; 
+    public static final Color SLCT = Color.red;     
+    public static final Color ALLW = Color.cyan; 
+    public static final Color CHECK = Color.magenta; 
     
     //piece team reference
     public static final String WHITES = "pqkbhr";
     public static final String BLACKS = "PQKBHR";
     
-    protected static Map<String, Integer> board;
-    protected static Map<String, String> img;
-    protected static Map<String, String> start;
+    protected Map<String, Integer> board;
+    protected Map<String, String> img;
+    protected Map<String, String> start;
     
     //Types of plays:
-    private static int choose = 0;
+    private int choose = 0;
     String std = "rhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHR";
     String p = "rhbkqbh-pppppppk-----------r-------R------------KPPPPPPP-HBQKBHR";
     String pawn = "pppkpppppppppppppppppppp----------------PPPPPPPPPPPPPPPPPPPPKPPP";
     String cstl = "r--kk--rk--rr--kR--KK--RK--RR--Kr--kk--rk--rr--kR--KK--RK--RR--K";
     String out = "pppppppprhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHRPPPPPPPP"; 
                                                                                                          
-    public Conf (){
+    public Conf (int chooseBoard){
+        this.choose = chooseBoard;
+        
         context = new Dimension(700,500);
                                      
         img = new HashMap<>();
@@ -77,16 +79,16 @@ public class Conf {
         board.put("w", defaultW+cols);
     }   
     
-    public static String getImg(String s){
+    public String getImg(String s){
         return img.get(s);
     }
     
-    public static int[] size(){
+    public int[] size(){
        int[] size = {board.get("h"),board.get("w")};
        return size;
     }
     
-    public static String init(){
+    public String init(){
         return start.keySet().toArray()[choose].toString();
     }
 }

@@ -64,9 +64,9 @@ public class Game extends JPanel implements ActionListener{
         if(choose == 0) {isWhite = true;} //yes
         else if(choose == 1) {isWhite = false;}//no
         
-        Conf conf= new Conf();
+        conf= new Conf(choose);
         
-        board = new Board(conf.size(), conf.init(), isWhite);
+        board = new Board(conf.size(), conf.init(), isWhite, conf);
         board.startBoard(this);
         
         JScrollPane border = new JScrollPane(board);
@@ -103,7 +103,7 @@ public class Game extends JPanel implements ActionListener{
             prev = btn;
             piece = tile;
             icon = btn.getIcon();
-            prev.setBackground(Conf.slct);  
+            prev.setBackground(Conf.SLCT);  
                       
             selected = true;
             board.paint(prev, board.w, board.h, board, conf, checkPos, castlingAllowed, pawnPessant, enPessant, posPessant);  
@@ -189,10 +189,11 @@ public class Game extends JPanel implements ActionListener{
         boolean finalRow = board.getPosition(btn) > board.w*board.h-board.w;
         boolean isPawn = piece.equalsIgnoreCase("P");
         if((firstRow || finalRow) && isPawn){  
-           JOptionPane.showOptionDialog(this, new Promotion(piece), "Select a piece", 1, 1, chessico, new Object[]{},null);
-           String select = Promotion.getSelectedPiece();
+           Promotion options = new Promotion(piece, conf);
+           JOptionPane.showOptionDialog(this, options, "Select a piece", 1, 1, chessico, new Object[]{},null);
+           String select = options.getSelectedPiece();
            btn.setName(select);
-           btn.setIcon(new ImageIcon(Conf.getImg(select)));
+           btn.setIcon(new ImageIcon(conf.getImg(select)));
         }
     }
     

@@ -19,11 +19,13 @@ import onlinechess.helpers.Conf;
  * @author admin
  */
 public class Promotion extends JPanel implements ActionListener{
-    private static String pawn;
-    private static String selectedPiece;
+    private String pawn;
+    private String selectedPiece;
+    private Conf conf;
     
-    public Promotion (String pawn){
+    public Promotion (String pawn, Conf conf){
         this.pawn = pawn;
+        this.conf = conf;
         initButtons();
     }
     
@@ -31,7 +33,7 @@ public class Promotion extends JPanel implements ActionListener{
         if(Conf.WHITES.contains(pawn)){
             for(String piece : Conf.WHITES.split("")){
                 if(!piece.equals("k")){
-                    JButton btn = new JButton(new ImageIcon(Conf.getImg(piece)));
+                    JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
                     btn.setName(piece);
                     btn.addActionListener(this);
                     add(btn);
@@ -41,7 +43,7 @@ public class Promotion extends JPanel implements ActionListener{
         if(Conf.BLACKS.contains(pawn)){
             for(String piece : Conf.BLACKS.split("")){
                 if(!piece.equals("K")){
-                    JButton btn = new JButton(new ImageIcon(Conf.getImg(piece)));
+                    JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
                     btn.setName(piece);
                     btn.addActionListener(this);
                     add(btn);
@@ -66,7 +68,7 @@ public class Promotion extends JPanel implements ActionListener{
                 }
     }
     
-    public static String getSelectedPiece(){
+    public String getSelectedPiece(){
         return !selectedPiece.equals(null) ? selectedPiece : pawn;
     }
 }

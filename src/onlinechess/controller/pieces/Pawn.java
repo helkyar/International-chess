@@ -45,7 +45,7 @@ public class Pawn extends PiecesChess{
         if(!isDiffTeam(piece, target, w, h)){return false;}
                 
         //Pawn logic
-        boolean side = conf.WHITES.contains(piece);
+        boolean side = (conf.WHITES.contains(piece) && board.isWhite) || (!conf.WHITES.contains(piece) && !board.isWhite);
         return checkOnlyForward(side, from, to, piece, w, h, board);
     }
 }
