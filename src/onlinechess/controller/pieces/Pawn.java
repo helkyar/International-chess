@@ -4,10 +4,8 @@
  */
 package onlinechess.controller.pieces;
 
-import onlinechess.controller.Game;
-import onlinechess.helpers.conf;
+import onlinechess.helpers.Conf;
 import onlinechess.views.Board;
-import onlinechess.views.ChessApp;
 
 /**
  *
@@ -15,39 +13,39 @@ import onlinechess.views.ChessApp;
  */
 public class Pawn extends PiecesChess{
     
-    private static boolean checkOnlyForward(boolean side, int from, int to, String piece){
+    private static boolean checkOnlyForward(boolean side, int from, int to, String piece, int w, int h, Board board){
         
-        //Pawns can't eat pieces on it's path "(+/-)Board.w" must be aplied to the method
-        boolean collisionDown = upDownCollisions(from, to+Board.w);
-        boolean collisionUp = upDownCollisions(from, to-Board.w);
+        //Pawns can't eat pieces on it's path "(+/-)w" must be aplied to the method
+        boolean collisionDown = upDownCollisions(from, to+w, w, h, board);
+        boolean collisionUp = upDownCollisions(from, to-w, w, h, board);
         //Out of bounds
-        if(from % Board.w == 0 && to - 1 % Board.w == 0){return false;}       
-        if(from - 1 % Board.w == 0 && to % Board.w == 0){return false;}
+        if(from % w == 0 && to - 1 % w == 0){return false;}       
+        if(from - 1 % w == 0 && to % w == 0){return false;}
         
         //Player insensitive moves
         if(side){            
             //Eating
-            if((from-to == Board.w+1 || from-to == Board.w-1) && !Game.board.isTileEmpty(to)){return true;}
+            if((from-to == w+1 || from-to == w-1) && !board.isTileEmpty(to)){return true;}
             //Piece logical moves & collisions 
-            else if(from - to == Board.w && collisionUp){return true;} //only down
-            else if(from-to == Board.w*2 && from > Board.w*(Board.h-2)  && collisionUp){return true;}
+            else if(from - to == w && collisionUp){return true;} //only down
+            else if(from-to == w*2 && from > w*(h-2)  && collisionUp){return true;}
             
         } else if(!side){            
             //Eating
-            if((from-to == -Board.w+1 || from-to == -Board.w-1) && !Game.board.isTileEmpty(to)){return true;}
+            if((from-to == -w+1 || from-to == -w-1) && !board.isTileEmpty(to)){return true;}
             //Piece logical moves & collisions  
-            else if(from - to == -Board.w  && collisionDown){return true;} //only up
-            else if(from - to == -Board.w*2 && from <= Board.w*2  && collisionDown){return true;}
+            else if(from - to == -w  && collisionDown){return true;} //only up
+            else if(from - to == -w*2 && from <= w*2  && collisionDown){return true;}
         }
         
         return false;
     }
     
-    public static boolean allowed(int from, int to, String piece, String target){
-        if(!isDiffTeam(piece, target)){return false;}
+    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board, Conf conf){
+        if(!isDiffTeam(piece, target, w, h)){return false;}
                 
         //Pawn logic
         boolean side = conf.WHITES.contains(piece);
-        return checkOnlyForward(side, from, to, piece);
+        return checkOnlyForward(side, from, to, piece, w, h, board);
     }
 }

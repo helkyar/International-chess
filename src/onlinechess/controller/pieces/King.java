@@ -4,7 +4,8 @@
  */
 package onlinechess.controller.pieces;
 
-import onlinechess.controller.Game;
+import java.util.ArrayList;
+import java.util.Map;
 import onlinechess.views.Board;
 
 /**
@@ -13,40 +14,37 @@ import onlinechess.views.Board;
  */
 public class King extends PiecesChess{
     
-    public static boolean allowed(int from, int to, String piece, String target){
-        if(!isDiffTeam(piece, target)){return false;}
+    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board, ArrayList<Integer> check, Map<Integer, Integer> castling){
+        if(!isDiffTeam(piece, target, w, h)){return false;}
     
         //"-1" avoids problems with rigth side
-        int row = (from-1) / Board.w * Board.w; 
-        boolean inBounds = to > row && to <= row + Board.w;
-        boolean uBound = to > row + Board.w && to <= row + Board.w*2;
-        boolean dBound = to > row - Board.w && to != row+1;
+        int row = (from-1) / w * w; 
+        boolean inBounds = to > row && to <= row + w;
+        boolean uBound = to > row + w && to <= row + w*2;
+        boolean dBound = to > row - w && to != row+1;
         
         if((to == from + 1 || to == from - 1) && inBounds){return true;}
-        else if(to == from + Board.w || to == from - Board.w ){return true;}
-        else if((to == from + Board.w -1 || to == from + Board.w +1) && uBound){return true;}
-        else if((to == from - Board.w -1 || to == from - Board.w +1) && dBound){return true;}
+        else if(to == from + w || to == from - w ){return true;}
+        else if((to == from + w -1 || to == from + w +1) && uBound){return true;}
+        else if((to == from - w -1 || to == from - w +1) && dBound){return true;}
         
-        //Crazy board: on edge -> KILL (to == from + Board.w +1 || to == from - Board.w -1)
-        //else if(to == from + Board.w*2 -1 || to == from - Board.w*2 +1){return true;}
-
         //Castling limitation
-        if(Game.checkPos.contains(from)){return false;} //king in check
-        if(!Game.castlingAllowed.containsKey(from)){return false;} //king or rook moved
+        if(check.contains(from)){return false;} //king in check
+        if(castling.containsKey(from)){return false;} //king or rook moved
         //Castling logical move
-        return castlingLogicalMove(from, to, piece);
+        return castlingLogicalMove(from, to, piece, w, h, board);
 
     }
 
-    private static boolean castlingLogicalMove(int from, int to, String piece) {
-        if(Game.board.getTilePiece(from + 1).equals("-") && Game.board.getTilePiece(from + 2).equals("-") &&
-        Game.board.getTilePiece(from + 3).equalsIgnoreCase("R") && to == from + 2){
-            if(!isDiffTeam(piece, Game.board.getTilePiece(from + 3))){return true;}
+    private static boolean castlingLogicalMove(int from, int to, String piece,int w, int h, Board board) {
+        if(board.getTilePiece(from + 1).equals("-") && board.getTilePiece(from + 2).equals("-") &&
+        board.getTilePiece(from + 3).equalsIgnoreCase("R") && to == from + 2){
+            if(!isDiffTeam(piece, board.getTilePiece(from + 3), w, h)){return true;}
         }
         
-        else if(Game.board.getTilePiece(from - 1).equals("-") && Game.board.getTilePiece(from - 2).equals("-") &&
-        Game.board.getTilePiece(from - 3).equalsIgnoreCase("R") && to == from - 2){
-            if(!isDiffTeam(piece, Game.board.getTilePiece(from - 3))){return true;}
+        else if(board.getTilePiece(from - 1).equals("-") && board.getTilePiece(from - 2).equals("-") &&
+        board.getTilePiece(from - 3).equalsIgnoreCase("R") && to == from - 2){
+            if(!isDiffTeam(piece, board.getTilePiece(from - 3), w, h)){return true;}
         }
                 
         return false;

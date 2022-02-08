@@ -4,10 +4,10 @@
  */
 package onlinechess.controller.pieces;
 
-import onlinechess.controller.Game;
+//Board borders
+
 import onlinechess.views.Board;
 
-//Board borders
 //Other team pieces stops advance (a++)
 
 /**
@@ -22,7 +22,7 @@ public class PiecesChess {
     * @param target  Piece of the target file
     * @return boolean indicating if the path is blocked
     */
-    public static boolean isDiffTeam(String piece, String target){
+    public static boolean isDiffTeam(String piece, String target, int w, int h){
         
         boolean pieceTeam = piece.equals(piece.toUpperCase());
         boolean targetTeam = target.equals(target.toUpperCase());
@@ -36,18 +36,18 @@ public class PiecesChess {
     * @param to   Number of the target tile
     * @return boolean indicating if the path is blocked
     */
-    protected static boolean upDownCollisions(int from, int to){
+    protected static boolean upDownCollisions(int from, int to, int w, int h, Board board){
         //Up & down collisions logic
-        int up=from-Board.w*Board.h,down=from+Board.w*Board.h,stpd=0,stpu=0;
-        for(int i = 1; i < (int)Math.abs((from-to)/Board.w); i++){                
+        int up=from-w*h,down=from+w*h,stpd=0,stpu=0;
+        for(int i = 1; i < (int)Math.abs((from-to)/w); i++){                
             try{                   
-                if(stpu <= 0&&!Game.board.isTileEmpty((int)from-Board.w*i)){
-                    up = from-Board.w*i;
+                if(stpu <= 0&&!board.isTileEmpty((int)from-w*i)){
+                    up = from-w*i;
                     stpu++; //avoid further actualization
                 }; }catch(Exception e){}
             try{
-                if(stpd<=0 && !Game.board.isTileEmpty((int)from+Board.w*i)){
-                    down = from+Board.w*i;
+                if(stpd<=0 && !board.isTileEmpty((int)from+w*i)){
+                    down = from+w*i;
                     stpd++; //avoid further actualization
                 }; } catch (Exception e){}
             }            
@@ -64,17 +64,17 @@ public class PiecesChess {
     * @param row  Initial number of the row (e. 9 -> 2nd row of 8x8 board)
     * @return boolean indicating if the path is blocked
     */
-    protected static boolean  leftRigthCollisions(int from, int to, int row){
+    protected static boolean  leftRigthCollisions(int from, int to, int row,int w, Board board){
             //Left & rigth collisions logic
-            int left=row,rigth=row+Board.w,stpl=0,stpr=0;
-            for(int i = 1; i <  Board.w; i++){                
+            int left=row,rigth=row+w,stpl=0,stpr=0;
+            for(int i = 1; i <  w; i++){                
                 try{                    
-                    if(stpl <= 0&&!Game.board.isTileEmpty(from-1*i)){
+                    if(stpl <= 0&&!board.isTileEmpty(from-1*i)){
                         left = from-1*i;
                         stpl++; //avoid further actualization
                     }; }catch(Exception e){}
                 try{
-                    if(stpr<=0 && !Game.board.isTileEmpty(from+1*i)){
+                    if(stpr<=0 && !board.isTileEmpty(from+1*i)){
                         rigth = from+1*i;
                         stpr++; //avoid further actualization
                     }; } catch (Exception e){}

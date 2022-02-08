@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Javier Palacios Botejara
  */
-public class conf {
+public class Conf {
 
     public static Dimension context;
     private final int rows = 0; //extra-minus rows
@@ -36,14 +36,14 @@ public class conf {
     protected static Map<String, String> start;
     
     //Types of plays:
-    private static int choose = 4;
+    private static int choose = 0;
     String std = "rhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHR";
     String p = "rhbkqbh-pppppppk-----------r-------R------------KPPPPPPP-HBQKBHR";
     String pawn = "pppkpppppppppppppppppppp----------------PPPPPPPPPPPPPPPPPPPPKPPP";
     String cstl = "r--kk--rk--rr--kR--KK--RK--RR--Kr--kk--rk--rr--kR--KK--RK--RR--K";
     String out = "pppppppprhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHRPPPPPPPP"; 
                                                                                                          
-    public conf (){
+    public Conf (){
         context = new Dimension(700,500);
                                      
         img = new HashMap<>();

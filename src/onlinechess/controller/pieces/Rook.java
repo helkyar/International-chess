@@ -4,7 +4,6 @@
  */
 package onlinechess.controller.pieces;
 
-import onlinechess.controller.Game;
 import onlinechess.views.Board;
 
 /**
@@ -13,18 +12,18 @@ import onlinechess.views.Board;
  */
 public class Rook extends PiecesChess{
     
-    public static boolean allowed(int from, int to, String piece, String target){
-        if(!isDiffTeam(piece, target)){return false;}
+    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board){
+        if(!isDiffTeam(piece, target, w, h)){return false;}
         
         //Aboid board out of bounds (left-rigth)
-        int row = (from-1) / Board.w * Board.w;
+        int row = (from-1) / w * w;
         
         //Piece logical moves
-        if(Math.abs(from - to) % Board.w == 0){  //up & down            
-            return upDownCollisions(from, to);
+        if(Math.abs(from - to) % w == 0){  //up & down            
+            return upDownCollisions(from, to, w, h, board);
             
-        } else if(to > row && to <= row + Board.w){ //left & rigth
-            return leftRigthCollisions(from, to, row);
+        } else if(to > row && to <= row + w){ //left & rigth
+            return leftRigthCollisions(from, to, row, w, board);
         }  
 
 
@@ -33,7 +32,7 @@ public class Rook extends PiecesChess{
         //Know if target tile is full (v)
         //Know if target cell is fiend/foe (v)
         //Aboid bumping into other pieces
-//        else if((to +  Board.w) > row && to <= row + Board.w && to < row ){return true;} //DOUBLE //Strange L
+//        else if((to +  w) > row && to <= row + w && to < row ){return true;} //DOUBLE //Strange L
 
     }
 }

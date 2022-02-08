@@ -4,16 +4,18 @@
  */
 package onlinechess.controller.pieces;
 
+import onlinechess.views.Board;
+
 /**
  *
  * @author admin
  */
 public class Queen extends PiecesChess{
     
-    public static boolean allowed(int from, int to, String piece, String target){
-        if(!isDiffTeam(piece, target)){return false;}
+    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board){
+        if(!isDiffTeam(piece, target, w, h)){return false;}
         
-        if(Rook.allowed(from, to, piece, target)|| Bishop.allowed(from, to, piece, target))
+        if(Rook.allowed(from, to, piece, target, w, h, board)|| Bishop.allowed(from, to, piece, target, w, h, board))
         {return true;}
         
         return false;

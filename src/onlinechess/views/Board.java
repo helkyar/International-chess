@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,7 +21,7 @@ import onlinechess.controller.pieces.King;
 import onlinechess.controller.pieces.Pawn;
 import onlinechess.controller.pieces.Queen;
 import onlinechess.controller.pieces.Rook;
-import onlinechess.helpers.conf;
+import onlinechess.helpers.Conf;
 import onlinechess.helpers.LogGen;
 
 
@@ -30,11 +31,11 @@ import onlinechess.helpers.LogGen;
  */
 public class Board extends JPanel{
     
-    public static int h;
-    public static int w;
+    public int h;
+    public int w;
     private String state;
     private boolean isWhite;
-    public static ArrayList<String> record;
+    public ArrayList<String> record;
     
     public Board (int[] size, String state, boolean isWhite){
         this.h = size[0];
@@ -65,8 +66,8 @@ public class Board extends JPanel{
                 catch(Exception e){btn.setName("-");}                 
                 
                 //Set tiles color pattern (alternated). Int cast for precision
-                if (((int)tile + alt) % 2 == 0){btn.setBackground(conf.bTile);}
-                else {btn.setBackground(conf.wTile);}
+                if (((int)tile + alt) % 2 == 0){btn.setBackground(Conf.bTile);}
+                else {btn.setBackground(Conf.wTile);}
                 add(btn);     
 
                 if(tile % w == 0){alt++;}
@@ -85,7 +86,7 @@ public class Board extends JPanel{
                 
                 ImageIcon icon = null;
                 boolean full = !tile[i].equals("-");
-                if(full){icon = new ImageIcon(conf.getImg(tile[i]));}
+                if(full){icon = new ImageIcon(Conf.getImg(tile[i]));}
 
                 btn.setIcon(icon);     
                 btn.setName(tile[i]);                           
@@ -125,20 +126,20 @@ public class Board extends JPanel{
      * Is ugly as fuck but gets the job done.
      * @param source the button clicked with the piece info
      */
-    public void paint(JButton source){
+    public void paint(JButton source,int w, int h, Board board, Conf conf,  ArrayList<Integer> check, Map<Integer, Integer> castling,String pP, boolean eP, int posP){
         int from = getPosition(source);
         String piece = source.getName();
         for (int i = 0; i < getComponentCount(); i++){
             JButton btn = (JButton) getComponents()[i];
-            if(piece.equalsIgnoreCase("R") && Rook.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}            
-            else if(piece.equalsIgnoreCase("H") && Horse.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}           
-            else if(piece.equalsIgnoreCase("B") && Bishop.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);} 
-            else if(piece.equalsIgnoreCase("Q") && Queen.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);} 
-            else if(piece.equalsIgnoreCase("K") && King.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);} 
-            else if(piece.equalsIgnoreCase("P") && Pawn.allowed(from, i+1, piece, btn.getName())){btn.setBackground(conf.allw);}   
+            if(piece.equalsIgnoreCase("R") && Rook.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(Conf.allw);}            
+            else if(piece.equalsIgnoreCase("H") && Horse.allowed(from, i+1, piece, btn.getName(), w, h)){btn.setBackground(Conf.allw);}           
+            else if(piece.equalsIgnoreCase("B") && Bishop.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(Conf.allw);} 
+            else if(piece.equalsIgnoreCase("Q") && Queen.allowed(from, i+1, piece, btn.getName(), w, h, board)){btn.setBackground(Conf.allw);} 
+            else if(piece.equalsIgnoreCase("K") && King.allowed(from, i+1, piece, btn.getName(), w, h, board, check, castling)){btn.setBackground(Conf.allw);} 
+            else if(piece.equalsIgnoreCase("P") && Pawn.allowed(from, i+1, piece, btn.getName(), w, h, board, conf)){btn.setBackground(Conf.allw);}   
             //enPessant
-            if(piece.equalsIgnoreCase("P") && !piece.equals(Game.pawnPessant) && Game.enPessant && i+1==Game.posPessant && 
-            (from+w-1==Game.posPessant || from+w+1==Game.posPessant || from-w+1==Game.posPessant || from-w-1==Game.posPessant)){
+            if(piece.equalsIgnoreCase("P") && !piece.equals(pP) && eP && i+1==posP && 
+            (from+w-1 == posP || from+w+1 == posP || from-w+1 == posP || from-w-1 == posP)){
                 btn.setBackground(conf.allw);
             }
         }
@@ -149,11 +150,11 @@ public class Board extends JPanel{
             JButton btn = (JButton) getComponents()[i-1];
             //Set tiles color pattern (alternated). Int cast for precision
             if (((int)i + alt) % 2 == 0){
-                btn.setBackground(conf.bTile);
-                btn.setForeground(conf.bTile);
+                btn.setBackground(Conf.bTile);
+                btn.setForeground(Conf.bTile);
             } else {
-                btn.setBackground(conf.wTile);
-                btn.setForeground(conf.wTile);
+                btn.setBackground(Conf.wTile);
+                btn.setForeground(Conf.wTile);
             }
 
             if(i % w == 0){alt++;}
@@ -162,7 +163,7 @@ public class Board extends JPanel{
     
     public void paintCheck(int pos){
         JButton btn = (JButton) getComponents()[pos-1];
-        btn.setBackground(conf.check);
+        btn.setBackground(Conf.check);
     }
     
     public int getPosition(JButton b){
@@ -192,7 +193,7 @@ public class Board extends JPanel{
         
         ImageIcon icon = null;
         boolean full = !piece.equals("-");
-        if(full){icon = new ImageIcon(conf.getImg(piece));}
+        if(full){icon = new ImageIcon(Conf.getImg(piece));}
 
         btn.setIcon(icon); 
         btn.setName(piece);

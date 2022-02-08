@@ -9,6 +9,7 @@ import onlinechess.helpers.LogGen;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import onlinechess.controller.Game;
-import onlinechess.helpers.conf;
+import onlinechess.helpers.Conf;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
@@ -49,14 +50,10 @@ public class ChessApp extends JFrame{
     
     public ChessApp(){
         
-        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 1, 1, chessico);
-        if(choose == 0) {isWhite = true;} //yes
-        else if(choose == 1) {isWhite = false;}//no
-
-        setLayout(new BorderLayout());
+        setLayout(new GridLayout(1,2));
         
-        new conf();
-        add(new Game(isWhite));
+        add(new Game());
+        add(new Game()); //piece selector must be in game
         
         setTitle("Online Chess");
         setIconImage(chessico.getImage());

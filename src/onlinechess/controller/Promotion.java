@@ -12,36 +12,36 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import onlinechess.helpers.conf;
+import onlinechess.helpers.Conf;
 
 /**
  *
  * @author admin
  */
-public class PawnSwitch extends JPanel implements ActionListener{
+public class Promotion extends JPanel implements ActionListener{
     private static String pawn;
     private static String selectedPiece;
     
-    public PawnSwitch (String pawn){
+    public Promotion (String pawn){
         this.pawn = pawn;
         initButtons();
     }
     
     private void initButtons(){
-        if(conf.WHITES.contains(pawn)){
-            for(String piece : conf.WHITES.split("")){
+        if(Conf.WHITES.contains(pawn)){
+            for(String piece : Conf.WHITES.split("")){
                 if(!piece.equals("k")){
-                    JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
+                    JButton btn = new JButton(new ImageIcon(Conf.getImg(piece)));
                     btn.setName(piece);
                     btn.addActionListener(this);
                     add(btn);
                 }
             }
         }
-        if(conf.BLACKS.contains(pawn)){
-            for(String piece : conf.BLACKS.split("")){
+        if(Conf.BLACKS.contains(pawn)){
+            for(String piece : Conf.BLACKS.split("")){
                 if(!piece.equals("K")){
-                    JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
+                    JButton btn = new JButton(new ImageIcon(Conf.getImg(piece)));
                     btn.setName(piece);
                     btn.addActionListener(this);
                     add(btn);
