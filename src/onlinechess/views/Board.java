@@ -13,15 +13,15 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import onlinechess.controller.Game;
+import onlinechess.controller.game.Game;
 
-import onlinechess.controller.pieces.Bishop;
-import onlinechess.controller.pieces.Horse;
-import onlinechess.controller.pieces.King;
-import onlinechess.controller.pieces.Pawn;
-import onlinechess.controller.pieces.Queen;
-import onlinechess.controller.pieces.Rook;
-import onlinechess.helpers.Conf;
+import onlinechess.controller.game.pieces.Bishop;
+import onlinechess.controller.game.pieces.Horse;
+import onlinechess.controller.game.pieces.King;
+import onlinechess.controller.game.pieces.Pawn;
+import onlinechess.controller.game.pieces.Queen;
+import onlinechess.controller.game.pieces.Rook;
+import onlinechess.helpers.GameConfig;
 import onlinechess.helpers.LogGen;
 
 
@@ -30,7 +30,7 @@ import onlinechess.helpers.LogGen;
  * @author admin
  */
 public class Board extends JPanel{
-    private Conf conf;
+    private GameConfig conf;
     
     public int h;
     public int w;
@@ -38,7 +38,7 @@ public class Board extends JPanel{
     public boolean isWhite;
     public ArrayList<String> record;
     
-    public Board (int[] size, String state, boolean isWhite, Conf conf){
+    public Board (int[] size, String state, boolean isWhite, GameConfig conf){
         this.conf = conf;
         this.h = size[0];
         this.w = size[1];
@@ -128,7 +128,7 @@ public class Board extends JPanel{
      * Is ugly as fuck but gets the job done.
      * @param source the button clicked with the piece info
      */
-    public void paint(JButton source,int w, int h, Board board, Conf conf,  ArrayList<Integer> check, Map<Integer, Integer> castling,String pP, boolean eP, int posP){
+    public void paint(JButton source,int w, int h, Board board, GameConfig conf,  ArrayList<Integer> check, Map<Integer, Integer> castling,String pP, boolean eP, int posP){
         int from = getPosition(source);
         String piece = source.getName();
         for (int i = 0; i < getComponentCount(); i++){

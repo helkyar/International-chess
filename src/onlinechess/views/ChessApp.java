@@ -24,8 +24,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import onlinechess.controller.Game;
-import onlinechess.helpers.Conf;
+import onlinechess.controller.game.Game;
+import onlinechess.helpers.GameConfig;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**

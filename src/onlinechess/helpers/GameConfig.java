@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Javier Palacios Botejara
  */
-public class Conf {
+public class GameConfig {
 
     public static Dimension context;
     private final int rows = 0; //extra-minus rows
@@ -43,7 +43,7 @@ public class Conf {
     String cstl = "r--kk--rk--rr--kR--KK--RK--RR--Kr--kk--rk--rr--kR--KK--RK--RR--K";
     String out = "pppppppprhbkqbhrpppppppp--------------------------------PPPPPPPPRHBQKBHRPPPPPPPP"; 
                                                                                                          
-    public Conf (int chooseBoard){
+    public GameConfig (int chooseBoard){
         this.choose = chooseBoard;
         
         context = new Dimension(700,500);

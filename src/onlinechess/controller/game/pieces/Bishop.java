@@ -1,4 +1,4 @@
-package onlinechess.controller.pieces;
+package onlinechess.controller.game.pieces;
 
 import onlinechess.views.Board;
 

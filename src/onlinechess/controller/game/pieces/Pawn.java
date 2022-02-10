@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package onlinechess.controller.pieces;
+package onlinechess.controller.game.pieces;
 
-import onlinechess.helpers.Conf;
+import onlinechess.helpers.GameConfig;
 import onlinechess.views.Board;
 
 /**
@@ -41,7 +41,7 @@ public class Pawn extends PiecesChess{
         return false;
     }
     
-    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board, Conf conf){
+    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board, GameConfig conf){
         if(!isDiffTeam(piece, target, w, h)){return false;}
                 
         //Pawn logic
