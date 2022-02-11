@@ -2,17 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package onlinechess.controller;
+package onlinechess.controller.game;
 
-import onlinechess.controller.pieces.King;
-import onlinechess.controller.pieces.Rook;
-import onlinechess.controller.pieces.Queen;
-import onlinechess.controller.pieces.Pawn;
-import onlinechess.controller.pieces.Bishop;
-import onlinechess.controller.pieces.Horse;
+import onlinechess.controller.game.pieces.King;
+import onlinechess.controller.game.pieces.Rook;
+import onlinechess.controller.game.pieces.Queen;
+import onlinechess.controller.game.pieces.Pawn;
+import onlinechess.controller.game.pieces.Bishop;
+import onlinechess.controller.game.pieces.Horse;
  
 import onlinechess.views.Board;
-import onlinechess.helpers.Conf;
+import onlinechess.helpers.GameConfig;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -27,7 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import onlinechess.controller.pieces.PiecesChess;
+import onlinechess.controller.game.pieces.PiecesChess;
 import onlinechess.views.ChessApp;
 import static onlinechess.views.ChessApp.chessico;
 
@@ -42,7 +42,7 @@ public class Game extends JPanel implements ActionListener{
     private Icon icon;
     private Color bg;
     
-    public Conf conf;
+    public GameConfig conf;
     public Board board;
     private boolean blackTurn;
     
@@ -64,7 +64,7 @@ public class Game extends JPanel implements ActionListener{
         if(choose == 0) {isWhite = true;} //yes
         else if(choose == 1) {isWhite = false;}//no
         
-        conf= new Conf(choose);
+        conf= new GameConfig(choose);
         
         board = new Board(conf.size(), conf.init(), isWhite, conf);
         board.startBoard(this);
@@ -94,8 +94,8 @@ public class Game extends JPanel implements ActionListener{
         
         //Turn checker ---------------------------------------------------------
         boolean correctTurn = (
-            (Conf.WHITES.contains(tile) && !blackTurn)||
-            (Conf.BLACKS.contains(tile) && blackTurn)
+            (GameConfig.WHITES.contains(tile) && !blackTurn)||
+            (GameConfig.BLACKS.contains(tile) && blackTurn)
         );
         
         //Select tile ----------------------------------------------------------
@@ -103,7 +103,7 @@ public class Game extends JPanel implements ActionListener{
             prev = btn;
             piece = tile;
             icon = btn.getIcon();
-            prev.setBackground(Conf.SLCT);  
+            prev.setBackground(GameConfig.SLCT);  
                       
             selected = true;
             board.paint(prev, board.w, board.h, board, conf, checkPos, castlingAllowed, pawnPessant, enPessant, posPessant);  
@@ -212,7 +212,7 @@ public class Game extends JPanel implements ActionListener{
             for(int i = 1; i <= board.w*board.h; i++){
                 String tile = board.getTilePiece(i);
                 
-                if(!board.isTileEmpty(i) && Conf.WHITES.contains(tile) && king.get(pos).equals("K")) {         
+                if(!board.isTileEmpty(i) && GameConfig.WHITES.contains(tile) && king.get(pos).equals("K")) {         
                     if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
                     else if(tile.equalsIgnoreCase("H")){check = Horse.allowed(i, pos, tile, king.get(pos), board.w, board.h) ? true : check;}            
                     else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
@@ -222,7 +222,7 @@ public class Game extends JPanel implements ActionListener{
                     if(check){board.paintCheck(pos);checkPos.add(pos);}
                     check = false;
                     
-                } else if(!board.isTileEmpty(i) && Conf.BLACKS.contains(tile) && king.get(pos).equals("k")) {        
+                } else if(!board.isTileEmpty(i) && GameConfig.BLACKS.contains(tile) && king.get(pos).equals("k")) {        
                     if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
                     else if(tile.equalsIgnoreCase("H")){check = Horse.allowed(i, pos, tile, king.get(pos), board.w, board.h) ? true : check;}            
                     else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            

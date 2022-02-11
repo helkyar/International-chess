@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package onlinechess.controller;
+package onlinechess.controller.game;
 
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import onlinechess.helpers.Conf;
+import onlinechess.helpers.GameConfig;
 
 /**
  *
@@ -21,17 +21,17 @@ import onlinechess.helpers.Conf;
 public class Promotion extends JPanel implements ActionListener{
     private String pawn;
     private String selectedPiece;
-    private Conf conf;
+    private GameConfig conf;
     
-    public Promotion (String pawn, Conf conf){
+    public Promotion (String pawn, GameConfig conf){
         this.pawn = pawn;
         this.conf = conf;
         initButtons();
     }
     
     private void initButtons(){
-        if(Conf.WHITES.contains(pawn)){
-            for(String piece : Conf.WHITES.split("")){
+        if(GameConfig.WHITES.contains(pawn)){
+            for(String piece : GameConfig.WHITES.split("")){
                 if(!piece.equals("k")){
                     JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
                     btn.setName(piece);
@@ -40,8 +40,8 @@ public class Promotion extends JPanel implements ActionListener{
                 }
             }
         }
-        if(Conf.BLACKS.contains(pawn)){
-            for(String piece : Conf.BLACKS.split("")){
+        if(GameConfig.BLACKS.contains(pawn)){
+            for(String piece : GameConfig.BLACKS.split("")){
                 if(!piece.equals("K")){
                     JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
                     btn.setName(piece);
