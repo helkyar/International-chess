@@ -52,10 +52,7 @@ public class Session extends JFrame{
         sessionbtn.addActionListener((ActionEvent e)->{
             CardLayout card = (CardLayout) masterpanel.getLayout();
             card.next(masterpanel);
-        //Close Server Connection Info POP-UP
-            new Timer(2000, (ActionEvent ev)->{
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-            });
+            new Timer(2000, (ActionEvent ev)->{dispose();}).start();
         });
         
     //STYLE OPTIONS ___________________________________________________________
@@ -84,9 +81,9 @@ public class Session extends JFrame{
         auth.add(changepanel);
         auth.add(sessionbtn);
         auth.add(guesstbtn);
-        
+        //session start information
         message.add(msglabel);
-        
+        //card to change between views
         masterpanel.add(auth, "auth");
         masterpanel.add(message, "message");                
         add(masterpanel);
@@ -123,8 +120,8 @@ public class Session extends JFrame{
         changepanel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
-                changepanel.setText(newuser ? loglink:reglink);
-                sessionbtn.setText(newuser ? "REGISTER":"LOGIN");   
+                changepanel.setText(newuser ? reglink:loglink);
+                sessionbtn.setText(newuser ? "LOGIN":"REGISTER");   
                 setLocationAndSize(newuser ? 40 : 0);             
                 newuser = newuser ? addComp() : removeComp();
                 auth.setVisible(false); auth.setVisible(true);
