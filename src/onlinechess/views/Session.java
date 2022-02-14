@@ -4,14 +4,10 @@
  */
 package onlinechess.views;
 
-import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,8 +29,7 @@ public class Session extends JFrame{
         logo = new JLabel(cnf.APP_ICON);   
         
     //PANEL STRUCTURE__________________________________________________________
-        login.setLayout(null);
-        register.setLayout(null);
+       auth.setLayout(null);
     
     //SET LOCATION AND SIZE ___________________________________________________
         setLocationAndSize(60);
@@ -46,20 +41,13 @@ public class Session extends JFrame{
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){dispose();}
         });
-        changepanel.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                changepanel.setText(loglink);
-                sessionbtn.setText("REGISTER");
-                setLocationAndSize(20);
-            }
-        });
+        swapChangePanelListener();
         sessionbtn.addActionListener((ActionEvent e)->{
-            
+            //send info
         });
         
     //STYLE OPTIONS ___________________________________________________________
-        login.setBackground(cnf.PRIME);        
-        register.setBackground(cnf.PRIME);
+       auth.setBackground(cnf.PRIME);    
         userlabel.setForeground(cnf.ALT);        
         paswlabel.setForeground(cnf.ALT);      
         changepanel.setForeground(cnf.ALT);
@@ -68,15 +56,15 @@ public class Session extends JFrame{
         paswtxt.setHorizontalAlignment(JTextField.CENTER);
     
     //ADD COMPONENTS __________________________________________________________   
-        login.add(close);
-        login.add(logo);
-        login.add(userlabel);
-        login.add(paswlabel);
-        login.add(usertxt);
-        login.add(paswtxt);
-        login.add(changepanel);
-        login.add(sessionbtn);        
-        add(login);
+        auth.add(close);
+        auth.add(logo);
+        auth.add(userlabel);
+        auth.add(paswlabel);
+        auth.add(usertxt);
+        auth.add(paswtxt);
+        auth.add(changepanel);
+        auth.add(sessionbtn);        
+        add(auth);
     
     //FRAME STRUCTURE _________________________________________________________  
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -97,6 +85,31 @@ public class Session extends JFrame{
         paswtxt.setBounds(w/4,275+off,w/2,30);
         sessionbtn.setBounds(w/2-50,350+off,100,30);
         changepanel.setBounds(155,400+off,200,30);
+        
+        email.setBounds(155,450+off,200,30);
+    }
+    
+    private void swapChangePanelListener(){
+        changepanel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                changepanel.setText(newuser ? loglink:reglink);
+                sessionbtn.setText(newuser ? "REGISTER":"LOGIN");   
+                setLocationAndSize(newuser ? 20 : 60);             
+                newuser = newuser ? addComp() : removeComp();
+                auth.setVisible(false); auth.setVisible(true);
+            }
+
+            private boolean addComp() {
+                auth.remove(email); 
+                return false;
+            }
+
+            private boolean removeComp() {                
+                auth.add(email);
+                return true;
+            }
+        });
     }
     
 //VARIABLES ___________________________________________________________________
@@ -105,8 +118,8 @@ public class Session extends JFrame{
     private int w = 500;
     private int h = 700;
     
-    private JPanel login = new JPanel();    
-    private JPanel register = new JPanel();
+    private JPanel auth = new JPanel();    
+    boolean newuser = false;
     
 //COMPONENTS __________________________________________________________________
     private final JLabel close;
