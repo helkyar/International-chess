@@ -6,7 +6,7 @@ package onlinechess.controller.game.pieces;
 
 import java.util.ArrayList;
 import java.util.Map;
-import onlinechess.views.game.Board;
+import onlinechess.views.Board;
 
 /**
  *

@@ -25,10 +25,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import onlinechess.controller.game.Game;
-import onlinechess.helpers.GameConfig;
+import onlinechess.helpers.ConfigGame;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
-import onlinechess.helpers.AppConfig;
-import onlinechess.views.session.Session;
+import onlinechess.helpers.ConfigApp;
 
 /**
  *
@@ -44,15 +43,15 @@ public class ChessApp extends JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try{
-                    AppConfig cnf = new AppConfig();
+                    ConfigApp cnf = new ConfigApp();
                     new ChessApp(cnf); //App start
                     new Session(cnf); //Session start  
-                } catch(Throwable e){LogGen.error(e.getMessage());}
+                } catch(Exception e){e.printStackTrace();}
             }
         });
     }
     
-    public ChessApp(AppConfig cnf){        
+    public ChessApp(ConfigApp cnf){        
         this.cnf = cnf;
         initDate();     
 //        add(new Game());
@@ -99,7 +98,7 @@ public class ChessApp extends JFrame{
     }
     
     // VARIABLE DECLARATION
-    private AppConfig cnf;
+    private ConfigApp cnf;
     public static ImageIcon chessico;
         
     private JTextField dateText = new JTextField();

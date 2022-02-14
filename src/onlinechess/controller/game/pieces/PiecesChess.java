@@ -6,7 +6,7 @@ package onlinechess.controller.game.pieces;
 
 //Board borders
 
-import onlinechess.views.game.Board;
+import onlinechess.views.Board;
 
 //Other team pieces stops advance (a++)
 

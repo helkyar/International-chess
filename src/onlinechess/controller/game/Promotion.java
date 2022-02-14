@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import onlinechess.helpers.GameConfig;
+import onlinechess.helpers.ConfigGame;
 
 /**
  *
@@ -21,17 +21,17 @@ import onlinechess.helpers.GameConfig;
 public class Promotion extends JPanel implements ActionListener{
     private String pawn;
     private String selectedPiece;
-    private GameConfig conf;
+    private ConfigGame conf;
     
-    public Promotion (String pawn, GameConfig conf){
+    public Promotion (String pawn, ConfigGame conf){
         this.pawn = pawn;
         this.conf = conf;
         initButtons();
     }
     
     private void initButtons(){
-        if(GameConfig.WHITES.contains(pawn)){
-            for(String piece : GameConfig.WHITES.split("")){
+        if(ConfigGame.WHITES.contains(pawn)){
+            for(String piece : ConfigGame.WHITES.split("")){
                 if(!piece.equals("k")){
                     JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
                     btn.setName(piece);
@@ -40,8 +40,8 @@ public class Promotion extends JPanel implements ActionListener{
                 }
             }
         }
-        if(GameConfig.BLACKS.contains(pawn)){
-            for(String piece : GameConfig.BLACKS.split("")){
+        if(ConfigGame.BLACKS.contains(pawn)){
+            for(String piece : ConfigGame.BLACKS.split("")){
                 if(!piece.equals("K")){
                     JButton btn = new JButton(new ImageIcon(conf.getImg(piece)));
                     btn.setName(piece);

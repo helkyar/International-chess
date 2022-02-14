@@ -4,8 +4,8 @@
  */
 package onlinechess.controller.game.pieces;
 
-import onlinechess.helpers.GameConfig;
-import onlinechess.views.game.Board;
+import onlinechess.helpers.ConfigGame;
+import onlinechess.views.Board;
 
 /**
  *
@@ -41,7 +41,7 @@ public class Pawn extends PiecesChess{
         return false;
     }
     
-    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board, GameConfig conf){
+    public static boolean allowed(int from, int to, String piece, String target, int w, int h, Board board, ConfigGame conf){
         if(!isDiffTeam(piece, target, w, h)){return false;}
                 
         //Pawn logic

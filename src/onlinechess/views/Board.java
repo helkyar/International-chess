@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package onlinechess.views.game;
+package onlinechess.views;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -21,7 +21,7 @@ import onlinechess.controller.game.pieces.King;
 import onlinechess.controller.game.pieces.Pawn;
 import onlinechess.controller.game.pieces.Queen;
 import onlinechess.controller.game.pieces.Rook;
-import onlinechess.helpers.GameConfig;
+import onlinechess.helpers.ConfigGame;
 import onlinechess.helpers.LogGen;
 
 
@@ -30,7 +30,7 @@ import onlinechess.helpers.LogGen;
  * @author admin
  */
 public class Board extends JPanel{
-    private GameConfig conf;
+    private ConfigGame conf;
     
     public int h;
     public int w;
@@ -38,7 +38,7 @@ public class Board extends JPanel{
     public boolean isWhite;
     public ArrayList<String> record;
     
-    public Board (int[] size, String state, boolean isWhite, GameConfig conf){
+    public Board (int[] size, String state, boolean isWhite, ConfigGame conf){
         this.conf = conf;
         this.h = size[0];
         this.w = size[1];
@@ -128,7 +128,7 @@ public class Board extends JPanel{
      * Is ugly as fuck but gets the job done.
      * @param source the button clicked with the piece info
      */
-    public void paint(JButton source,int w, int h, Board board, GameConfig conf,  ArrayList<Integer> check, Map<Integer, Integer> castling,String pP, boolean eP, int posP){
+    public void paint(JButton source,int w, int h, Board board, ConfigGame conf,  ArrayList<Integer> check, Map<Integer, Integer> castling,String pP, boolean eP, int posP){
         int from = getPosition(source);
         String piece = source.getName();
         for (int i = 0; i < getComponentCount(); i++){
