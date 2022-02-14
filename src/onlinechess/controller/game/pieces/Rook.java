@@ -4,7 +4,7 @@
  */
 package onlinechess.controller.game.pieces;
 
-import onlinechess.views.Board;
+import onlinechess.views.game.Board;
 
 /**
  *
