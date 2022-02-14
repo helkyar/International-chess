@@ -5,7 +5,7 @@
 package onlinechess.controller.game.pieces;
 
 import onlinechess.helpers.GameConfig;
-import onlinechess.views.Board;
+import onlinechess.views.game.Board;
 
 /**
  *

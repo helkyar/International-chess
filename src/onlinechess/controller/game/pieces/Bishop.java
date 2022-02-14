@@ -1,6 +1,6 @@
 package onlinechess.controller.game.pieces;
 
-import onlinechess.views.Board;
+import onlinechess.views.game.Board;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

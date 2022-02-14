@@ -11,7 +11,7 @@ import onlinechess.controller.game.pieces.Pawn;
 import onlinechess.controller.game.pieces.Bishop;
 import onlinechess.controller.game.pieces.Horse;
  
-import onlinechess.views.Board;
+import onlinechess.views.game.Board;
 import onlinechess.helpers.GameConfig;
 
 import java.awt.Color;

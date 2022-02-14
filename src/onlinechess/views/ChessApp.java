@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import onlinechess.controller.game.Game;
 import onlinechess.helpers.GameConfig;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import onlinechess.views.session.Session;
 
 /**
  *
@@ -48,16 +49,19 @@ public class ChessApp extends JFrame{
         });
     }
     
-    public ChessApp(){
+    public ChessApp(){        
         
-        setLayout(new GridLayout(1,2));
-        
-        add(new Game());
-        add(new Game()); 
-        
+        initDate();        
+        new Session();
+//        add(new Game());
+//        add(new Game()); 
+
+    // FRAME STRUCTURE ________________________________________________________
         setTitle("Online Chess");
+        setLayout(new GridLayout(1,2));
         setIconImage(chessico.getImage());
-        setSize(800,800);
+        
+        setSize(800,800);    
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setVisible(true);
 
@@ -69,8 +73,6 @@ public class ChessApp extends JFrame{
                 exit();
             }
         });
-        
-        initDate();
         
         LogGen.info("Session started succesfully");
     }
