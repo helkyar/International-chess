@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import onlinechess.controller.game.Game;
 import onlinechess.helpers.GameConfig;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import onlinechess.helpers.AppConfig;
 import onlinechess.views.session.Session;
 
 /**
@@ -43,21 +44,22 @@ public class ChessApp extends JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try{
-                    new ChessApp().setVisible(true);
+                    AppConfig cnf = new AppConfig();
+                    new ChessApp(cnf); //App start
+                    new Session(cnf); //Session start  
                 } catch(Throwable e){LogGen.error(e.getMessage());}
             }
         });
     }
     
-    public ChessApp(){        
-        
-        initDate();        
-        new Session();
+    public ChessApp(AppConfig cnf){        
+        this.cnf = cnf;
+        initDate();     
 //        add(new Game());
 //        add(new Game()); 
-
     // FRAME STRUCTURE ________________________________________________________
         setTitle("Online Chess");
+        chessico = cnf.APP_ICON;
         setLayout(new GridLayout(1,2));
         setIconImage(chessico.getImage());
         
@@ -97,10 +99,9 @@ public class ChessApp extends JFrame{
     }
     
     // VARIABLE DECLARATION
-    public static ImageIcon chessico = new ImageIcon("img/chessico.png");
-    
-    public static boolean isWhite;
-    
+    private AppConfig cnf;
+    public static ImageIcon chessico;
+        
     private JTextField dateText = new JTextField();
     private DateFormat timeFormat = new SimpleDateFormat("  kk:mm:ss  dd/MM/yyyy  ");  
 
