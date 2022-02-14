@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,11 +43,17 @@ public class Session extends JFrame{
         
     //ADD LISTENERS ___________________________________________________________
         changepanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        close.setCursor(new Cursor(Cursor.HAND_CURSOR));        
+        close.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        paswtxt.setTransferHandler(null); //avoid paste
         swapChangePanelListener();
         
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){dispose();}
+        });
+        paswshow.addActionListener((ActionEvent e)->{
+            if (paswshow.isSelected()) {
+                paswtxt.setEchoChar((char) 0);
+            } else {paswtxt.setEchoChar('\u2022');}
         });
         
         sessionbtn.addActionListener((ActionEvent e)->{
@@ -57,7 +64,8 @@ public class Session extends JFrame{
         
     //STYLE OPTIONS ___________________________________________________________
         setIconImage(cnf.APP_ICON.getImage());
-        auth.setBackground(cnf.PRIME);  
+        auth.setBackground(cnf.PRIME); 
+        paswshow.setBackground(cnf.PRIME);
         userlabel.setForeground(cnf.ALT);        
         paswlabel.setForeground(cnf.ALT);      
         changepanel.setForeground(cnf.ALT);
@@ -66,21 +74,24 @@ public class Session extends JFrame{
         //center text        
         usertxt.setHorizontalAlignment(JTextField.CENTER);
         paswtxt.setHorizontalAlignment(JTextField.CENTER);
+        emailtxt.setHorizontalAlignment(JTextField.CENTER);
+        confpswdtxt.setHorizontalAlignment(JTextField.CENTER);
         //register-login mesage        
         message.setBackground(cnf.PRIME);
         msglabel.setFont(new Font("arial", 3, 32));
         msglabel.setForeground(cnf.ALT);
     
-    //ADD COMPONENTS __________________________________________________________   
+    //ADD COMPONENTS __________________________________________________________ 
         auth.add(close);
         auth.add(logo);
         auth.add(userlabel);
         auth.add(paswlabel);
         auth.add(usertxt);
         auth.add(paswtxt);
-        auth.add(changepanel);
+        auth.add(paswshow);
         auth.add(sessionbtn);
         auth.add(guesstbtn);
+        auth.add(changepanel);
         //session start information
         message.add(msglabel);
         //card to change between views
@@ -106,6 +117,7 @@ public class Session extends JFrame{
         usertxt.setBounds(w/4,start+o,w/2,30);
         paswlabel.setBounds(w/4,start+o*4-i,150,30);
         paswtxt.setBounds(w/4,start+o*5-i,w/2,30);
+        paswshow.setBounds(w/4,start+o*5-10,w/2,30);
         sessionbtn.setBounds(w/2-105,start+o*9-i*2,100,30);
         guesstbtn.setBounds(w/2+5,start+o*9-i*2,100,30);
         changepanel.setBounds(155,start+o*10-i*2,200,30);
@@ -131,7 +143,8 @@ public class Session extends JFrame{
                 auth.remove(emailtxt); 
                 auth.remove(confpswdtxt); 
                 auth.remove(emailabel);                 
-                auth.remove(confpswdlabel); 
+                auth.remove(confpswdlabel);
+                auth.add(paswshow);
                 return false;
             }
 
@@ -139,7 +152,8 @@ public class Session extends JFrame{
                 auth.add(emailtxt); 
                 auth.add(confpswdtxt); 
                 auth.add(emailabel);                 
-                auth.add(confpswdlabel);
+                auth.add(confpswdlabel);                
+                auth.remove(paswshow);
                 return true;
             }
         });
@@ -161,12 +175,13 @@ public class Session extends JFrame{
     private final JLabel logo;
     private final JTextField usertxt = new JTextField(); 
     private final JPasswordField paswtxt = new JPasswordField();  
-    private final JTextField confpswdtxt = new JTextField(20);    
+    private final JLabel confpswdlabel = new JLabel("Confirm Password: "); 
+    private final JPasswordField confpswdtxt = new JPasswordField(20);     
+    private final JLabel emailabel = new JLabel("Email: "); 
     private final JTextField emailtxt = new JTextField(20);
     private final JLabel userlabel= new JLabel("Username: ");
-    private final JLabel paswlabel= new JLabel("Password: ");
-    private final JLabel confpswdlabel = new JLabel("Confirm Password:");  
-    private final JLabel emailabel = new JLabel("Email"); 
+    private final JLabel paswlabel= new JLabel("Password: ");    
+    private final JCheckBox paswshow = new JCheckBox("Show Password");
     private final JButton sessionbtn = new JButton("LOGIN");
     private final JButton guesstbtn = new JButton("GUESST");
     private final String reglink = "No tienes cuenta? Crea una aquí...";
