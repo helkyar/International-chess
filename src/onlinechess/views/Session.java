@@ -47,19 +47,12 @@ public class Session extends JFrame{
         paswtxt.setTransferHandler(null); //avoid paste
         swapChangePanelListener();
         
+        paswshow.addActionListener((ActionEvent e)->{showPassword();});        
+        sessionbtn.addActionListener((ActionEvent e)->{sessionStart(e);});    
+        guesstbtn.addActionListener((ActionEvent e)->{startAsGuesst(e);});
+        
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){dispose();}
-        });
-        paswshow.addActionListener((ActionEvent e)->{
-            if (paswshow.isSelected()) {
-                paswtxt.setEchoChar((char) 0);
-            } else {paswtxt.setEchoChar('\u2022');}
-        });
-        
-        sessionbtn.addActionListener((ActionEvent e)->{
-            CardLayout card = (CardLayout) masterpanel.getLayout();
-            card.next(masterpanel);
-            new Timer(2000, (ActionEvent ev)->{dispose();}).start();
         });
         
     //STYLE OPTIONS ___________________________________________________________
@@ -159,6 +152,19 @@ public class Session extends JFrame{
         });
     }
     
+    private void showPassword() {
+        if (paswshow.isSelected()) {paswtxt.setEchoChar((char) 0);} 
+        else {paswtxt.setEchoChar('\u2022');}
+    }
+
+    private void startAsGuesst(ActionEvent e) {
+    
+    }
+       
+    private void sessionStart(ActionEvent e) {
+        ((CardLayout) masterpanel.getLayout()).next(masterpanel);
+        new Timer(2000, (ActionEvent ev)->{dispose();}).start();
+    }
 //VARIABLES ___________________________________________________________________
     private final ConfigApp cnf;
     
@@ -189,5 +195,4 @@ public class Session extends JFrame{
     private final JLabel changepanel = new JLabel(reglink);
 
     private final JLabel msglabel = new JLabel("Acces granted!!");
-       
 }
