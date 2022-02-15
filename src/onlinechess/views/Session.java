@@ -175,23 +175,25 @@ public class Session extends JFrame{
        
     private void sessionStart(ActionEvent e) {
         ((CardLayout) masterpanel.getLayout()).next(masterpanel);
-        String warning, enter = "\n\n\n\n\n\n\n\n";
-    //VALIDATION ______________________________________________________________
-        //set color red, change to previous panel, (?)set info on previus panel
-    //SUCCESS MSG _____________________________________________________________
+        String warning, msg="", enter = "\n\n\n\n\n\n\n\n";
+        int timer = 2000;
+    //GUESST CASE _____________________________________________________________
         if(e.getActionCommand().equals("GUESST")){
             warning = "\n\nChats & Boards \nwont be saved!";
             msgtxt.setText(enter+"Session started as Guesst..."+warning);
             new Timer(3000, (ActionEvent ev)->{dispose();}).start();
-            
-        }else if(e.getActionCommand().equals("LOGIN")){
-            msgtxt.setText(enter+"\n\nAcces granted!!");
-            new Timer(3000, (ActionEvent ev)->{dispose();}).start();
-            
-        }else if(e.getActionCommand().equals("REGISTER")){            
-            msgtxt.setText(enter+"\n\nRegistered successfully!!");
-            new Timer(3000, (ActionEvent ev)->{dispose();}).start();
+            return;
         }
+    //VALIDATION ______________________________________________________________
+        if(e.getActionCommand().equals("REGISTER")){   
+            msg = enter+"\n\nRegistered successfully!!";
+        } else {
+             msg = enter+"\n\nAccess granted!!";
+        }
+        //set color red, change to previous panel, (?)set info on previus panel
+    //SUCCESS MSG _____________________________________________________________        
+        msgtxt.setText(msg);
+        new Timer(timer, (ActionEvent ev)->{dispose();}).start();
     }
 //==============================================================================
 //VARIABLES 
