@@ -17,8 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.Timer;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import onlinechess.helpers.ConfigApp;
     
 /**
@@ -39,17 +44,18 @@ public class Session extends JFrame{
     
     //SET LOCATION AND SIZE ___________________________________________________
         setLocationAndSize(40);
-        msglabel.setBounds(w/4,300,w/2,50);
+        msgtxt.setBounds(0,0,w,h);
         
     //ADD LISTENERS ___________________________________________________________
         changepanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        close.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        paswtxt.setTransferHandler(null); //avoid paste
+        close.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+        paswtxt.setTransferHandler(null); //avoid paste       
+        msgtxt.setEditable(false);
         swapChangePanelListener();
         
         paswshow.addActionListener((ActionEvent e)->{showPassword();});        
         sessionbtn.addActionListener((ActionEvent e)->{sessionStart(e);});    
-        guesstbtn.addActionListener((ActionEvent e)->{startAsGuesst(e);});
+        guesstbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){dispose();}
@@ -65,14 +71,20 @@ public class Session extends JFrame{
         emailabel.setForeground(cnf.ALT);
         confpswdlabel.setForeground(cnf.ALT);
         //center text        
+        msgtxt.setAlignmentX(CENTER_ALIGNMENT);
+        msgtxt.setAlignmentY(CENTER_ALIGNMENT);
         usertxt.setHorizontalAlignment(JTextField.CENTER);
         paswtxt.setHorizontalAlignment(JTextField.CENTER);
         emailtxt.setHorizontalAlignment(JTextField.CENTER);
         confpswdtxt.setHorizontalAlignment(JTextField.CENTER);
         //register-login mesage        
-        message.setBackground(cnf.PRIME);
-        msglabel.setFont(new Font("arial", 3, 32));
-        msglabel.setForeground(cnf.ALT);
+        StyledDocument style = msgtxt.getStyledDocument();
+        SimpleAttributeSet align = new SimpleAttributeSet();
+        StyleConstants.setAlignment(align, StyleConstants.ALIGN_CENTER);
+        style.setParagraphAttributes(0, style.getLength(), align, false);  
+        msgtxt.setFont(new Font("arial", 3, 24));
+        msgtxt.setBackground(cnf.PRIME);
+        msgtxt.setForeground(cnf.ALT);
     
     //ADD COMPONENTS __________________________________________________________ 
         auth.add(close);
@@ -86,7 +98,7 @@ public class Session extends JFrame{
         auth.add(guesstbtn);
         auth.add(changepanel);
         //session start information
-        message.add(msglabel);
+        message.add(msgtxt);
         //card to change between views
         masterpanel.add(auth, "auth");
         masterpanel.add(message, "message");                
@@ -129,7 +141,7 @@ public class Session extends JFrame{
                 sessionbtn.setText(newuser ? "LOGIN":"REGISTER");   
                 setLocationAndSize(newuser ? 40 : 0);             
                 newuser = newuser ? addComp() : removeComp();
-                auth.setVisible(false); auth.setVisible(true);
+                auth.repaint();
             }
 
             private boolean addComp() {
@@ -163,9 +175,27 @@ public class Session extends JFrame{
        
     private void sessionStart(ActionEvent e) {
         ((CardLayout) masterpanel.getLayout()).next(masterpanel);
-        new Timer(2000, (ActionEvent ev)->{dispose();}).start();
+        String warning, enter = "\n\n\n\n\n\n\n\n";
+    //VALIDATION ______________________________________________________________
+        //set color red, change to previous panel, (?)set info on previus panel
+    //SUCCESS MSG _____________________________________________________________
+        if(e.getActionCommand().equals("GUESST")){
+            warning = "\n\nChats & Boards \nwont be saved!";
+            msgtxt.setText(enter+"Session started as Guesst..."+warning);
+            new Timer(3000, (ActionEvent ev)->{dispose();}).start();
+            
+        }else if(e.getActionCommand().equals("LOGIN")){
+            msgtxt.setText(enter+"\n\nAcces granted!!");
+            new Timer(3000, (ActionEvent ev)->{dispose();}).start();
+            
+        }else if(e.getActionCommand().equals("REGISTER")){            
+            msgtxt.setText(enter+"\n\nRegistered successfully!!");
+            new Timer(3000, (ActionEvent ev)->{dispose();}).start();
+        }
     }
-//VARIABLES ___________________________________________________________________
+//==============================================================================
+//VARIABLES 
+//==============================================================================
     private final ConfigApp cnf;
     
     private final int w = 500;
@@ -194,5 +224,5 @@ public class Session extends JFrame{
     private final String loglink = "Ya tienes cuenta? Inicia sesión...";
     private final JLabel changepanel = new JLabel(reglink);
 
-    private final JLabel msglabel = new JLabel("Acces granted!!");
+    private final JTextPane msgtxt = new JTextPane();
 }
