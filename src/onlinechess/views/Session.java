@@ -10,14 +10,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.Timer;
@@ -30,13 +29,15 @@ import onlinechess.helpers.ConfigApp;
  *
  * @author javier
  */
-public class Session extends JFrame{
+public class Session extends JDialog{
     
-    public Session(ConfigApp cnfiguration){
+    public Session(JFrame parent, ConfigApp cnf){
+        super(parent, true);
         
-        this.cnf = cnfiguration;
+        this.cnf = cnf;
         close = new JLabel(cnf.CLOSE_ICON);
-        logo = new JLabel(cnf.APP_ICON);   
+        wait = new JLabel(cnf.LOAD_ICON);
+        logo = new JLabel(cnf.APP_ICON); 
         
     //PANEL STRUCTURE__________________________________________________________
        auth.setLayout(null);
@@ -56,7 +57,7 @@ public class Session extends JFrame{
         paswshow.addActionListener((ActionEvent e)->{showPassword();});        
         sessionbtn.addActionListener((ActionEvent e)->{sessionStart(e);});    
         guesstbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
-        
+        localbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){dispose();}
         });
@@ -71,8 +72,6 @@ public class Session extends JFrame{
         emailabel.setForeground(cnf.ALT);
         confpswdlabel.setForeground(cnf.ALT);
         //center text        
-        msgtxt.setAlignmentX(CENTER_ALIGNMENT);
-        msgtxt.setAlignmentY(CENTER_ALIGNMENT);
         usertxt.setHorizontalAlignment(JTextField.CENTER);
         paswtxt.setHorizontalAlignment(JTextField.CENTER);
         emailtxt.setHorizontalAlignment(JTextField.CENTER);
@@ -96,15 +95,17 @@ public class Session extends JFrame{
         auth.add(paswshow);
         auth.add(sessionbtn);
         auth.add(guesstbtn);
+        auth.add(localbtn);
         auth.add(changepanel);
         //session start information
+        message.add(wait);
         message.add(msgtxt);
         //card to change between views
         masterpanel.add(auth, "auth");
         masterpanel.add(message, "message");                
         add(masterpanel);
     
-    //FRAME STRUCTURE _________________________________________________________  
+    //FRAME STRUCTURE _________________________________________________________ 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
         setSize(w,h);
@@ -125,7 +126,8 @@ public class Session extends JFrame{
         paswshow.setBounds(w/4,start+o*5-10,w/2,30);
         sessionbtn.setBounds(w/2-105,start+o*9-i*2,100,30);
         guesstbtn.setBounds(w/2+5,start+o*9-i*2,100,30);
-        changepanel.setBounds(155,start+o*10-i*2,200,30);
+        localbtn.setBounds(w/2-50,start+o*10-i*2+10,100,30);
+        changepanel.setBounds(155,start+o*11-i*2+5,200,30);
         
         emailabel.setBounds(w/4,start+o*2,w/2,30);
         emailtxt.setBounds(w/4,start+o*3,w/2,30);
@@ -173,14 +175,33 @@ public class Session extends JFrame{
     
     }
        
+    /**
+     * Manages SESSSION START either login or register
+     * @param e Action event (button) 
+     */
     private void sessionStart(ActionEvent e) {
         ((CardLayout) masterpanel.getLayout()).next(masterpanel);
         String warning, msg="", enter = "\n\n\n\n\n\n\n\n";
         int timer = 2000;
-    //GUESST CASE _____________________________________________________________
+        
+    //LOCAL CASE ______________________________________________________________
+        if(e.getActionCommand().equals("LOCAL")){
+            warning = "\n\nChats & Boards \nwont be saved!";
+            msgtxt.setText(enter+"Started local game..."+warning);
+            new Timer(1000, (ActionEvent ev)->{dispose();}).start();
+            return;
+        }
+
+    /**
+     * (!)CHECK INTERNET CONNECTION
+     * (!)CALL SERVER
+     */
+        msgtxt.insertIcon(cnf.LOAD_ICON);
+        
+    //GUESST CASE _____________________________________________________________        
         if(e.getActionCommand().equals("GUESST")){
             warning = "\n\nChats & Boards \nwont be saved!";
-            msgtxt.setText(enter+"Session started as Guesst..."+warning);
+            msgtxt.setText(enter+"Session started as Guesst..."+warning);            
             new Timer(3000, (ActionEvent ev)->{dispose();}).start();
             return;
         }
@@ -222,9 +243,12 @@ public class Session extends JFrame{
     private final JCheckBox paswshow = new JCheckBox("Show Password");
     private final JButton sessionbtn = new JButton("LOGIN");
     private final JButton guesstbtn = new JButton("GUESST");
+    private final JButton localbtn = new JButton("LOCAL");
     private final String reglink = "No tienes cuenta? Crea una aquí...";
     private final String loglink = "Ya tienes cuenta? Inicia sesión...";
     private final JLabel changepanel = new JLabel(reglink);
 
     private final JTextPane msgtxt = new JTextPane();
+    private final JLabel wait; 
 }
+//(>)Waiting gif when login on label

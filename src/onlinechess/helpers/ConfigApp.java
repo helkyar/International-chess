@@ -18,4 +18,5 @@ public class ConfigApp {
     public final ImageIcon APP_ICON = new ImageIcon("img/chessicow.png");
     public final ImageIcon LOG_ICON = new ImageIcon("img/chessico.png");
     public final ImageIcon CLOSE_ICON = new ImageIcon("img/cross.png");
+    public final ImageIcon LOAD_ICON = new ImageIcon("img/load.gif");
 }

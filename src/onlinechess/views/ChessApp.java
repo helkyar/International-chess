@@ -20,13 +20,12 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import onlinechess.controller.game.Game;
-import onlinechess.helpers.ConfigGame;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+
+import onlinechess.controller.game.Game;
 import onlinechess.helpers.ConfigApp;
 
 /**
@@ -44,8 +43,7 @@ public class ChessApp extends JFrame{
             public void run() {
                 try{
                     ConfigApp cnf = new ConfigApp();
-                    new ChessApp(cnf); //App start
-                    new Session(cnf); //Session start  
+                    new ChessApp(cnf); //App start  
                 } catch(Exception e){e.printStackTrace();}
             }
         });
@@ -54,8 +52,9 @@ public class ChessApp extends JFrame{
     public ChessApp(ConfigApp cnf){        
         this.cnf = cnf;
         initDate();     
-//        add(new Game());
-//        add(new Game()); 
+        add(new Game());
+        add(new Game()); 
+       
     // FRAME STRUCTURE ________________________________________________________
         setTitle("Online Chess");
         chessico = cnf.APP_ICON;
@@ -75,6 +74,7 @@ public class ChessApp extends JFrame{
             }
         });
         
+        new Session(this, cnf);
         LogGen.info("Session started succesfully");
     }
     // =========================================================================
@@ -103,5 +103,5 @@ public class ChessApp extends JFrame{
         
     private JTextField dateText = new JTextField();
     private DateFormat timeFormat = new SimpleDateFormat("  kk:mm:ss  dd/MM/yyyy  ");  
-
 }
+
