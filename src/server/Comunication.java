@@ -46,11 +46,13 @@ public class Comunication extends JFrame implements Runnable{
     public static void main(String[] args) {
         new Comunication();
     }    
-
+ 
+ // ===========================================================================
+ //                            REQUEST
+ // ===========================================================================
     @Override
     public void run() {
         Package p;
-        String nick, move, msg;
         ObjectInputStream input;
         ServerSocket port = null;
 
@@ -61,7 +63,8 @@ public class Comunication extends JFrame implements Runnable{
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
                 p = (Package) input.readObject();
-
+                
+        //ROUTES ______________________________________________________________
                 switch(p.getStatus()){
                     /**
                      * FILTER REQUESTS
@@ -72,5 +75,21 @@ public class Comunication extends JFrame implements Runnable{
             } catch (Exception ex) {ex.printStackTrace();}
         }
     }        
+ // ===========================================================================
+ //                    CONTROLLERS & MIDDLEWARE
+ // ===========================================================================
+    
+ // ===========================================================================
+ //                            RESPONSE
+ // ===========================================================================
+    public void response(Package p, String ip) throws IOException{
+        ObjectOutputStream msgpackage;
+        
+        Socket sendmsg = new Socket(ip, 9090);
+        msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
+        msgpackage.writeObject(p);
+
+        msgpackage.close(); sendmsg.close(); 
+    }
 }
 

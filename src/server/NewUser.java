@@ -6,6 +6,7 @@ package server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -26,7 +27,6 @@ class NewUser implements Runnable{
     @Override
     public void run() {
         packager.Package p;
-        String nick, move, msg;
         ObjectInputStream input;
         ServerSocket port = null;
 
@@ -34,6 +34,7 @@ class NewUser implements Runnable{
         catch (IOException ex) {ex.printStackTrace();}
 
         while(true){
+        // REQUEST ________________________________________________________________
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
                 p = (packager.Package) input.readObject();
@@ -41,16 +42,21 @@ class NewUser implements Runnable{
                 if(!p.getStatus().equals("online")){return;}
                 //Get client ip 
                 InetAddress locateip = request.getInetAddress();
-                String getip = locateip.getHostAddress();
+                String ip = locateip.getHostAddress();
                 p.setStatus("imserver"); 
-
-                Response.res(p, getip);  
-                request.close();
                 
-            //SHOW INFO ___________________________________________________________    
-                Comunication.txt.append("New connection: "+getip); 
+        // RESPONSE _______________________________________________________________
+                ObjectOutputStream msgpackage;
+        
+                Socket sendmsg = new Socket(ip, 7070);
+                msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
+                msgpackage.writeObject(p);
+
+                msgpackage.close(); sendmsg.close(); request.close();
+                
+        //SHOW INFO _______________________________________________________________    
+                Comunication.txt.append("New connection: " + ip); 
             } catch (Exception ex) {ex.printStackTrace();}
         }
     }
-
 }
