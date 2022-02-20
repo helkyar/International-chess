@@ -13,8 +13,10 @@ import packager.Package;
  * @author admin
  */
 public class Response {
-    public static void response (Package p, String ip) throws IOException{
+    
+    public static void res(Package p, String ip) throws IOException{
         ObjectOutputStream msgpackage;
+        
         Socket sendmsg = new Socket(ip, 7070);
         msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
         msgpackage.writeObject(p);

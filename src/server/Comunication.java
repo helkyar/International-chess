@@ -47,7 +47,6 @@ public class Comunication extends JFrame implements Runnable{
         new Comunication();
     }    
 
-    
     @Override
     public void run() {
         Package p;
@@ -55,7 +54,7 @@ public class Comunication extends JFrame implements Runnable{
         ObjectInputStream input;
         ServerSocket port = null;
 
-        try {port = new ServerSocket(7777);}
+        try {port = new ServerSocket(9999);}
         catch (IOException ex) {ex.printStackTrace();}
 
         while(true){

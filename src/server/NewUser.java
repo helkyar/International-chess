@@ -37,26 +37,20 @@ class NewUser implements Runnable{
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
                 p = (packager.Package) input.readObject();
+                //layer of protection
+                if(!p.getStatus().equals("online")){return;}
+                //Get client ip 
+                InetAddress locateip = request.getInetAddress();
+                String getip = locateip.getHostAddress();
+                p.setStatus("imserver"); 
 
-                switch(p.getStatus()){
-                    case "online": sayHello(request, p); break;
-                }      
-
+                Response.res(p, getip);  
                 request.close();
+                
+            //SHOW INFO ___________________________________________________________    
+                Comunication.txt.append("New connection: "+getip); 
             } catch (Exception ex) {ex.printStackTrace();}
         }
     }
 
-    private void sayHello(Socket request, Package p) throws IOException{
-        //Get client ip 
-        InetAddress locateip = request.getInetAddress();
-        String getip = locateip.getHostAddress();
-        p.setStatus("imserver"); 
-
-        Response.response(p, getip);  
-
-    //SHOW INFO ___________________________________________________________    
-        Comunication.txt.append("New connection: "+getip);
-    }
-
-    }
+}
