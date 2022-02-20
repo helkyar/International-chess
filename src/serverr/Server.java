@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Server;
+package serverr;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import Package.Package;
+import packager.Package;
 
 /**
  *
@@ -110,17 +110,12 @@ public class Server extends JFrame implements Runnable{
         }
 
         private void sayHello(Socket request, Package p) throws IOException{
-            ObjectOutputStream msgpackage;
             InetAddress locateip = request.getInetAddress();
             String getip = locateip.getHostAddress();
-
-            p.setStatus("imserver");   
-
-            Socket sendmsg = new Socket(getip, 7070);
-            msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
-            msgpackage.writeObject(p);
-
-            msgpackage.close(); sendmsg.close();        
+            p.setStatus("imserver"); 
+            
+            Response.response(p, getip);  
+            
         //SHOW INFO ___________________________________________________________    
             txt.append("New connection: "+getip);
         }

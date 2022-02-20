@@ -4,7 +4,7 @@
  */
 package onlinechess.controller.socket;
 
-import Package.Package;
+import packager.Package;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
