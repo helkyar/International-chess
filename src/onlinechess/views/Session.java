@@ -4,8 +4,11 @@
  */
 package onlinechess.views;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -26,7 +29,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import onlinechess.controller.socket.SS;
+import onlinechess.controller.socket.SearchServer;
 import onlinechess.controller.socket.utils.NetUtils;
 import onlinechess.helpers.ConfigApp;
     
@@ -41,16 +44,20 @@ public class Session extends JDialog{
         
         this.cnf = cnf;
         close = new JLabel(cnf.CLOSE_ICON);
-        wait = new JLabel(cnf.LOAD_ICON);
         logo = new JLabel(cnf.APP_ICON); 
         
     //PANEL STRUCTURE__________________________________________________________
-       auth.setLayout(null);
-       message.setLayout(null);
+       auth.setLayout(null); 
+       wait.setLayout(new BorderLayout());
+       message.setLayout(new BorderLayout());
+       JPanel style = new JPanel();
     
     //SET LOCATION AND SIZE ___________________________________________________
         setLocationAndSize(40);
-        msgtxt.setBounds(0,0,w,h);
+        style.setPreferredSize(new Dimension(0,7));
+        wait.setPreferredSize(new Dimension(30,0));
+        options.setPreferredSize(new Dimension(0,200));
+        msgtxt.setBounds(0,0,w,h-100);
         
     //ADD LISTENERS ___________________________________________________________
         changepanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -64,7 +71,7 @@ public class Session extends JDialog{
         guesstbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         localbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         close.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){dispose();}
+            public void mouseClicked(MouseEvent e){localSessionInit(swap);}
         });
         
     //STYLE OPTIONS ___________________________________________________________
@@ -87,8 +94,11 @@ public class Session extends JDialog{
         doc.setParagraphAttributes(0, doc.getLength(), align, false);  
         msgtxt.setFont(new Font("arial", 3, 24));
         msgtxt.setBackground(cnf.PRIME);
-        msgtxt.setForeground(cnf.ALT);
-    
+        msgtxt.setForeground(cnf.ALT);        
+        wait.setBackground(cnf.PRIME);
+        options.setBackground(cnf.PRIME);
+        style.setBackground(cnf.PRIME);
+            
     //ADD COMPONENTS __________________________________________________________ 
         auth.add(close);
         auth.add(logo);
@@ -102,8 +112,9 @@ public class Session extends JDialog{
         auth.add(localbtn);
         auth.add(changepanel);
         //session start information
-        message.add(wait);
-        message.add(msgtxt);
+        message.add("North",style);
+        message.add("East",wait);
+        message.add("Center",msgtxt);        
         //card to change between views
         masterpanel.add(auth, "auth");
         masterpanel.add(message, "message");                
@@ -180,75 +191,89 @@ public class Session extends JDialog{
     }
 
     /**
-     * Manages SESSSION START either guesst, login or register
+     * Manages APP START either local, guesst, login or register
      * @param e Action event (button) 
      */
-    private void sessionStart(ActionEvent e) {
+    private void sessionStart(ActionEvent e) {        
         ((CardLayout) masterpanel.getLayout()).next(masterpanel);
+        String ac = e.getActionCommand();
+        swap = !swap;
         
     //LOCAL CASE ______________________________________________________________
-        if(e.getActionCommand().equals("LOCAL")){
-            msgtxt.setText(cnf.LOCAL);
-            new Timer(1000, (ActionEvent ev)->{dispose();}).start();
-            return;
-        }
-            
-    //CHECK CONNECTION AND SEARCH SERVER ______________________________________    
-        if(NetUtils.getLocalIp().size() < 1){return;}//full offline
-        if(!NetUtils.isConnected()){return;} //No Internet
-        SS search = new SS();
+        if(ac.equals("LOCAL")){localSessionInit(swap); return;}
+        wait.add("North",close);
         
-        //(>)INSERT LOADING ICON
-        //(>)SET LOADING TEXT
-        //(>)SET CONNECTION LOST MSG
+    //CHECK CONNECTION AND SEARCH SERVER ______________________________________ 
+        //(>)INSERT LOADING ICON        
+        //(>)ALLOW CLOSE AND START LOCAl AT ANY MOMENT
         //(>)SET RETRY-LOCAL OPTIONS IF CONNECTION FAILS
+        SearchServer search = new SearchServer(this);
         
+    //(!)BUTTON TO CLOSE THE PANEL
         new Timer(6000, (ActionEvent evt) -> {
-            if(offline){search.getServerIP();}
+            if(connecting){search.getServerIP();}
             else{
                 ((Timer)evt.getSource()).stop();
-                serverValidation(e);
+                serverValidation(ac);
             }
         }).start();       
     }
     
-    private void serverValidation(ActionEvent e) {
+    private void localSessionInit(boolean swap) {       
+        message.remove(options);
+        message.remove(wait);
+        if(swap) {((CardLayout) masterpanel.getLayout()).next(masterpanel);} 
+        new Timer(1100, (ActionEvent ev)->{dispose();}).start(); 
+        msgtxt.setText(cnf.LOCAL);
+    }
+    
+    private void serverValidation(String ac) {
         String msg="";
        
     //GUESST CASE _____________________________________________________________        
-        if(e.getActionCommand().equals("GUESST")){
-            msgtxt.setText(cnf.GUEST);            
+        if(ac.equals("GUESST")){
+            msgtxt.setText(cnf.GUEST);                  
             new Timer(1500, (ActionEvent ev)->{dispose();}).start();
             return;
         }
     //SERVER VALIDATION _______________________________________________________
-        if(e.getActionCommand().equals("REGISTER")){   
+        if(ac.equals("REGISTER")){   
             msg = cnf.REGISTER;
-        } else {
-             msg = cnf.LOGIN;
+        } 
+        else if(ac.equals("LOGIN")) {
+            msg = cnf.LOGIN;
         }
         //set color red, change to previous panel, (?)set info on previus panel
     //SUCCESS MSG _____________________________________________________________        
         msgtxt.setText(msg);
         new Timer(2000, (ActionEvent ev)->{dispose();}).start();
     }
+
+    public void badConnection() {
+        //   (!)ALLOW PLAY LOCAL
+        msgtxt.setText(cnf.LOST+Math.random()+"\n\n"); 
+        msgtxt.insertIcon(cnf.DESCONNECTED);
+        options.add(localbtn);
+        message.add("South", options);
+    }
         
-    public static void serverResponseTimeout() {
-        
+    public void serverResponseTimeout() {
+        msgtxt.insertIcon(cnf.LOAD_ICON);
     }
     
     
 //GETTERS & SETTERS ___________________________________________________________
-    public static void setOffline(boolean offline){Session.offline = offline;}
+    public void setConnecting(boolean connecting){this.connecting = connecting;}
     
 //VARIABLES____________________________________________________________________
-    private final ConfigApp cnf;
+    private ConfigApp cnf;
     
     private final int w = 500;
     private final int h = 700;
-     
+         
+    private boolean swap = true;   
     private boolean newuser = false;      
-    private static boolean offline = true;   
+    private boolean connecting = true;
     
 //SWING COMPONENTS __________________________________________________________________
     private final JPanel masterpanel = new JPanel(new CardLayout());
@@ -273,8 +298,9 @@ public class Session extends JDialog{
     private final String loglink = "Ya tienes cuenta? Inicia sesión...";
     private final JLabel changepanel = new JLabel(reglink);
 
-    public static final JTextPane msgtxt = new JTextPane();
-    public static final StyledDocument doc = msgtxt.getStyledDocument();
-    private final JLabel wait;         
+    public final JTextPane msgtxt = new JTextPane();
+    public final StyledDocument doc = msgtxt.getStyledDocument();
+    private final JPanel wait = new JPanel();
+    private final JPanel options = new JPanel();
 }
 //(>)Waiting gif when login on label

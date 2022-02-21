@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 import onlinechess.controller.game.Game;
-import onlinechess.controller.socket.SS;
+import onlinechess.controller.socket.SearchServer;
 import onlinechess.helpers.ConfigApp;
 
 /**

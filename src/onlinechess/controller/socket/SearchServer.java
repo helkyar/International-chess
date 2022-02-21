@@ -25,50 +25,60 @@ import onlinechess.views.Session;
  *
  * @author admin
  */
-public class SS {
+public class SearchServer {
     
+    private Session session;
     private boolean loop = true;
-    private boolean onlyOne = true;
+    private boolean firstOne = true;
     
-    public SS(){
-        new RecieveMsg();
+    public SearchServer(Session session){
+        this.session = session;
+        new ResponseServer();
         getServerIP();
     }
+    
     /**
      * Options on timeout:{RETRY, LOCAL}
      * Send SERVERIP to APP
      * Send messages to APP
      */
     
-    public void getServerIP() {               
-        //Search server ip in the client net
+    public void getServerIP() {     
+    //CHECK CONNECTION ________________________________________________________
+        boolean localNet = NetUtils.getLocalIp().size() < 1;
+        if(localNet){session.badConnection(); return;}//Not even net
+        if(!NetUtils.isConnected()){session.badConnection(); return;}//Offline
+        
+    //SEARCH SERVER IP IN CLIENT NET __________________________________________
         String ip = (String) NetUtils.getLocalIp().get(1);
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
         if(!loop){return;}        
-        Session.msgtxt.setText("\n\n\n\nSearching server\n"); 
+        session.msgtxt.setText("\n\n\n\nSearching server\n"); 
         
         for(int i = 0; i<=255; i++){
-            new Thread(new SearchServer(i, ip)).start();
-        }
-        setUserMessage(20, "\n\nWaiting response...\n");
-        //DESTROY EVERYTHING AND SET OPTIONS {RETRY-LOCAL}
-        if(onlyOne){
-            onlyOne = false;
-            new Timer(20000, (ActionEvent e) -> {
-                loop = false;
-                Session.serverResponseTimeout();           
-                ((Timer)e.getSource()).stop();
-            }).start();
+            new Thread(new RequestServer(i, ip)).start();
         }
         
+        setUserMessage(20, "\n\nWaiting response...\n");
+    
+    //SET TIMEOUT RESPONSE ____________________________________________________
+        if(!firstOne){ return;}        
+        firstOne = false;
+        
+        new Timer(20000, (ActionEvent e) -> {
+    //(!)CHECK IF SESSION STARTED or BADCONNECTION IN THE MEANTIME
+            loop = false;
+            session.serverResponseTimeout();           
+            ((Timer)e.getSource()).stop();
+        }).start();       
     }
         
-    class SearchServer implements Runnable {
+    class RequestServer implements Runnable {
         int i;
         String ip;
 
-        public SearchServer(int i, String ip){
+        public RequestServer(int i, String ip){
             this.ip = ip;
             this.i = i;
         }
@@ -92,9 +102,9 @@ public class SS {
         }
     }
 
-    class RecieveMsg implements Runnable{
+    class ResponseServer implements Runnable{
        
-        RecieveMsg(){
+        ResponseServer(){
             Thread lintening = new Thread(this);
             lintening.start();
         }
@@ -112,11 +122,11 @@ public class SS {
                 try (Socket mysocket = port.accept()) {
                     input = new ObjectInputStream(mysocket.getInputStream());
                     p = (Package) input.readObject();
-                    
+            //(!)CHESS HORSE GIF NEEDEEEEED!!
                     setUserMessage(41,"\n\nTying the horses...");
                     if(!p.getStatus().equals("imserver")){return;}
                     
-                    Session.setOffline(false);
+                    session.setConnecting(false);
                     System.out.println(p.getStatus());
 
                 } catch(Exception e){}                    
@@ -126,7 +136,7 @@ public class SS {
     }
     
     private void setUserMessage(int i,String msg){        
-        try { Session.doc.insertString(i, msg, null );} 
+        try { session.doc.insertString(i, msg, null );} 
         catch (BadLocationException ex) { }
     }
 }
