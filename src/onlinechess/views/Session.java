@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -20,9 +22,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.Timer;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import onlinechess.controller.socket.SS;
+import onlinechess.controller.socket.utils.NetUtils;
 import onlinechess.helpers.ConfigApp;
     
 /**
@@ -30,7 +35,7 @@ import onlinechess.helpers.ConfigApp;
  * @author javier
  */
 public class Session extends JDialog{
-    
+
     public Session(JFrame parent, ConfigApp cnf){
         super(parent, true);
         
@@ -77,10 +82,9 @@ public class Session extends JDialog{
         emailtxt.setHorizontalAlignment(JTextField.CENTER);
         confpswdtxt.setHorizontalAlignment(JTextField.CENTER);
         //register-login mesage        
-        StyledDocument style = msgtxt.getStyledDocument();
         SimpleAttributeSet align = new SimpleAttributeSet();
         StyleConstants.setAlignment(align, StyleConstants.ALIGN_CENTER);
-        style.setParagraphAttributes(0, style.getLength(), align, false);  
+        doc.setParagraphAttributes(0, doc.getLength(), align, false);  
         msgtxt.setFont(new Font("arial", 3, 24));
         msgtxt.setBackground(cnf.PRIME);
         msgtxt.setForeground(cnf.ALT);
@@ -143,7 +147,7 @@ public class Session extends JDialog{
                 sessionbtn.setText(newuser ? "LOGIN":"REGISTER");   
                 setLocationAndSize(newuser ? 40 : 0);             
                 newuser = newuser ? addComp() : removeComp();
-                auth.repaint();
+                auth.repaint(); auth.validate();
             }
 
             private boolean addComp() {
@@ -170,66 +174,87 @@ public class Session extends JDialog{
         if (paswshow.isSelected()) {paswtxt.setEchoChar((char) 0);} 
         else {paswtxt.setEchoChar('\u2022');}
     }
-
-    private void startAsGuesst(ActionEvent e) {
+    
+    private void inputValidation(){
     
     }
-       
+
     /**
-     * Manages SESSSION START either login or register
+     * Manages SESSSION START either guesst, login or register
      * @param e Action event (button) 
      */
     private void sessionStart(ActionEvent e) {
         ((CardLayout) masterpanel.getLayout()).next(masterpanel);
-        String warning, msg="", enter = "\n\n\n\n\n\n\n\n";
-        int timer = 2000;
         
     //LOCAL CASE ______________________________________________________________
         if(e.getActionCommand().equals("LOCAL")){
-            warning = "\n\nChats & Boards \nwont be saved!";
-            msgtxt.setText(enter+"Started local game..."+warning);
+            msgtxt.setText(cnf.LOCAL);
             new Timer(1000, (ActionEvent ev)->{dispose();}).start();
             return;
         }
-
-    /**
-     * (!)CHECK INTERNET CONNECTION
-     * (!)CALL SERVER
-     */
-        msgtxt.insertIcon(cnf.LOAD_ICON);
+            
+    //CHECK CONNECTION AND SEARCH SERVER ______________________________________    
+        if(NetUtils.getLocalIp().size() < 1){return;}//full offline
+        if(!NetUtils.isConnected()){return;} //No Internet
+        SS search = new SS();
         
+        //(>)INSERT LOADING ICON
+        //(>)SET LOADING TEXT
+        //(>)SET CONNECTION LOST MSG
+        //(>)SET RETRY-LOCAL OPTIONS IF CONNECTION FAILS
+        
+        new Timer(6000, (ActionEvent evt) -> {
+            if(offline){search.getServerIP();}
+            else{
+                ((Timer)evt.getSource()).stop();
+                serverValidation(e);
+            }
+        }).start();       
+    }
+    
+    private void serverValidation(ActionEvent e) {
+        String msg="";
+       
     //GUESST CASE _____________________________________________________________        
         if(e.getActionCommand().equals("GUESST")){
-            warning = "\n\nChats & Boards \nwont be saved!";
-            msgtxt.setText(enter+"Session started as Guesst..."+warning);            
-            new Timer(3000, (ActionEvent ev)->{dispose();}).start();
+            msgtxt.setText(cnf.GUEST);            
+            new Timer(1500, (ActionEvent ev)->{dispose();}).start();
             return;
         }
-    //VALIDATION ______________________________________________________________
+    //SERVER VALIDATION _______________________________________________________
         if(e.getActionCommand().equals("REGISTER")){   
-            msg = enter+"\n\nRegistered successfully!!";
+            msg = cnf.REGISTER;
         } else {
-             msg = enter+"\n\nAccess granted!!";
+             msg = cnf.LOGIN;
         }
         //set color red, change to previous panel, (?)set info on previus panel
     //SUCCESS MSG _____________________________________________________________        
         msgtxt.setText(msg);
-        new Timer(timer, (ActionEvent ev)->{dispose();}).start();
+        new Timer(2000, (ActionEvent ev)->{dispose();}).start();
     }
-//==============================================================================
-//VARIABLES 
-//==============================================================================
+        
+    public static void serverResponseTimeout() {
+        
+    }
+    
+    
+//GETTERS & SETTERS ___________________________________________________________
+    public static void setOffline(boolean offline){Session.offline = offline;}
+    
+//VARIABLES____________________________________________________________________
     private final ConfigApp cnf;
     
     private final int w = 500;
     private final int h = 700;
+     
+    private boolean newuser = false;      
+    private static boolean offline = true;   
     
+//SWING COMPONENTS __________________________________________________________________
     private final JPanel masterpanel = new JPanel(new CardLayout());
     private final JPanel message = new JPanel();
-    private final JPanel auth = new JPanel();    
-    boolean newuser = false;
+    private final JPanel auth = new JPanel(); 
     
-//COMPONENTS __________________________________________________________________
     private final JLabel close;
     private final JLabel logo;
     private final JTextField usertxt = new JTextField(); 
@@ -248,7 +273,8 @@ public class Session extends JDialog{
     private final String loglink = "Ya tienes cuenta? Inicia sesión...";
     private final JLabel changepanel = new JLabel(reglink);
 
-    private final JTextPane msgtxt = new JTextPane();
-    private final JLabel wait; 
+    public static final JTextPane msgtxt = new JTextPane();
+    public static final StyledDocument doc = msgtxt.getStyledDocument();
+    private final JLabel wait;         
 }
 //(>)Waiting gif when login on label

@@ -27,13 +27,13 @@ import packager.Package;
  *
  * @author admin
  */
-public class Comunication extends JFrame implements Runnable{
+public class Server extends JFrame implements Runnable{
     private static int guest = 0;
     public static JTextArea txt = new JTextArea();
     private Map<String, String[]> ips = new HashMap<>(); 
     private String ip = "";
     
-    Comunication(){
+    Server(){
         Thread lintening = new Thread(this);
         lintening.start();
         new NewUser(); //new thread to avoid overlapping res/req
@@ -44,7 +44,7 @@ public class Comunication extends JFrame implements Runnable{
     }
     
     public static void main(String[] args) {
-        new Comunication();
+        new Server();
     }    
  
  // ===========================================================================

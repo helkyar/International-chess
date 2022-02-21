@@ -12,86 +12,87 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
-import onlinechess.controller.socket.utils.GetIP;
+import javax.swing.text.BadLocationException;
+import onlinechess.controller.socket.utils.NetUtils;
+import onlinechess.helpers.ConfigApp;
+import onlinechess.views.ChessApp;
+import onlinechess.views.Session;
 
 /**
  *
  * @author admin
  */
 public class SS {
+    
+    private boolean loop = true;
+    private boolean onlyOne = true;
+    
+    public SS(){
+        new RecieveMsg();
+        getServerIP();
+    }
     /**
-     * Check if user connceted to internet
-     * Only one loop each time
-     * Wait for response
      * Options on timeout:{RETRY, LOCAL}
      * Send SERVERIP to APP
      * Send messages to APP
-     * Close all processes 
      */
     
-    /**
-     * 
-     */
-    private void getServerIP() {
+    public void getServerIP() {               
         //Search server ip in the client net
-        String ip = (String) GetIP.getLocalIp().get(1);
+        String ip = (String) NetUtils.getLocalIp().get(1);
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
-        //Check last 255 local ips searching for server
+        //Check 255 local ips searching for server
+        if(!loop){return;}        
+        Session.msgtxt.setText("\n\n\n\nSearching server\n"); 
+        
         for(int i = 0; i<=255; i++){
-            Thread t = new Thread(new SearchServer(i, ip));
-
-            java.util.Timer timer = new java.util.Timer();
-            timer.schedule(new KillSearchThread(t, timer), 100);
-            t.start();
+            new Thread(new SearchServer(i, ip)).start();
         }
+        setUserMessage(20, "\n\nWaiting response...\n");
         //DESTROY EVERYTHING AND SET OPTIONS {RETRY-LOCAL}
-        new Timer(15000, (ActionEvent e) -> { }).start();
+        if(onlyOne){
+            onlyOne = false;
+            new Timer(20000, (ActionEvent e) -> {
+                loop = false;
+                Session.serverResponseTimeout();           
+                ((Timer)e.getSource()).stop();
+            }).start();
+        }
+        
     }
         
-}
+    class SearchServer implements Runnable {
+        int i;
+        String ip;
 
-class SearchServer implements Runnable {
-    int i;
-    String ip;
-        
-    public SearchServer(int i, String ip){
-        this.ip = ip;
-        this.i = i;
-    }
-        
-    @Override
-    public void run() {
-        while (!Thread.interrupted()) {
+        public SearchServer(int i, String ip){
+            this.ip = ip;
+            this.i = i;
+        }
+
+        @Override
+        public void run() {
+            ObjectOutputStream objp;
+            // Alternatively:  while (!Thread.interrupted()) {}
             try {
-                try (Socket socket = new Socket(ip+i,7777)) {
-                    Package p = new Package();
-                    p.setStatus("online");
-                    ObjectOutputStream objp = new ObjectOutputStream(socket.getOutputStream());
-                    objp.writeObject(p);
-                    socket.close();
-                } 
-            } catch (IOException ex) {System.out.println("Server tested: "+ip+i);}
+                Socket socket = new Socket(ip+i,7777);
+                Package p = new Package();
+                p.setStatus("online");
+                objp = new ObjectOutputStream(socket.getOutputStream());
+                objp.writeObject(p);
+                socket.close();
+
+                System.out.println("===============================================");
+                System.out.println("Server OK: "+ip+i);
+                System.out.println("===============================================");
+            } catch(IOException ex){System.out.println("Server test: "+ip+i);}
         }
     }
-}
-class KillSearchThread extends TimerTask {
-    private Thread t;
-    private java.util.Timer timer;
 
-    public KillSearchThread(Thread t, java.util.Timer timer){
-        this.t = t;
-        this.timer = timer;
-    }
-
-    public void run() {
-        if (t != null && t.isAlive()) {
-            t.interrupt();
-            timer.cancel();
-        }
-    }
-}
-class RecieveMsg implements Runnable{
+    class RecieveMsg implements Runnable{
        
         RecieveMsg(){
             Thread lintening = new Thread(this);
@@ -100,28 +101,32 @@ class RecieveMsg implements Runnable{
         
         @Override
         public void run() {
-            try { 
-                ServerSocket port = new ServerSocket(7070);
-                String nick, ip, move, msg;
-                Package p;
+            ObjectInputStream input;
+            ServerSocket port = null;
+            Package p;
+            
+            try {port = new ServerSocket(7070);}
+            catch (Exception e){}
 
-                while(true){
-                    try (Socket mysocket = port.accept()) {
-                        ObjectInputStream entrada = new ObjectInputStream(mysocket.getInputStream());
-                        p = (Package) entrada.readObject();
-                        
-                        if(p.getStatus().equals("imserver")){initSession();}                      
-                    } catch(Exception e){}                    
-                }
-            } catch (Exception e){}
+            while(true){
+                try (Socket mysocket = port.accept()) {
+                    input = new ObjectInputStream(mysocket.getInputStream());
+                    p = (Package) input.readObject();
+                    
+                    setUserMessage(41,"\n\nTying the horses...");
+                    if(!p.getStatus().equals("imserver")){return;}
+                    
+                    Session.setOffline(false);
+                    System.out.println(p.getStatus());
+
+                } catch(Exception e){}                    
+            }
+           
         }                     
-        private String initSession(){
-            /**
-             * SET APP IP
-             * SET INFO MESSAGES OF EXIT
-             */
-            return "";
-        }
-        
     }
     
+    private void setUserMessage(int i,String msg){        
+        try { Session.doc.insertString(i, msg, null );} 
+        catch (BadLocationException ex) { }
+    }
+}

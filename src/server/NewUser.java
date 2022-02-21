@@ -55,7 +55,7 @@ class NewUser implements Runnable{
                 msgpackage.close(); sendmsg.close(); request.close();
                 
         //SHOW INFO _______________________________________________________________    
-                Comunication.txt.append("New connection: " + ip); 
+                Server.txt.append("New connection: " + ip); 
             } catch (Exception ex) {ex.printStackTrace();}
         }
     }

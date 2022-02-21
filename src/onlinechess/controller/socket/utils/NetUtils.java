@@ -10,9 +10,12 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -22,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author Javier Palacios
  */
-public class GetIP {
+public class NetUtils {
     
     public static String getPublicIP() {
         String publicIP;
@@ -49,14 +52,28 @@ public class GetIP {
         
         ArrayList<String> localIP = new ArrayList<>(); 
         try {
-            for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+            ArrayList<NetworkInterface> ifaces;
+            ifaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface iface : ifaces) {
                 // Due to the amount of the interfaces, we will only print the ones online
-                if (iface.isUp()) {localIP.add(iface.getInetAddresses().nextElement().getHostAddress());}                
+                if (iface.isUp()) {
+                    localIP.add(
+                        iface.getInetAddresses().nextElement().getHostAddress()
+                    );
+                }                
             }           
-        } catch (SocketException ex) {
-            Logger.getLogger(GetIP.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        } catch (SocketException ex) { } 
         return localIP;
+    }
+    
+        public static boolean isConnected(){
+        try{ 
+            InetAddress in = InetAddress.getByName("www.google.com");
+            return in.isReachable(2000);
+        } catch(UnknownHostException e){}
+          catch(IOException e){}
+        
+       return false;
     }
 }
  

@@ -8,7 +8,6 @@ package onlinechess.views;
 import onlinechess.helpers.LogGen;
 
 import java.awt.Color;
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -26,6 +25,7 @@ import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 import onlinechess.controller.game.Game;
+import onlinechess.controller.socket.SS;
 import onlinechess.helpers.ConfigApp;
 
 /**
@@ -51,7 +51,7 @@ public class ChessApp extends JFrame{
     
     public ChessApp(ConfigApp cnf){        
         this.cnf = cnf;
-        initDate();     
+        initDate();
         add(new Game());
         add(new Game()); 
        
@@ -84,11 +84,9 @@ public class ChessApp extends JFrame{
         dateText.setBackground(Color.black);
         dateText.setForeground(Color.green);
 
-        Timer timer = new Timer(1000, (ActionEvent e) -> {
+        new Timer(1000, (ActionEvent e) -> {
             dateText.setText(timeFormat.format(new Date()));
-        });
-        timer.setInitialDelay(0);
-        timer.start(); 
+        }).start();
     }
     
     private void exit(){        
@@ -96,11 +94,11 @@ public class ChessApp extends JFrame{
         if(exit == 0) {System.exit(0);} //yes
         else if(exit == 1) {}//no
     }
-    
+        
     // VARIABLE DECLARATION
     private ConfigApp cnf;
     public static ImageIcon chessico;
-        
+           
     private JTextField dateText = new JTextField();
     private DateFormat timeFormat = new SimpleDateFormat("  kk:mm:ss  dd/MM/yyyy  ");  
 }

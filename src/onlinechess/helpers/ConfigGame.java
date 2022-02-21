@@ -70,9 +70,12 @@ public class ConfigGame {
         start.put(cstl, "8,8");
         start.put(out, "10,8");
         
-        String[] s = start.values().toArray()[choose].toString().split(",");
-        int defaultH = Integer.parseInt(s[0]);
-        int defaultW = Integer.parseInt(s[1]);
+        int defaultH=8, defaultW=8;       
+        if(choose > 0){
+            String[] s = start.values().toArray()[choose].toString().split(",");
+            defaultH = Integer.parseInt(s[0]);
+            defaultW = Integer.parseInt(s[1]);
+        }
         
         board = new HashMap<>();
         board.put("h", defaultH+rows);
@@ -89,6 +92,9 @@ public class ConfigGame {
     }
     
     public String init(){
-        return start.keySet().toArray()[choose].toString();
+        String init = (choose > 0) ? 
+            start.keySet().toArray()[choose].toString() : std;
+        
+        return init;
     }
 }
