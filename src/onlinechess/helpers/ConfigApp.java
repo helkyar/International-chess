@@ -18,6 +18,8 @@ public class ConfigApp {
     public final ImageIcon APP_ICON = new ImageIcon("img/chessicow.png");
     public final ImageIcon LOG_ICON = new ImageIcon("img/chessico.png");
     public final ImageIcon CLOSE_ICON = new ImageIcon("img/cross.png");
+    public final ImageIcon EYE_CLOSE = new ImageIcon("img/-eye.png");
+    public final ImageIcon EYE_OPEN = new ImageIcon("img/+eye.png");
     public final ImageIcon LOAD_ICON = new ImageIcon("img/load.gif");
     public final ImageIcon DESCONNECTED = new ImageIcon("img/disconnect.png");
     private final String warning = "\n\nChats & Boards \nwont be saved!";

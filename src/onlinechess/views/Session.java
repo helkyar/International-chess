@@ -43,8 +43,9 @@ public class Session extends JDialog{
         super(parent, true);
         
         this.cnf = cnf;
-        close = new JLabel(cnf.CLOSE_ICON);
         logo = new JLabel(cnf.APP_ICON); 
+        close = new JLabel(cnf.CLOSE_ICON);
+        paswshow = new JLabel(cnf.EYE_CLOSE);
         
     //PANEL STRUCTURE__________________________________________________________
        auth.setLayout(null); 
@@ -61,17 +62,20 @@ public class Session extends JDialog{
         
     //ADD LISTENERS ___________________________________________________________
         changepanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        close.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+        close.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        paswshow.setCursor(new Cursor(Cursor.HAND_CURSOR));
         paswtxt.setTransferHandler(null); //avoid paste       
         msgtxt.setEditable(false);
         swapChangePanelListener();
         
-        paswshow.addActionListener((ActionEvent e)->{showPassword();});        
         sessionbtn.addActionListener((ActionEvent e)->{sessionStart(e);});    
         guesstbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         localbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){localSessionInit(swap);}
+        });        
+        paswshow.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){showPassword();}
         });
         
     //STYLE OPTIONS ___________________________________________________________
@@ -119,7 +123,7 @@ public class Session extends JDialog{
         masterpanel.add(auth, "auth");
         masterpanel.add(message, "message");                
         add(masterpanel);
-    
+            
     //FRAME STRUCTURE _________________________________________________________ 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -137,8 +141,8 @@ public class Session extends JDialog{
         userlabel.setBounds(w/4,start,150,30);
         usertxt.setBounds(w/4,start+o,w/2,30);
         paswlabel.setBounds(w/4,start+o*4-i,150,30);
-        paswtxt.setBounds(w/4,start+o*5-i,w/2,30);
-        paswshow.setBounds(w/4,start+o*5-10,w/2,30);
+        paswtxt.setBounds(w/4,start+o*5-i,w/2-33,30);
+        paswshow.setBounds(w/4+w/2-57,start+o*5-i,w/6,30);
         sessionbtn.setBounds(w/2-105,start+o*9-i*2,100,30);
         guesstbtn.setBounds(w/2+5,start+o*9-i*2,100,30);
         localbtn.setBounds(w/2-50,start+o*10-i*2+10,100,30);
@@ -182,8 +186,14 @@ public class Session extends JDialog{
     }
     
     private void showPassword() {
-        if (paswshow.isSelected()) {paswtxt.setEchoChar((char) 0);} 
-        else {paswtxt.setEchoChar('\u2022');}
+        toggle = !toggle;
+        if (!toggle) {
+            paswshow.setIcon(cnf.EYE_OPEN);
+            paswtxt.setEchoChar((char) 0);
+        } else {
+            paswshow.setIcon(cnf.EYE_CLOSE);
+            paswtxt.setEchoChar('\u2022');
+        }
     }
     
     private void inputValidation(){
@@ -271,8 +281,9 @@ public class Session extends JDialog{
     private final int w = 500;
     private final int h = 700;
          
-    private boolean swap = true;   
-    private boolean newuser = false;      
+    private boolean swap = true;        
+    private boolean toggle = true;
+    private boolean newuser = false;     
     private boolean connecting = true;
     
 //SWING COMPONENTS __________________________________________________________________
@@ -281,7 +292,8 @@ public class Session extends JDialog{
     private final JPanel auth = new JPanel(); 
     
     private final JLabel close;
-    private final JLabel logo;
+    private final JLabel logo;    
+    private final JLabel paswshow;
     private final JTextField usertxt = new JTextField(); 
     private final JPasswordField paswtxt = new JPasswordField();  
     private final JLabel confpswdlabel = new JLabel("Confirm Password: "); 
@@ -289,8 +301,7 @@ public class Session extends JDialog{
     private final JLabel emailabel = new JLabel("Email: "); 
     private final JTextField emailtxt = new JTextField(20);
     private final JLabel userlabel= new JLabel("Username: ");
-    private final JLabel paswlabel= new JLabel("Password: ");    
-    private final JCheckBox paswshow = new JCheckBox("Show Password");
+    private final JLabel paswlabel= new JLabel("Password: ");
     private final JButton sessionbtn = new JButton("LOGIN");
     private final JButton guesstbtn = new JButton("GUESST");
     private final JButton localbtn = new JButton("LOCAL");
