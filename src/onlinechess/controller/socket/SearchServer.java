@@ -56,6 +56,8 @@ public class SearchServer {
         
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
         String ip = (String) NetUtils.getLocalIp().get(1);
+        Request.ownip = ip; //set Requests ip
+        
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
         if(!loop){return;}        
@@ -139,7 +141,7 @@ public class SearchServer {
                     
                     session.setConnecting(false);
                     session.setInfoLabel("SUCCESS");
-                    ChessApp.server = ip;
+                    Request.server = ip;
                     
                     response.close();
                 } catch(Exception e){}                    

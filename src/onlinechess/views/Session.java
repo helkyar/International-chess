@@ -136,6 +136,9 @@ public class Session extends JDialog{
         search = new SearchServer(this);
     }
 
+ // ===========================================================================
+ //        SET LOCATION AND SIZE OF SWING COMPONENTS (DYNAMIC)
+ // ===========================================================================
     private void setLocationAndSize(int i) {
         start=205; o=30; this.i=i;
         userinfo.setBounds(w/6,5,w/2,20);
@@ -158,12 +161,15 @@ public class Session extends JDialog{
         confpswdtxt.setBounds(w/4,start+o*7,w/2,30);
     }
     
+ // ===========================================================================
+ //              CHANGE BETWEEN REGISTER AND LOGIN
+ // ===========================================================================
     private void swapChangePanelListener(){
         changepanel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
-                changepanel.setText(newuser ? reglink:loglink);
-                sessionbtn.setText(newuser ? "LOGIN":"REGISTER");   
+                changepanel.setText(newuser ? reglink : loglink);
+                sessionbtn.setText(newuser ? "LOGIN" : "REGISTER");   
                 setLocationAndSize(newuser ? 40 : 0);             
                 newuser = newuser ? addComp() : removeComp();
                 auth.repaint(); auth.validate();
@@ -189,6 +195,9 @@ public class Session extends JDialog{
         });
     }
     
+    /**
+     * On Click: hows or hides password characters
+     */
     private void showPassword() {
         toggle = !toggle;
         if (!toggle) {
@@ -198,8 +207,11 @@ public class Session extends JDialog{
             paswshow.setIcon(cnf.EYE_CLOSE);
             paswtxt.setEchoChar('\u2022');
         }
-    }
+    }    
     
+ // ===========================================================================
+ //                         SESSION START
+ // ===========================================================================
     /**
      * Manages APP START either local, guesst, login or register
      * @param e Action event (button) 
@@ -215,8 +227,17 @@ public class Session extends JDialog{
         wait.add("North",close);
         
     //CHECK CONNECTION AND SEARCH SERVER ______________________________________ 
-        //(!)INSERT LOADING ICON 
+        //(!)INSERT LOADING ICON
+        //(!)CONFLICTS WITH PREVIOUS TIMER
         search.startSearch(ac);
+    }
+        
+    private void localSessionInit(boolean swap) {       
+        message.remove(options);
+        message.remove(wait);
+        if(swap) {((CardLayout) masterpanel.getLayout()).next(masterpanel);} 
+        new Timer(1100, (ActionEvent ev)->{dispose();}).start(); 
+        msgtxt.setText(cnf.LOCAL);
     }    
         
     public void startValidations(String ac) {
@@ -237,25 +258,26 @@ public class Session extends JDialog{
         String password = String.valueOf(paswtxt.getPassword());
         String cnfpaswd = String.valueOf(confpswdtxt.getPassword());
         
-        if(ac.equals("REGISTER")){ 
-            
+        if(ac.equals("REGISTER")){             
             String[] response = 
-            InputValidator.validateRegister(nick, email, password, cnfpaswd);
+            InputValidator.validRegister(nick, email, password, cnfpaswd, this);
             denied =  response[0].equals("ERROR");                       
             msg = response[1];
             
-        } else if(ac.equals("LOGIN")) {  
-            
+        } else if(ac.equals("LOGIN")){            
             String[] response = 
-            InputValidator.validateLogin(nick, password);
+            InputValidator.validLogin(nick, password, this);
             denied =  response[0].equals("ERROR");
             msg = response[1];
         }
-    //SUCCESS MSG _____________________________________________________________        
-        msgtxt.setText(msg);
-        boolean forfuckssakejavapleasestopthisshit = denied;
+        
+        if(denied){setValidationMessage(msg, denied);}
+    }
+    
+    public void setValidationMessage(String msg, boolean denied) {
+        msgtxt.setText(msg);        
         new Timer(2000, (ActionEvent ev)->{            
-            if(!forfuckssakejavapleasestopthisshit){dispose();}
+            if(!denied){dispose();}
             else {
                 swap = !swap;
                 auth.add(localbtn);
@@ -264,7 +286,10 @@ public class Session extends JDialog{
             ((Timer) ev.getSource()).stop();
         }).start();
     }
-
+    
+ // ===========================================================================
+ //           EXCEPTIONS MANAGEMENT (CONNECTION, TIMEOUT...)
+ // ===========================================================================
     public void badConnection() {        
         msgtxt.setText(cnf.LOST+"Retry: "+Math.random()+"\n\n"); 
         msgtxt.insertIcon(cnf.DESCONNECTED);
@@ -285,6 +310,9 @@ public class Session extends JDialog{
         }
     }
     
+ // ===========================================================================
+ //                 SET USER INFO
+ // ===========================================================================
     public void setInfoLabel(String msg) {
         if(msg.equals("DISCONNECTED")){        
             userinfo.setText(cnf.LOST);
@@ -300,14 +328,6 @@ public class Session extends JDialog{
             userinfo.setIcon(cnf.MINISUCCESS);
         }
     }    
-        
-    private void localSessionInit(boolean swap) {       
-        message.remove(options);
-        message.remove(wait);
-        if(swap) {((CardLayout) masterpanel.getLayout()).next(masterpanel);} 
-        new Timer(1100, (ActionEvent ev)->{dispose();}).start(); 
-        msgtxt.setText(cnf.LOCAL);
-    }
     
 //GETTERS & SETTERS ___________________________________________________________
     public void setConnecting(boolean connecting){this.connecting = connecting;}
@@ -327,7 +347,7 @@ public class Session extends JDialog{
     
     private SearchServer search;
     
-//SWING COMPONENTS __________________________________________________________________
+//SWING COMPONENTS ____________________________________________________________
     private final JPanel masterpanel = new JPanel(new CardLayout());
     private final JPanel message = new JPanel();
     private final JPanel auth = new JPanel(); 

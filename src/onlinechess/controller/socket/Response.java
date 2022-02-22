@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import onlinechess.controller.session.InputValidator;
+import onlinechess.views.Session;
+import packager.Package;
 
 /**
  *
@@ -34,20 +37,28 @@ class Response implements Runnable{
                 try (Socket request = port.accept()) {
                     input = new ObjectInputStream(request.getInputStream());
                     p = (packager.Package) input.readObject();
-
+                    request.close();
+                    
                     switch(p.getStatus()){
-//                        case "imserver": setServerIP(mysocket, p); break;
-//                        case "login":    setLoginMessage(p); break;
-//                        case "register": setRegisterMessage(p); break;                        
+                        case "login":    setLoginMessage(p); break;
+                        case "register": setRegisterMessage(p); break;                        
 //                        case "getusers": setUsersOnline(p); break;
 //                        case "message":  sendMessage(p); break;
 //                        case "managegroup": serverMembersResponse(p); break;
 //                        case "groupusers":  informChatUsers(p); break;                       
 //                        case "changeusers": refreshGroups(p); break;                
                     }
-                    request.close();
                 } catch(Exception e){e.printStackTrace();}                    
             }
-        }                     
+        }    
+        //Gets server response about login/register and sends it accordingly
+
+    private void setLoginMessage(Package p) {
+        InputValidator.serverLoginValidator(p.getInfo());
     }
+
+    private void setRegisterMessage(Package p) {
+        InputValidator.serverRegisterValidator(p.getInfo());
+    }
+}
     

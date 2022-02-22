@@ -52,7 +52,7 @@ public class CryptoValidator {
     }
 
 // PASSWORD VALIDATION ________________________________________________________
-    private static boolean validatePassword(String original, String stored)
+    public static boolean validatePassword(String original, String stored)
     throws NoSuchAlgorithmException, InvalidKeySpecException {
         String[] parts = stored.split(":");
         int iterations = Integer.parseInt(parts[0]);

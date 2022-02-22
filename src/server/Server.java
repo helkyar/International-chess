@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import packager.Package;
+import server.dbconnect.managers.UserManager;
 
 /**
  *
@@ -63,22 +64,60 @@ public class Server extends JFrame implements Runnable{
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
                 p = (Package) input.readObject();
+                request.close();
                 
         //ROUTES ______________________________________________________________
                 switch(p.getStatus()){
-                    /**
-                     * FILTER REQUESTS
-                     */
+                    case "register": setNewRegisterUser(p); break;
+                    case "login":    getLoginPassword(p); break;
                 }      
 
-                request.close();
             } catch (Exception ex) {ex.printStackTrace();}
         }
     }        
  // ===========================================================================
  //                    CONTROLLERS & MIDDLEWARE
  // ===========================================================================
+    private void getLoginPassword(Package p) throws IOException{
+        ObjectOutputStream msgpackage;
+        String resp;
+                
+        //Send info to database
+        resp = UserManager.checkLogin(p.getNick());
+        p.setInfo(resp);
+        
+//        p.setObj(UserManager.getRegisteredChats(p.getNick()));
+        
+        //if OK resgister ip as last for this user        
+//         if(resp.equals("OK")){DBConnection.setLastIP(p.getNick(), p.getIp());}
+        
+        Socket sendmsg = new Socket(p.getIp(), 9090);
+        msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
+        msgpackage.writeObject(p);
+                        
+        msgpackage.close(); sendmsg.close();
+    }
     
+    private void setNewRegisterUser(Package p) throws IOException{
+        ObjectOutputStream msgpackage;
+        String resp = UserManager.checkRegister(p.getNick(), p.getEmail());
+        
+        if(!resp.equals("")){p.setInfo(resp);}            
+        else {        
+            int registersuccess =
+            UserManager.registerUser(p.getPaswd(), p.getNick(), p.getEmail());
+            p.setInfo(registersuccess > 0 ? "" : "\n\n\n\nDatabase error...");
+        }     
+        
+        //if OK resgister ip as last for this user
+//         if(resp.equals("OK")){DBConnection.setLastIP(p.getNick(), p.getIp());}
+
+        Socket sendmsg = new Socket(p.getIp(), 9090);
+        msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
+        msgpackage.writeObject(p);
+                        
+        msgpackage.close(); sendmsg.close();  
+    }
  // ===========================================================================
  //                            RESPONSE
  // ===========================================================================

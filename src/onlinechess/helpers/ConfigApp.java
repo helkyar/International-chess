@@ -39,4 +39,8 @@ public class ConfigApp {
     public final String TIMEOUTMINI = "Server connection timeout...\n";
     public final String TIMEOUT = "Ups! Server crashed...\n";
     public final ImageIcon MINITIMEOUT = new ImageIcon("img/alert.png");
+    public final String BLANK =  ".";
+    public final String WRONG_MAIL =  ".";
+    public final String DIFF_PWD =  ".";
+    public final String WRONG_CREDENTIALS =  ".";
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Package implements Serializable{
     
-    private String nick, ip, info, msg, status;
+    private String nick, ip, info, msg, status, email, pwdcryp;
     private Map<String, String> ips, users;
 
     public void setIp(String ip){this.ip = ip;}
@@ -31,4 +31,9 @@ public class Package implements Serializable{
     public String getStatus(){return status;}
     public Map<String,String> getIps(){return ips;}
     public Map<String, String> getUsers() {return users;}
+
+    public void setEmail(String email) {this.email = email;}
+    public void setPassword(String pwdcryp) {this.pwdcryp = pwdcryp;}
+    public String getEmail(){return email;}
+    public String getPaswd(){return pwdcryp;}
 }

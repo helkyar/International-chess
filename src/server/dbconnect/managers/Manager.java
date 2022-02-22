@@ -20,7 +20,7 @@ public class Manager {
         catch (SQLException e){e.printStackTrace();}
     }
     
-    public void connect(){
+    public static void connect(){
         try{ Class.forName(driver);}
         catch(ClassNotFoundException e){e.printStackTrace();} 
         
@@ -29,10 +29,10 @@ public class Manager {
     }
     
 // VARIABLES __________________________________________________________________
-    private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost:3306/chess";
-    private String user = "root";
-    private String pwd = "";    
+    private static String driver = "com.mysql.jdbc.Driver";
+    private static String url = "jdbc:mysql://localhost:3306/chess";
+    private static String user = "root";
+    private static String pwd = "";    
     
     protected static PreparedStatement ps = null;
     protected static Connection conn = null;
