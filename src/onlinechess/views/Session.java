@@ -6,15 +6,12 @@ package onlinechess.views;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -22,15 +19,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.Timer;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import onlinechess.controller.session.*;
 import onlinechess.controller.socket.SearchServer;
-import onlinechess.controller.socket.utils.NetUtils;
 import onlinechess.helpers.ConfigApp;
     
 /**
@@ -71,6 +68,7 @@ public class Session extends JDialog{
         sessionbtn.addActionListener((ActionEvent e)->{sessionStart(e);});    
         guesstbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         localbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
+        retrybtn.addActionListener((ActionEvent e)->{search.startSearch("");});
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){localSessionInit(swap);}
         });        
@@ -134,24 +132,25 @@ public class Session extends JDialog{
         setLocationRelativeTo(null);
         setUndecorated(true);
                 
-    //SEARCH SERVER ___________________________________________________________
-        new SearchServer(this);
+    //INIT SEARCH SERVER ___________________________________________________________
+        search = new SearchServer(this);
     }
 
     private void setLocationAndSize(int i) {
-        int start=205, o=30;
+        start=205; o=30; this.i=i;
         userinfo.setBounds(w/6,5,w/2,20);
         close.setBounds(w-25,5,20,20);
         logo.setBounds(w/2-100,50,200,150);
         userlabel.setBounds(w/4,start,150,30);
         usertxt.setBounds(w/4,start+o,w/2,30);
         paswlabel.setBounds(w/4,start+o*4-i,150,30);
-        paswtxt.setBounds(w/4,start+o*5-i,w/2-33,30);
+        paswtxt.setBounds(w/4,start+o*5-i,(int)(w/2-i*0.825),30);
         paswshow.setBounds(w/4+w/2-57,start+o*5-i,w/6,30);
         sessionbtn.setBounds(w/2-105,start+o*9-i*2,100,30);
         guesstbtn.setBounds(w/2+5,start+o*9-i*2,100,30);
         localbtn.setBounds(w/2-50,start+o*10-i*2+10,100,30);
-        changepanel.setBounds(155,start+o*11-i*2+5,200,30);
+        changepanel.setBounds(155,start+o*11-i*2+5,200,30);     
+        retrybtn.setBounds(w/2-105,start+o*10-i*2+10,100,30);
         
         emailabel.setBounds(w/4,start+o*2,w/2,30);
         emailtxt.setBounds(w/4,start+o*3,w/2,30);
@@ -201,21 +200,12 @@ public class Session extends JDialog{
         }
     }
     
-    private void inputValidation(String ac){
-        //GET INPUTS
-        //CHECK INPUTS
-            //(B)blank
-            //(R)secure password
-        //SET ERROR MSG
-    }
-
     /**
      * Manages APP START either local, guesst, login or register
      * @param e Action event (button) 
      */
     private void sessionStart(ActionEvent e) {
         String ac = e.getActionCommand();
-        inputValidation(ac);
         
         ((CardLayout) masterpanel.getLayout()).next(masterpanel);
         swap = !swap;
@@ -225,61 +215,73 @@ public class Session extends JDialog{
         wait.add("North",close);
         
     //CHECK CONNECTION AND SEARCH SERVER ______________________________________ 
-        //(!)INSERT LOADING ICON        
-        SearchServer search = new SearchServer(this);
-        new Timer(6000, (ActionEvent evt) -> {
-            if(connecting){search.getServerIP();}
-            else{
-                ((Timer)evt.getSource()).stop();
-                serverValidation(ac);
-            }
-        }).start();       
-    }
-    
-    private void localSessionInit(boolean swap) {       
-        message.remove(options);
-        message.remove(wait);
-        if(swap) {((CardLayout) masterpanel.getLayout()).next(masterpanel);} 
-        new Timer(1100, (ActionEvent ev)->{dispose();}).start(); 
-        msgtxt.setText(cnf.LOCAL);
-    }
-    
-    private void serverValidation(String ac) {
+        //(!)INSERT LOADING ICON 
+        search.startSearch(ac);
+    }    
+        
+    public void startValidations(String ac) {
+        if(ac.equals("")){return;}
+        boolean denied = true;
         String msg="";
-       
+               
     //GUESST CASE _____________________________________________________________        
         if(ac.equals("GUESST")){
             msgtxt.setText(cnf.GUEST);                  
             new Timer(1500, (ActionEvent ev)->{dispose();}).start();
             return;
         }
-    //SERVER VALIDATION _______________________________________________________
-        if(ac.equals("REGISTER")){   
-            msg = cnf.REGISTER;
-        } 
-        else if(ac.equals("LOGIN")) {
-            msg = cnf.LOGIN;
+        
+    //GET INPUTS ______________________________________________________________       
+        String nick = usertxt.getText();
+        String email = emailtxt.getText();
+        String password = String.valueOf(paswtxt.getPassword());
+        String cnfpaswd = String.valueOf(confpswdtxt.getPassword());
+        
+        if(ac.equals("REGISTER")){ 
+            
+            String[] response = 
+            InputValidator.validateRegister(nick, email, password, cnfpaswd);
+                       
+//            msg = response[1];
+            
+        } else if(ac.equals("LOGIN")) {  
+            
+            String[] response = 
+            InputValidator.validateLogin(nick, password);
+            
+//            msg = response[1];
         }
-        //set color red, change to previous panel, (?)set info on previus panel
     //SUCCESS MSG _____________________________________________________________        
         msgtxt.setText(msg);
-        new Timer(2000, (ActionEvent ev)->{dispose();}).start();
+        new Timer(2000, (ActionEvent ev)->{            
+            if(!denied){dispose();}
+            else {
+                swap = !swap;
+                auth.add(localbtn);
+                ((CardLayout) masterpanel.getLayout()).next(masterpanel);
+            }
+            ((Timer) ev.getSource()).stop();
+        }).start();
     }
 
-    public void badConnection() {
-        if(!swap){
-            msgtxt.setText(cnf.LOST+"Retry: "+Math.random()+"\n\n"); 
-            msgtxt.insertIcon(cnf.DESCONNECTED);
-            options.add(localbtn);
-            message.add("South", options);
-        }
+    public void badConnection() {        
+        msgtxt.setText(cnf.LOST+"Retry: "+Math.random()+"\n\n"); 
+        msgtxt.insertIcon(cnf.DESCONNECTED);
+        if(!swap){options.add(localbtn);}
+        message.add("South", options);
+        
         setInfoLabel("DISCONNECTED");
     }
         
-    public void serverResponseTimeout() {
+    public void serverResponseTimeout() { 
+        auth.add(retrybtn);
+        localbtn.setBounds(w/2+5,start+o*10-i*2+10,100,30);
+        retrybtn.setBounds(w/2-105,start+o*10-i*2+10,100,30);
         msgtxt.setText(cnf.TIMEOUT);
         msgtxt.insertIcon(cnf.LOAD_ICON);
-        options.add(localbtn);
+        if(!swap){
+            options.add(localbtn); options.add(retrybtn);
+        }
     }
     
     public void setInfoLabel(String msg) {
@@ -290,13 +292,21 @@ public class Session extends JDialog{
             userinfo.setText(cnf.WAIT);
             userinfo.setIcon(cnf.MINIWAIT);
         } else if(msg.equals("TIMEOUT")){            
-            userinfo.setText(cnf.TIMEOUT);
+            userinfo.setText(cnf.TIMEOUTMINI);
             userinfo.setIcon(cnf.MINITIMEOUT);        
         } else if(msg.equals("SUCCESS")){            
             userinfo.setText(cnf.OK);
             userinfo.setIcon(cnf.MINISUCCESS);
         }
     }    
+        
+    private void localSessionInit(boolean swap) {       
+        message.remove(options);
+        message.remove(wait);
+        if(swap) {((CardLayout) masterpanel.getLayout()).next(masterpanel);} 
+        new Timer(1100, (ActionEvent ev)->{dispose();}).start(); 
+        msgtxt.setText(cnf.LOCAL);
+    }
     
 //GETTERS & SETTERS ___________________________________________________________
     public void setConnecting(boolean connecting){this.connecting = connecting;}
@@ -306,11 +316,15 @@ public class Session extends JDialog{
     
     private final int w = 500;
     private final int h = 700;
-         
+    //variables for component location
+    int start, o, i;
+    
     private boolean swap = true;        
     private boolean toggle = true;
     private boolean newuser = false;     
     public boolean connecting = true;
+    
+    private SearchServer search;
     
 //SWING COMPONENTS __________________________________________________________________
     private final JPanel masterpanel = new JPanel(new CardLayout());
@@ -331,7 +345,8 @@ public class Session extends JDialog{
     private final JLabel paswlabel= new JLabel("Password: ");
     private final JButton sessionbtn = new JButton("LOGIN");
     private final JButton guesstbtn = new JButton("GUESST");
-    private final JButton localbtn = new JButton("LOCAL");
+    private final JButton localbtn = new JButton("LOCAL");    
+    private final JButton retrybtn = new JButton("RECONNECT");
     private final String reglink = "No tienes cuenta? Crea una aquí...";
     private final String loglink = "Ya tienes cuenta? Inicia sesión...";
     private final JLabel changepanel = new JLabel(reglink);

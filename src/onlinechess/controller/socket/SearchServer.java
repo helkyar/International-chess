@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.TimerTask;
@@ -34,19 +35,20 @@ public class SearchServer {
     public SearchServer(Session session){
         this.session = session;
         new ResponseServer();
+        startSearch("");
+    }
+    
+    public void startSearch(String ac){
+        loop = true; firstOne = true;
         new Timer(6000, (ActionEvent evt) -> {
             if(session.connecting){getServerIP();}
-            else{((Timer)evt.getSource()).stop();}
+            else{
+                session.startValidations(ac);
+                ((Timer)evt.getSource()).stop();}
         }).start(); 
     }
     
-    /**
-     * Options on timeout:{RETRY, LOCAL}
-     * Send SERVERIP to APP
-     * Send messages to APP
-     */
-    
-    public void getServerIP() {     
+    private void getServerIP() {     
     //CHECK CONNECTION ________________________________________________________
         boolean localNet = NetUtils.getLocalIp().size() < 1;
         if(localNet){session.badConnection(); return;}//Not even net
@@ -71,7 +73,8 @@ public class SearchServer {
         firstOne = false;
         
         new Timer(20000, (ActionEvent e) -> {
-    //(!)CHECK IF SESSION STARTED or BADCONNECTION IN THE MEANTIME
+    //(!)CHECK IF SESSION STARTED or BADCONNECTION IN THE MEANTIME    
+    /*Options on timeout:{RETRY, LOCAL}*/
             loop = false;
             session.serverResponseTimeout();
             session.setInfoLabel("TIMEOUT");
@@ -100,9 +103,9 @@ public class SearchServer {
                 objp.writeObject(p);
                 socket.close();
 
-                System.out.println("===============================================");
+                System.out.println("=========================================");
                 System.out.println("Server OK: "+ip+i);
-                System.out.println("===============================================");
+                System.out.println("=========================================");
             } catch(IOException ex){System.out.println("Server test: "+ip+i);}
         }
     }
@@ -124,16 +127,21 @@ public class SearchServer {
             catch (Exception e){}
 
             while(true){
-                try (Socket mysocket = port.accept()) {
-                    input = new ObjectInputStream(mysocket.getInputStream());
+                try (Socket response = port.accept()) {
+                    input = new ObjectInputStream(response.getInputStream());
                     p = (Package) input.readObject();
             //(!)CHESS HORSE GIF NEEDEEEEED!!
                     setUserMessage(41,"\n\nTying the horses...");
                     if(!p.getStatus().equals("imserver")){return;}
                     
+                    InetAddress locateip = response.getInetAddress();
+                    String ip = locateip.getHostAddress();
+                    
                     session.setConnecting(false);
                     session.setInfoLabel("SUCCESS");
-
+                    ChessApp.server = ip;
+                    
+                    response.close();
                 } catch(Exception e){}                    
             }
            

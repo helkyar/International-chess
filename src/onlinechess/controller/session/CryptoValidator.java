@@ -18,7 +18,7 @@ import javax.crypto.spec.PBEKeySpec;
 public class CryptoValidator {
     
 //PASSWORD ENCRYPTATION _______________________________________________________
-    private static String generateStrongPasswordHash(String password) 
+    public static String generateEncryptation(String password) 
     throws NoSuchAlgorithmException, InvalidKeySpecException {
         int iterations = 1000;
         char[] chars = password.toCharArray();

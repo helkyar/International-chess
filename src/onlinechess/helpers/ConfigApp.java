@@ -16,6 +16,7 @@ public class ConfigApp {
     public final Color PRIME  = Color.black;
     public static Color ALT = Color.gray;
     public final Color WORD = Color.white;
+    public final Color ERROR = Color.red;
     public final ImageIcon APP_ICON = new ImageIcon("img/chessicow.png");
     public final ImageIcon LOG_ICON = new ImageIcon("img/chessico.png");
     public final ImageIcon CLOSE_ICON = new ImageIcon("img/cross.png");
@@ -34,7 +35,8 @@ public class ConfigApp {
     public final String WAIT = "\n\n\nWaiting for server response...\n";
     public final ImageIcon MINIWAIT = new ImageIcon("img/wait.png");
     public final Icon MINISUCCESS = new ImageIcon("img/ok.png");
-    public final String OK = "\n\n\nEverything ok, hurry up!\n";;
+    public final String OK = "\n\n\nEverything ok, hurry up!\n";    
+    public final String TIMEOUTMINI = "Server connection timeout...\n";
     public final String TIMEOUT = "Ups! Server crashed...\n";
     public final ImageIcon MINITIMEOUT = new ImageIcon("img/alert.png");
 }

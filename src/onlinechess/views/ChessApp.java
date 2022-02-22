@@ -98,6 +98,7 @@ public class ChessApp extends JFrame{
     // VARIABLE DECLARATION
     private ConfigApp cnf;
     public static ImageIcon chessico;
+    public static String server;
            
     private JTextField dateText = new JTextField();
     private DateFormat timeFormat = new SimpleDateFormat("  kk:mm:ss  dd/MM/yyyy  ");  
