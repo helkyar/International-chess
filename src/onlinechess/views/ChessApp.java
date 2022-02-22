@@ -74,7 +74,7 @@ public class ChessApp extends JFrame{
             }
         });
         
-        new Session(this, cnf);
+        new Session(this, cnf).setVisible(true);
         LogGen.info("Session started succesfully");
     }
     // =========================================================================

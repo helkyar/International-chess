@@ -34,7 +34,10 @@ public class SearchServer {
     public SearchServer(Session session){
         this.session = session;
         new ResponseServer();
-        getServerIP();
+        new Timer(6000, (ActionEvent evt) -> {
+            if(session.connecting){getServerIP();}
+            else{((Timer)evt.getSource()).stop();}
+        }).start(); 
     }
     
     /**
@@ -55,6 +58,7 @@ public class SearchServer {
         //Check 255 local ips searching for server
         if(!loop){return;}        
         session.msgtxt.setText("\n\n\n\nSearching server\n"); 
+        session.setInfoLabel("WAITING");
         
         for(int i = 0; i<=255; i++){
             new Thread(new RequestServer(i, ip)).start();
@@ -69,7 +73,8 @@ public class SearchServer {
         new Timer(20000, (ActionEvent e) -> {
     //(!)CHECK IF SESSION STARTED or BADCONNECTION IN THE MEANTIME
             loop = false;
-            session.serverResponseTimeout();           
+            session.serverResponseTimeout();
+            session.setInfoLabel("TIMEOUT");
             ((Timer)e.getSource()).stop();
         }).start();       
     }
@@ -127,7 +132,7 @@ public class SearchServer {
                     if(!p.getStatus().equals("imserver")){return;}
                     
                     session.setConnecting(false);
-                    System.out.println(p.getStatus());
+                    session.setInfoLabel("SUCCESS");
 
                 } catch(Exception e){}                    
             }

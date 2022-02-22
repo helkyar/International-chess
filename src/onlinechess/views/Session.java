@@ -82,6 +82,7 @@ public class Session extends JDialog{
         setIconImage(cnf.APP_ICON.getImage());
         auth.setBackground(cnf.PRIME); 
         paswshow.setBackground(cnf.PRIME);
+        userinfo.setForeground(cnf.ALT); 
         userlabel.setForeground(cnf.ALT);        
         paswlabel.setForeground(cnf.ALT);      
         changepanel.setForeground(cnf.ALT);
@@ -104,6 +105,7 @@ public class Session extends JDialog{
         style.setBackground(cnf.PRIME);
             
     //ADD COMPONENTS __________________________________________________________ 
+        auth.add(userinfo);
         auth.add(close);
         auth.add(logo);
         auth.add(userlabel);
@@ -131,11 +133,14 @@ public class Session extends JDialog{
         
         setLocationRelativeTo(null);
         setUndecorated(true);
-        setVisible(true);
+                
+    //SEARCH SERVER ___________________________________________________________
+        new SearchServer(this);
     }
 
     private void setLocationAndSize(int i) {
         int start=205, o=30;
+        userinfo.setBounds(w/6,5,w/2,20);
         close.setBounds(w-25,5,20,20);
         logo.setBounds(w/2-100,50,200,150);
         userlabel.setBounds(w/4,start,150,30);
@@ -196,17 +201,23 @@ public class Session extends JDialog{
         }
     }
     
-    private void inputValidation(){
-    
+    private void inputValidation(String ac){
+        //GET INPUTS
+        //CHECK INPUTS
+            //(B)blank
+            //(R)secure password
+        //SET ERROR MSG
     }
 
     /**
      * Manages APP START either local, guesst, login or register
      * @param e Action event (button) 
      */
-    private void sessionStart(ActionEvent e) {        
-        ((CardLayout) masterpanel.getLayout()).next(masterpanel);
+    private void sessionStart(ActionEvent e) {
         String ac = e.getActionCommand();
+        inputValidation(ac);
+        
+        ((CardLayout) masterpanel.getLayout()).next(masterpanel);
         swap = !swap;
         
     //LOCAL CASE ______________________________________________________________
@@ -214,12 +225,8 @@ public class Session extends JDialog{
         wait.add("North",close);
         
     //CHECK CONNECTION AND SEARCH SERVER ______________________________________ 
-        //(>)INSERT LOADING ICON        
-        //(>)ALLOW CLOSE AND START LOCAl AT ANY MOMENT
-        //(>)SET RETRY-LOCAL OPTIONS IF CONNECTION FAILS
+        //(!)INSERT LOADING ICON        
         SearchServer search = new SearchServer(this);
-        
-    //(!)BUTTON TO CLOSE THE PANEL
         new Timer(6000, (ActionEvent evt) -> {
             if(connecting){search.getServerIP();}
             else{
@@ -260,17 +267,36 @@ public class Session extends JDialog{
     }
 
     public void badConnection() {
-        //   (!)ALLOW PLAY LOCAL
-        msgtxt.setText(cnf.LOST+Math.random()+"\n\n"); 
-        msgtxt.insertIcon(cnf.DESCONNECTED);
-        options.add(localbtn);
-        message.add("South", options);
+        if(!swap){
+            msgtxt.setText(cnf.LOST+"Retry: "+Math.random()+"\n\n"); 
+            msgtxt.insertIcon(cnf.DESCONNECTED);
+            options.add(localbtn);
+            message.add("South", options);
+        }
+        setInfoLabel("DISCONNECTED");
     }
         
     public void serverResponseTimeout() {
+        msgtxt.setText(cnf.TIMEOUT);
         msgtxt.insertIcon(cnf.LOAD_ICON);
+        options.add(localbtn);
     }
     
+    public void setInfoLabel(String msg) {
+        if(msg.equals("DISCONNECTED")){        
+            userinfo.setText(cnf.LOST);
+            userinfo.setIcon(cnf.MINICONNECTED);
+        } else if(msg.equals("WAITING")){            
+            userinfo.setText(cnf.WAIT);
+            userinfo.setIcon(cnf.MINIWAIT);
+        } else if(msg.equals("TIMEOUT")){            
+            userinfo.setText(cnf.TIMEOUT);
+            userinfo.setIcon(cnf.MINITIMEOUT);        
+        } else if(msg.equals("SUCCESS")){            
+            userinfo.setText(cnf.OK);
+            userinfo.setIcon(cnf.MINISUCCESS);
+        }
+    }    
     
 //GETTERS & SETTERS ___________________________________________________________
     public void setConnecting(boolean connecting){this.connecting = connecting;}
@@ -284,7 +310,7 @@ public class Session extends JDialog{
     private boolean swap = true;        
     private boolean toggle = true;
     private boolean newuser = false;     
-    private boolean connecting = true;
+    public boolean connecting = true;
     
 //SWING COMPONENTS __________________________________________________________________
     private final JPanel masterpanel = new JPanel(new CardLayout());
@@ -294,6 +320,7 @@ public class Session extends JDialog{
     private final JLabel close;
     private final JLabel logo;    
     private final JLabel paswshow;
+    private final JLabel userinfo = new JLabel("", JLabel.RIGHT);
     private final JTextField usertxt = new JTextField(); 
     private final JPasswordField paswtxt = new JPasswordField();  
     private final JLabel confpswdlabel = new JLabel("Confirm Password: "); 
@@ -314,4 +341,3 @@ public class Session extends JDialog{
     private final JPanel wait = new JPanel();
     private final JPanel options = new JPanel();
 }
-//(>)Waiting gif when login on label
