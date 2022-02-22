@@ -241,20 +241,21 @@ public class Session extends JDialog{
             
             String[] response = 
             InputValidator.validateRegister(nick, email, password, cnfpaswd);
-                       
-//            msg = response[1];
+            denied =  response[0].equals("ERROR");                       
+            msg = response[1];
             
         } else if(ac.equals("LOGIN")) {  
             
             String[] response = 
             InputValidator.validateLogin(nick, password);
-            
-//            msg = response[1];
+            denied =  response[0].equals("ERROR");
+            msg = response[1];
         }
     //SUCCESS MSG _____________________________________________________________        
         msgtxt.setText(msg);
+        boolean forfuckssakejavapleasestopthisshit = denied;
         new Timer(2000, (ActionEvent ev)->{            
-            if(!denied){dispose();}
+            if(!forfuckssakejavapleasestopthisshit){dispose();}
             else {
                 swap = !swap;
                 auth.add(localbtn);

@@ -27,11 +27,12 @@ public class InputValidator {
         try {pwdcryp = CryptoValidator.generateEncryptation(password);} 
         catch (NoSuchAlgorithmException ex) {}
         catch (InvalidKeySpecException ex) {}
-        return new String[]{};
+        
+        return new String[]{"ERROR", "Just for fun"};
     }
 
     public static String[] validateLogin(String nick, String password) {    
-        return new String[]{};
+        return new String[]{"OK", "Go ahead motherfucker"};
     }
     
 }
