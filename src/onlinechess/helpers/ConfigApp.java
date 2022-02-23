@@ -29,7 +29,7 @@ public class ConfigApp {
     public final String enter = "\n\n\n\n\n\n\n\n";
     public final String GUEST = enter+"Session started as Guesst..."+warning;     
     public final String LOCAL = enter+"Started local game..."+warning;
-    public final String LOGIN = enter+"\n\\nAccess granted!!";
+    public final String LOGIN = enter+"\n\n\nAccess granted!!";
     public final String REGISTER = enter+"\n\nRegistered successfully!!";
     public final String LOST = "\n\n\nYour connection is lost...\n";
     public final String WAIT = "\n\n\nWaiting for server response...\n";

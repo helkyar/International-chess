@@ -20,6 +20,7 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
@@ -48,12 +49,15 @@ public class ChessApp extends JFrame{
             }
         });
     }
-    
+
     public ChessApp(ConfigApp cnf){        
         this.cnf = cnf;
         initDate();
         add(new Game());
-        add(new Game()); 
+        add(test);
+        //ADD CHAT IF USER ONLINE
+        //ADD LATERAL PANELS IF ONLINE
+        //LOCAL SETTING HAS ROW OF OPTIONS INSTEAD OF CHAT
        
     // FRAME STRUCTURE ________________________________________________________
         setTitle("Online Chess");
@@ -87,6 +91,8 @@ public class ChessApp extends JFrame{
         new Timer(1000, (ActionEvent e) -> {
             dateText.setText(timeFormat.format(new Date()));
         }).start();
+        System.out.println("HELLO?");
+        test.setText(nick);
     }
     
     private void exit(){        
@@ -94,12 +100,23 @@ public class ChessApp extends JFrame{
         if(exit == 0) {System.exit(0);} //yes
         else if(exit == 1) {}//no
     }
-        
-    // VARIABLE DECLARATION
+//GETTERS & SETTERS ___________________________________________________________
+    public void setSessionVariables(String nick, int id) {
+        ChessApp.nick = nick; 
+        ChessApp.userId = id;
+        test.setText(nick);
+    }
+      
+// VARIABLE DECLARATION _______________________________________________________
     private ConfigApp cnf;
     public static ImageIcon chessico;
            
     private JTextField dateText = new JTextField();
-    private DateFormat timeFormat = new SimpleDateFormat("  kk:mm:ss  dd/MM/yyyy  ");  
+    private DateFormat timeFormat = new SimpleDateFormat("kk:mm dd/yy");  
+    
+    //SESSION VARIABLES _______________________________________________________
+    private static String nick = "local";
+    private static int userId = -1; //guest has id = 0
+    JLabel test = new JLabel(nick);
 }
 

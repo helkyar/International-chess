@@ -54,11 +54,11 @@ class Response implements Runnable{
     //Gets server response about login/register and sends it accordingly
 
     private void setLoginMessage(Package p) {
-        InputValidator.serverLoginValidator(p.getInfo());
+        InputValidator.serverLoginValidator(p.getInfo(),p.getNick(), p.getId());
     }
 
     private void setRegisterMessage(Package p) {
-        InputValidator.serverRegisterValidator(p.getInfo());
+        InputValidator.svrRegisterValidator(p.getInfo(), p.getNick(), p.getId());
     }
 }
     

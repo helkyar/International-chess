@@ -32,14 +32,14 @@ import onlinechess.helpers.ConfigApp;
     
 /**
  *
- * @author javier
+ * @author javier palacios
  */
 public class Session extends JDialog{
-
-    public Session(JFrame parent, ConfigApp cnf){
+    ChessApp parent;
+    public Session(ChessApp parent, ConfigApp cnf){
         super(parent, true);
-        
         this.cnf = cnf;
+        this.parent = parent;
         logo = new JLabel(cnf.APP_ICON); 
         close = new JLabel(cnf.CLOSE_ICON);
         paswshow = new JLabel(cnf.EYE_CLOSE);
@@ -251,6 +251,7 @@ public class Session extends JDialog{
         if(ac.equals("GUESST")){
             msgtxt.setText(cnf.GUEST);                  
             new Timer(1500, (ActionEvent ev)->{dispose();}).start();
+            parent.setSessionVariables("guest", 0);
             return;
         }
         
@@ -273,14 +274,14 @@ public class Session extends JDialog{
             msg = response[1];
         }
         
-        if(denied){setValidationMessage(msg, denied);}
+        if(denied){validationMsg(msg, "", denied, -2);}
     }
     
-    public void setValidationMessage(String msg, boolean denied) {
+    public void validationMsg(String msg, String nick, boolean denied, int id) {
         msgtxt.setText(msg);        
         new Timer(2000, (ActionEvent ev)->{    
             ((Timer) ev.getSource()).stop();        
-            if(!denied){dispose();}
+            if(!denied){parent.setSessionVariables(nick, id); dispose();}
             else {
                 swap = !swap;
                 auth.add(localbtn);
@@ -383,5 +384,11 @@ public class Session extends JDialog{
     public final StyledDocument doc = msgtxt.getStyledDocument();
     private final JPanel wait = new JPanel();
     private final JPanel options = new JPanel();
-
 }
+//(!)ACCESS GRANTED WHEN IT SHOULDN'T
+//(!)RECONNECT BUTTON SHOULD HIDE ON LOST CONNECTION
+//(!)SESSION SEARCH SERVER MAY CATCH VIRTUAL MACHINE IP
+//(!)POSSIBLE ERROR SETTING P.INFO IN USER REGISTER
+//(>)PASS USER INFO TO MAIN PROGRAM
+//(>)SERVER TIMEOUT RESPONSE IN LOGIN/REGISTER
+//(>)ENTER SENDS REQUEST

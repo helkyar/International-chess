@@ -57,7 +57,7 @@ public class SearchServer {
         }
         badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
-        String ip = (String) NetUtils.getLocalIp().get(1);
+        String ip = (String) NetUtils.getLocalIp().get(2);
         Request.ownip = ip; //set Requests ip
         
         ip = ip.substring(0, ip.lastIndexOf(".")+1);

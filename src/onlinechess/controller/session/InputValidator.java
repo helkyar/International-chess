@@ -67,7 +67,7 @@ public class InputValidator {
         catch (NoSuchAlgorithmException ex) {}
         catch (InvalidKeySpecException ex) {}
             
-        Request.registerUser(nick, pwdcryp, email);
+        Request.registerUser(nick.toLowerCase(), pwdcryp, email);
         return new String[]{"WAIT", rgtmsg};
     }
     
@@ -86,7 +86,7 @@ public class InputValidator {
             return new String[]{"ERROR", cnf.BLANK};
         }
     //LOGIN ___________________________________________________________________
-        Request.loginUser(nick);
+        Request.loginUser(nick.toLowerCase());
         return new String[]{"WAIT", ""};
     }
     
@@ -95,13 +95,13 @@ public class InputValidator {
      * password is empty and same error message gets displayed.
      * @param storedpwd 
      */
-    public static void serverLoginValidator(String storedpwd){
+    public static void serverLoginValidator(String pwd, String nick, int id){
         String[] response;
         
         boolean isCorrect=false;
-        try {isCorrect = CryptoValidator.validatePassword(password, storedpwd);} 
-        catch (NoSuchAlgorithmException ex) {} 
-        catch (InvalidKeySpecException ex) {}
+        try {isCorrect = CryptoValidator.validatePassword(password, pwd);} 
+        catch (NoSuchAlgorithmException ex) {isCorrect=false;} 
+        catch (InvalidKeySpecException ex) {isCorrect=false;}
         
         InputValidator.password = ""; //destroy saved password
         if(!isCorrect){lgnmsg += cnf.WRONG_CREDENTIALS;}
@@ -112,16 +112,16 @@ public class InputValidator {
         boolean denied =  response[0].equals("ERROR");
         String msg = response[1];
         
-        session.setValidationMessage(msg, denied);
+        session.validationMsg(msg, nick, denied, id);
     }
     
     /**
      * Gets server response and calls (JDialog) Session to set the response.
      * @param servermsg 
      */
-    public static void serverRegisterValidator(String servermsg){
+    public static void svrRegisterValidator(String info, String nick, int id){
         String[] response;
-        rgtmsg += servermsg;
+        rgtmsg += info;
         
         if(!rgtmsg.equals("")){response = new String[]{"ERROR", rgtmsg};}
         response = new String[]{"OK", cnf.REGISTER};
@@ -129,7 +129,7 @@ public class InputValidator {
         boolean denied =  response[0].equals("ERROR");
         String msg = response[1];
         
-        session.setValidationMessage(msg, denied);
+        session.validationMsg(msg, nick, denied, id);
     }
     
 }

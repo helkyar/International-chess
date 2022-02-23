@@ -80,12 +80,12 @@ public class Server extends JFrame implements Runnable{
  // ===========================================================================
     private void getLoginPassword(Package p) throws IOException{
         ObjectOutputStream msgpackage;
-        String resp;
                 
         //Send info to database
-        resp = UserManager.checkLogin(p.getNick());
-        p.setInfo(resp);
-        
+        Map<Integer, String> resp = UserManager.checkLogin(p.getNick());
+        if(resp == null){p.setInfo("");}            
+        else{for(int id : resp.keySet()){p.setInfo(resp.get(id)); p.setId(id);}}
+
 //        p.setObj(UserManager.getRegisteredChats(p.getNick()));
         
         //if OK resgister ip as last for this user        
@@ -102,11 +102,16 @@ public class Server extends JFrame implements Runnable{
         ObjectOutputStream msgpackage;
         String resp = UserManager.checkRegister(p.getNick(), p.getEmail());
         
-        if(!resp.equals("")){p.setInfo(resp);}            
-        else {        
+        if(!resp.equals("")){//user or email found   
+            p.setInfo(resp);
+        } else {        
             int registersuccess =
             UserManager.registerUser( p.getNick(),p.getPaswd(), p.getEmail());
             p.setInfo(registersuccess > 0 ? "" : "\n\n\n\nDatabase error...");
+            //use the same method as login to get the new user_id
+            Map<Integer, String> getid = UserManager.checkLogin(p.getNick());
+            if(resp != null) {for(int id : getid.keySet()){p.setId(id);}}
+            else {p.setId(-1);}   
         }     
         
         //if OK resgister ip as last for this user

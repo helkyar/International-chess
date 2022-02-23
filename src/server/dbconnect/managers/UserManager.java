@@ -7,7 +7,9 @@ package server.dbconnect.managers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import server.dbconnect.models.UserModel;
 
 /**
@@ -42,21 +44,24 @@ public class UserManager extends Manager{
         finally{try{conn.close();}catch(Exception e){e.printStackTrace();}}
     }
     
-    public static String checkLogin(String nick) {
-        String query;         
-        query = "SELECT `password` FROM users WHERE username = '"+nick+"';";
+    public static Map checkLogin(String nick) {
+        Map<Integer, String> resp = new HashMap<>();
+        System.out.println(resp);
+        String query = "SELECT `user_id`, `password` FROM users WHERE "
+            + "username = '"+nick+"';";
         
         connect();
         try {
             st = conn.createStatement();
             rs = st.executeQuery(query);
             
-            if (rs.next()) {return rs.getString(1);}
-            return "";
+            if (!rs.next()) {return resp;}
+            resp.put(rs.getInt(1), rs.getString(2));
+            return resp;
             
-        } catch (SQLException e){e.printStackTrace(); return "";}
-        catch(Exception e){e.printStackTrace(); return "";}    
-        finally{try{conn.close();} catch(Exception e){return "";}}
+        } catch (SQLException e){e.printStackTrace(); return resp;}
+        catch(Exception e){e.printStackTrace(); return resp;}    
+        finally{try{conn.close();} catch(Exception e){return resp;}}
     }
 
     public static String checkRegister(String nick, String email) {
