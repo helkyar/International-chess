@@ -12,14 +12,9 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Timer;
 import javax.swing.text.BadLocationException;
 import onlinechess.controller.socket.utils.NetUtils;
-import onlinechess.helpers.ConfigApp;
-import onlinechess.views.ChessApp;
 import onlinechess.views.Session;
 
 /**
@@ -31,11 +26,14 @@ public class SearchServer {
     private Session session;
     private boolean loop = true;
     private boolean firstOne = true;
+    private boolean badconnection = false;
     
     public SearchServer(Session session){
         this.session = session;
         new ResponseServer();
         startSearch("");
+        //init response listener
+        new Response();
     }
     
     public void startSearch(String ac){
@@ -50,10 +48,14 @@ public class SearchServer {
     
     private void getServerIP() {     
     //CHECK CONNECTION ________________________________________________________
-        boolean localNet = NetUtils.getLocalIp().size() < 1;
-        if(localNet){session.badConnection(); return;}//Not even net
-        if(!NetUtils.isConnected()){session.badConnection(); return;}//Offline
-        
+        boolean localNet = NetUtils.getLocalIp().size() > 0;
+        if(!localNet || !NetUtils.isConnected()){
+            session.badConnection(); 
+            System.out.println("Local: " + localNet + "Internet:" +!NetUtils.isConnected());
+            badconnection = true; 
+            return;
+        }
+        badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
         String ip = (String) NetUtils.getLocalIp().get(1);
         Request.ownip = ip; //set Requests ip
@@ -75,12 +77,12 @@ public class SearchServer {
         firstOne = false;
         
         new Timer(20000, (ActionEvent e) -> {
-    //(!)CHECK IF SESSION STARTED or BADCONNECTION IN THE MEANTIME    
-    /*Options on timeout:{RETRY, LOCAL}*/
             loop = false;
+            ((Timer)e.getSource()).stop();
+            if(!session.connecting || badconnection){return;}
+            
             session.serverResponseTimeout();
             session.setInfoLabel("TIMEOUT");
-            ((Timer)e.getSource()).stop();
         }).start();       
     }
         
@@ -108,7 +110,7 @@ public class SearchServer {
                 System.out.println("=========================================");
                 System.out.println("Server OK: "+ip+i);
                 System.out.println("=========================================");
-            } catch(IOException ex){System.out.println("Server test: "+ip+i);}
+            } catch(IOException ex){}
         }
     }
 

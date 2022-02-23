@@ -95,7 +95,7 @@ public class UserManager extends Manager{
             
         } catch (SQLException e){e.printStackTrace(); return -1;}
         catch(Exception e){e.printStackTrace(); return -1;}    
-        finally{try{conn.close();} catch(Exception e){return -1;}}
+        finally{try{conn.close();return -1;} catch(Exception e){return -1;}}
     }
         
     // GETTERS & SETTERS _________________________________________________________

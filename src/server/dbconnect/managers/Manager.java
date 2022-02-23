@@ -29,7 +29,8 @@ public class Manager {
     }
     
 // VARIABLES __________________________________________________________________
-    private static String driver = "com.mysql.jdbc.Driver";
+//    private static String driver = "com.mysql.jdbc.Driver";
+    private static String driver = "com.mysql.cj.jdbc.Driver";
     private static String url = "jdbc:mysql://localhost:3306/chess";
     private static String user = "root";
     private static String pwd = "";    

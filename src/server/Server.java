@@ -105,7 +105,7 @@ public class Server extends JFrame implements Runnable{
         if(!resp.equals("")){p.setInfo(resp);}            
         else {        
             int registersuccess =
-            UserManager.registerUser(p.getPaswd(), p.getNick(), p.getEmail());
+            UserManager.registerUser( p.getNick(),p.getPaswd(), p.getEmail());
             p.setInfo(registersuccess > 0 ? "" : "\n\n\n\nDatabase error...");
         }     
         

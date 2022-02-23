@@ -27,7 +27,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import onlinechess.controller.session.*;
-import onlinechess.controller.socket.SearchServer;
+import onlinechess.controller.socket.*;
 import onlinechess.helpers.ConfigApp;
     
 /**
@@ -68,7 +68,7 @@ public class Session extends JDialog{
         sessionbtn.addActionListener((ActionEvent e)->{sessionStart(e);});    
         guesstbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
         localbtn.addActionListener((ActionEvent e)->{sessionStart(e);});
-        retrybtn.addActionListener((ActionEvent e)->{search.startSearch("");});
+        retrybtn.addActionListener((ActionEvent e)->{retryConnection();});
         close.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){localSessionInit(swap);}
         });        
@@ -132,7 +132,7 @@ public class Session extends JDialog{
         setLocationRelativeTo(null);
         setUndecorated(true);
                 
-    //INIT SEARCH SERVER ___________________________________________________________
+    //INIT SEARCH SERVER ______________________________________________________
         search = new SearchServer(this);
     }
 
@@ -173,6 +173,8 @@ public class Session extends JDialog{
                 setLocationAndSize(newuser ? 40 : 0);             
                 newuser = newuser ? addComp() : removeComp();
                 auth.repaint(); auth.validate();
+                paswtxt.setText("");
+                confpswdtxt.setText("");
             }
 
             private boolean addComp() {
@@ -213,7 +215,7 @@ public class Session extends JDialog{
  //                         SESSION START
  // ===========================================================================
     /**
-     * Manages APP START either local, guesst, login or register
+     * Manages APP START either local, guest, login or register
      * @param e Action event (button) 
      */
     private void sessionStart(ActionEvent e) {
@@ -245,7 +247,7 @@ public class Session extends JDialog{
         boolean denied = true;
         String msg="";
                
-    //GUESST CASE _____________________________________________________________        
+    //GUEST CASE _____________________________________________________________        
         if(ac.equals("GUESST")){
             msgtxt.setText(cnf.GUEST);                  
             new Timer(1500, (ActionEvent ev)->{dispose();}).start();
@@ -276,14 +278,14 @@ public class Session extends JDialog{
     
     public void setValidationMessage(String msg, boolean denied) {
         msgtxt.setText(msg);        
-        new Timer(2000, (ActionEvent ev)->{            
+        new Timer(2000, (ActionEvent ev)->{    
+            ((Timer) ev.getSource()).stop();        
             if(!denied){dispose();}
             else {
                 swap = !swap;
                 auth.add(localbtn);
                 ((CardLayout) masterpanel.getLayout()).next(masterpanel);
             }
-            ((Timer) ev.getSource()).stop();
         }).start();
     }
     
@@ -310,6 +312,11 @@ public class Session extends JDialog{
         }
     }
     
+    private void retryConnection() {
+        search.startSearch("");
+        retrybtn.setBounds(w+150,start+o*10-i*2+10,100,30);
+        localbtn.setBounds(w/2-50,start+o*10-i*2+10,100,30);
+    }
  // ===========================================================================
  //                 SET USER INFO
  // ===========================================================================
@@ -376,4 +383,5 @@ public class Session extends JDialog{
     public final StyledDocument doc = msgtxt.getStyledDocument();
     private final JPanel wait = new JPanel();
     private final JPanel options = new JPanel();
+
 }
