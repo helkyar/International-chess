@@ -41,18 +41,14 @@ public class ChatController implements ActionListener{
         }
     }
     
-    private void sendMessageToChat(String txt){              
-        try {                
-            String msg = df.format(new Date())+"["+app.nick+"]:\n"+
-                    txt + "\n";
-                app.chatxt.append(msg);
-                String message = app.chatxt.getText() + "\n";
-                  
-                app.userinput.setText("");
+    private void sendMessageToChat(String txt){        
+        String msg = df.format(new Date())+"["+app.nick+"]:\n"+txt + "\n";
+        app.userinput.setText("");
+        app.chatxt.append(msg);
+
+        String message = app.chatxt.getText() + "\n";
                 
-//                chatstorage.put(chatID, txt);
-//                Send.message( adress, msg, nick, "messaging", chatID);
-        
-        } catch (Exception e){e.printStackTrace();} 
-    }
+//        chatstorage.put(chatID, txt);
+//        Send.message( adress, msg, nick, "messaging", chatID);
+   }
 }
