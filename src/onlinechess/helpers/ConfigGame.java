@@ -46,7 +46,7 @@ public class ConfigGame {
     public ConfigGame (int chooseBoard){
         this.choose = chooseBoard;
         
-        context = new Dimension(700,500);
+        context = new Dimension(600,450); //board size
                                      
         img = new HashMap<>();
         img.put("R", "img/T.png");

@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import onlinechess.controller.game.pieces.PiecesChess;
 import onlinechess.views.ChessApp;
-import static onlinechess.views.ChessApp.chessico;
+import static onlinechess.views.ChessApp.appicon;
 
 /**
  *
@@ -60,7 +60,7 @@ public class Game extends JPanel implements ActionListener{
     
     public Game(){
         boolean isWhite = true;
-        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 0, 1, chessico);
+        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 0, 1, appicon);
         if(choose == 0) {isWhite = true;} //yes
         else if(choose == 1) {isWhite = false;}//no
         
@@ -190,7 +190,7 @@ public class Game extends JPanel implements ActionListener{
         boolean isPawn = piece.equalsIgnoreCase("P");
         if((firstRow || finalRow) && isPawn){  
            Promotion options = new Promotion(piece, conf);
-           JOptionPane.showOptionDialog(this, options, "Select a piece", 1, 1, chessico, new Object[]{},null);
+           JOptionPane.showOptionDialog(this, options, "Select a piece", 1, 1, appicon, new Object[]{},null);
            String select = options.getSelectedPiece();
            btn.setName(select);
            btn.setIcon(new ImageIcon(conf.getImg(select)));
@@ -261,11 +261,11 @@ public class Game extends JPanel implements ActionListener{
 
     private void isThereaWinner() {
         if(!board.getState().contains("k")){
-            JOptionPane.showMessageDialog(this, "End-Game", "Black Wins!", 0, chessico);
+            JOptionPane.showMessageDialog(this, "End-Game", "Black Wins!", 0, appicon);
             board.setState(board.record.get(0));
             blackTurn = false;
         }else if(!board.getState().contains("K")){
-            JOptionPane.showMessageDialog(this, "End-Game", "White Wins!", 0, chessico);
+            JOptionPane.showMessageDialog(this, "End-Game", "White Wins!", 0, appicon);
             board.setState(board.record.get(0));
             blackTurn = false;
         }
