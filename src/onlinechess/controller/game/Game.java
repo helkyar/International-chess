@@ -58,12 +58,12 @@ public class Game extends JPanel implements ActionListener{
     private Map<Integer, Integer> castlingDef;
     private boolean initializing = true;
     
-    public Game(){
+    public Game(int choose, boolean white){
         boolean isWhite = true;
-        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 0, 1, appicon);
-        if(choose == 0) {isWhite = true;} //yes
-        else if(choose == 1) {isWhite = false;}//no
-        
+//        int choose = JOptionPane.showConfirmDialog(this, "Quieres ser blancas?", "Elige", 0, 1, appicon);
+//        if(choose == 0) {isWhite = true;} //yes
+//        else if(choose == 1) {isWhite = false;}//no
+        isWhite = white;
         conf= new ConfigGame(choose);
         
         board = new Board(conf.size(), conf.init(), isWhite, conf);

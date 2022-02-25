@@ -14,8 +14,8 @@ import onlinechess.views.Session;
 import packager.Packager;
 
 /**
- *
- * @author admin
+ * Processes and routes all server responses.
+ * @author Javier Palacios
  */
 class Response implements Runnable{
        
@@ -66,9 +66,10 @@ class Response implements Runnable{
     private void setUsersOnline(Packager p) {
         //Recieves a map ip -> user
         
+        ScreenController.setUsersOnScreen("test", "test", 0);
         for(String ip : p.getIps().keySet()){
             System.out.println("User:"+p.getIps().get(ip) +"@"+ ip);
-            ScreenController.setUsersOnlineOnScreen(ip, p.getIps().get(ip));
+            ScreenController.setUsersOnScreen(ip, p.getIps().get(ip), p.getId());
         }  
     }
 }

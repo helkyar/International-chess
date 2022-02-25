@@ -70,7 +70,7 @@ public class Server extends JFrame implements Runnable{
                 switch(p.getStatus()){
                     case "register": setNewRegisterUser(p); break;
                     case "login":    getLoginPassword(p); break;
-                    case "online":   getUsersOnline(p, request); break;
+                    case "online":   getUsersOnline(p); break;
                 }      
 
             } catch (Exception ex) {ex.printStackTrace();}
@@ -113,7 +113,7 @@ public class Server extends JFrame implements Runnable{
         response(p, p.getIp());  
     }
     
-    private void getUsersOnline(Packager p, Socket request) throws IOException {            
+    private void getUsersOnline(Packager p) throws IOException {            
         //Sets new user on the map and send the actualized version to all users
         ips.put(p.getIp(), p.getNick());
         p.setIps(ips);

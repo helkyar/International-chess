@@ -17,8 +17,6 @@ import onlinechess.views.ChessApp;
  * @author javier
  */
 public class ChatController implements ActionListener{
-//MAKE CHAT LISTEN TO EVENTS
-//MAKE MODELS AND MANAGERS
     ChessApp app;    
     private DateFormat df;
     

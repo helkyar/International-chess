@@ -11,8 +11,8 @@ import onlinechess.views.ChessApp;
 import packager.Packager;
 
 /**
- *
- * @author admin
+ * Makes all requests to the server (except search server request)
+ * @author Javier Palacios
  */
 public class Request {    
     public static String server;
@@ -47,12 +47,13 @@ public class Request {
         } catch (IOException ex) {ex.printStackTrace();}
     }
 
-    public static void searchUsersOnline(String nick) {
+    public static void searchUsersOnline(String nick, int id) {
         try {
             try (Socket socket = new Socket(server,9999)) {
                 Packager p = new Packager();
                 p.setStatus("online");
                 p.setIp(ownip);
+                p.setId(id);
                 p.setNick(nick);
                 sendRequest(p, socket);
             }               

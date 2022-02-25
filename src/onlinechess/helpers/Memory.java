@@ -15,20 +15,22 @@ import onlinechess.controller.game.Game;
  */
 public class Memory {
 
-    public Memory(Game g, String m, String id, 
-     HashMap<String, String> u, JToggleButton b){
-        this.game = g;
-        this.msg = m;
-        this.chatId = id;
-        this.users = u;
-        this.btn = b;
+    public Memory(Game game, String message, String chatid, String ip, 
+     int userid, HashMap<String, String> useripmap, JToggleButton button){
+        this.game = game;
+        this.msg = message;
+        this.chatId = chatid;
+        this.users = useripmap;
+        this.userid = userid;
+        this.btn = button;
     }    
         
-    Game game;
-    String msg;
-    String chatId;
-    JToggleButton btn;
-    Map<String, String> users; 
+    public Game game;
+    public String msg;
+    public int userid;
+    public String chatId;
+    public JToggleButton btn;
+    public Map<String, String> users; 
 }
 
 //(>)GET USERS ONLINE if not local user

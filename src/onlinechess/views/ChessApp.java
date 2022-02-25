@@ -77,7 +77,7 @@ public class ChessApp extends JFrame{
     //INIT CHAT COMPONENTS ____________________________________________________
         initChat(chatCtrl);
     //INIT GAME ______________________________________________________________
-        screen.add(new Game(), 0);
+        screen.add(new Game(0, true), 0);
     // FRAME STRUCTURE ________________________________________________________
         setTitle("Online Chess");
         appicon = cnf.APP_ICON;
@@ -174,7 +174,7 @@ public class ChessApp extends JFrame{
         ChessApp.userId = id;
         nicklabel.setText(nick);
         new ScreenController(this, cnf);
-        if(id > -1){Request.searchUsersOnline(nick);} 
+        if(id > -1){Request.searchUsersOnline(nick, id);} 
     }
       
 // VARIABLE DECLARATION _______________________________________________________
@@ -193,7 +193,7 @@ public class ChessApp extends JFrame{
     
     //CHAT COMPONENTS _________________________________________________________
     private JPanel chat = new JPanel();
-    private final JPanel screen = new JPanel(); //text chat and game
+    public final JPanel screen = new JPanel(); //text chat and game
     private JPanel options = new JPanel();
     private JPanel input = new JPanel(); //facilitate adding componnents
     private JPanel connect = new JPanel();
