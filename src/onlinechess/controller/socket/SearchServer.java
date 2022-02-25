@@ -58,7 +58,7 @@ public class SearchServer {
         badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
         //(!)CAREFULL VIRTUAL IPS AND ARRAY OUT OF BOUNDS
-        String ip = (String) NetUtils.getLocalIp().get(1);        
+        String ip = (String) NetUtils.getLocalIp().get(2);        
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
         if(!loop){return;}        

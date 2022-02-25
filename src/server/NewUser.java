@@ -46,6 +46,8 @@ class NewUser implements Runnable{
                 p.setStatus("imserver"); 
                 p.setIp(ip);
                 
+                Server.ips.put(ip, "cyi");
+                
         // RESPONSE _______________________________________________________________
                 ObjectOutputStream msgpackage;
         

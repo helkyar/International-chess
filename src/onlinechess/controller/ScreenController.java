@@ -65,9 +65,8 @@ public class ScreenController {
     
     private static void renderAllTheShit(ActionEvent e) {
     
-    }
-    
-    
+    }    
     //Function: Inserts buttons into a referenced panel and groupbutton
     //Problem: setting variables adress and chat
 }
+//(!) APP IS NULL AT SOME POINT

@@ -43,7 +43,7 @@ class Response implements Runnable{
                 switch(p.getStatus()){
                     case "login":    setLoginMessage(p); break;
                     case "register": setRegisterMessage(p); break;                     
-                    case "online": setUsersOnline(p); break;                        
+                    case "online":   setUsersOnline(p); break;                        
 //                        case "getusers": setUsersOnline(p); break;
 //                        case "message":  sendMessage(p); break;
 //                        case "managegroup": serverMembersResponse(p); break;
@@ -67,6 +67,7 @@ class Response implements Runnable{
         //Recieves a map ip -> user
         
         for(String ip : p.getIps().keySet()){
+            System.out.println("User:"+p.getIps().get(ip) +"@"+ ip);
             ScreenController.setUsersOnlineOnScreen(ip, p.getIps().get(ip));
         }  
     }

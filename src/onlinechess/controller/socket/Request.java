@@ -52,7 +52,8 @@ public class Request {
             try (Socket socket = new Socket(server,9999)) {
                 Packager p = new Packager();
                 p.setStatus("online");
-                p.setStatus(nick);
+                p.setIp(ownip);
+                p.setNick(nick);
                 sendRequest(p, socket);
             }               
         } catch (IOException ex) {ex.printStackTrace();}

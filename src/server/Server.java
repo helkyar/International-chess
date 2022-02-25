@@ -31,7 +31,7 @@ import server.dbconnect.managers.UserManager;
 public class Server extends JFrame implements Runnable{
     private static int guest = 0;
     public static JTextArea txt = new JTextArea();
-    private Map<String, String> ips = new HashMap<>(); 
+    public static Map<String, String> ips = new HashMap<>(); 
     private String ip = "";
     
     Server(){
@@ -113,13 +113,11 @@ public class Server extends JFrame implements Runnable{
         response(p, p.getIp());  
     }
     
-    private void getUsersOnline(Packager p, Socket request) throws IOException {
-        InetAddress locateip = request.getInetAddress();
-        String ip = locateip.getHostAddress();        
+    private void getUsersOnline(Packager p, Socket request) throws IOException {            
         //Sets new user on the map and send the actualized version to all users
-        ips.put(ip, p.getNick());
+        ips.put(p.getIp(), p.getNick());
         p.setIps(ips);
-        
+        System.out.println("User:"+p.getNick() +"@"+ p.getIp());
         for(String userip : ips.keySet()){response(p, userip);}        
     }
  // ===========================================================================
