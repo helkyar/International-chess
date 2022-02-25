@@ -66,7 +66,8 @@ class Response implements Runnable{
     private void setUsersOnline(Packager p) {
         //Recieves a map ip -> user
         
-        ScreenController.setUsersOnScreen("test", "test", 0);
+        ScreenController.setUsersOnScreen("test", "test", 0);        
+        ScreenController.setUsersOnScreen("test2", "test2", 0);
         for(String ip : p.getIps().keySet()){
             System.out.println("User:"+p.getIps().get(ip) +"@"+ ip);
             ScreenController.setUsersOnScreen(ip, p.getIps().get(ip), p.getId());

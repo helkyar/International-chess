@@ -270,7 +270,7 @@ public class Session extends JDialog{
             
         } else if(ac.equals("LOGIN")){            
             String[] response = 
-            InputValidator.validLogin(nick, password, this);
+            InputValidator.validLogin(nick, password, this); //(!)set timeout
             denied =  response[0].equals("ERROR");
             msg = response[1];
         }
@@ -391,6 +391,7 @@ public class Session extends JDialog{
 //(!)SESSION SEARCH SERVER MAY CATCH VIRTUAL MACHINE IP
 //(!)POSSIBLE ERROR SETTING P.INFO IN USER REGISTER
 //(!)SESSION CRASHES IF WRONG USER
+//(!)SET TIMEOUT FOR SERVER RESPONSE ERROR/DBERROR
 //(>)PASS USER INFO TO MAIN PROGRAM
 //(>)SERVER TIMEOUT RESPONSE IN LOGIN/REGISTER
 //(>)ENTER SENDS REQUEST

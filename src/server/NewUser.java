@@ -45,9 +45,7 @@ class NewUser implements Runnable{
                 String ip = locateip.getHostAddress();
                 p.setStatus("imserver"); 
                 p.setIp(ip);
-                
-                Server.ips.put(ip, "cyi");
-                
+                               
         // RESPONSE _______________________________________________________________
                 ObjectOutputStream msgpackage;
         

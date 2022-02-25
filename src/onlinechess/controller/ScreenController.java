@@ -64,9 +64,12 @@ public class ScreenController {
         JToggleButton btn = (JToggleButton) e.getSource();
         for(Memory m : app.storage.values()){
             if(btn != m.btn){continue;}
-            app.chatxt.setText(m.msg);
-            app.screen.add(m.game);
+            app.chatxt.setText(m.msg);            
+            app.screen.remove(0);
+            app.screen.add(m.game,0);
         }
+        app.screen.repaint();
+        app.screen.validate();
         //(?)Repaint
         //when message send include chatid, adressip, 
     }    

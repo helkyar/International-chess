@@ -142,7 +142,7 @@ public class SearchServer {
                     
                     session.setConnecting(false);
                     session.setInfoLabel("SUCCESS");
-                    Request.ownip = p.getIp();
+                    Request.ownip = p.getIp();//(!)why error??
                     Request.server = ip;
                     
                     response.close();
