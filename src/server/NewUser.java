@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import packager.Package;
+import packager.Packager;
 
 /**
  *
@@ -26,7 +26,7 @@ class NewUser implements Runnable{
 
     @Override
     public void run() {
-        packager.Package p;
+        packager.Packager p;
         ObjectInputStream input;
         ServerSocket port = null;
 
@@ -37,13 +37,14 @@ class NewUser implements Runnable{
         // REQUEST ________________________________________________________________
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
-                p = (packager.Package) input.readObject();
+                p = (packager.Packager) input.readObject();
                 //layer of protection
                 if(!p.getStatus().equals("online")){return;}
                 //Get client ip 
                 InetAddress locateip = request.getInetAddress();
                 String ip = locateip.getHostAddress();
                 p.setStatus("imserver"); 
+                p.setIp(ip);
                 
         // RESPONSE _______________________________________________________________
                 ObjectOutputStream msgpackage;

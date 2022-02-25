@@ -8,9 +8,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import onlinechess.controller.ScreenController;
 import onlinechess.controller.session.InputValidator;
 import onlinechess.views.Session;
-import packager.Package;
+import packager.Packager;
 
 /**
  *
@@ -25,7 +26,7 @@ class Response implements Runnable{
 
     @Override
     public void run() {
-        packager.Package p;
+        packager.Packager p;
         String nick, move, msg;
         ObjectInputStream input;
         ServerSocket port = null;
@@ -36,12 +37,13 @@ class Response implements Runnable{
         while(true){
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
-                p = (packager.Package) input.readObject();
+                p = (packager.Packager) input.readObject();
                 request.close();
 
                 switch(p.getStatus()){
                     case "login":    setLoginMessage(p); break;
-                    case "register": setRegisterMessage(p); break;                        
+                    case "register": setRegisterMessage(p); break;                     
+                    case "online": setUsersOnline(p); break;                        
 //                        case "getusers": setUsersOnline(p); break;
 //                        case "message":  sendMessage(p); break;
 //                        case "managegroup": serverMembersResponse(p); break;
@@ -53,12 +55,20 @@ class Response implements Runnable{
     }    
     //Gets server response about login/register and sends it accordingly
 
-    private void setLoginMessage(Package p) {
+    private void setLoginMessage(Packager p) {
         InputValidator.serverLoginValidator(p.getInfo(),p.getNick(), p.getId());
     }
 
-    private void setRegisterMessage(Package p) {
+    private void setRegisterMessage(Packager p) {
         InputValidator.svrRegisterValidator(p.getInfo(), p.getNick(), p.getId());
+    }
+
+    private void setUsersOnline(Packager p) {
+        //Recieves a map ip -> user
+        
+        for(String ip : p.getIps().keySet()){
+            ScreenController.setUsersOnlineOnScreen(ip, p.getIps().get(ip));
+        }  
     }
 }
     

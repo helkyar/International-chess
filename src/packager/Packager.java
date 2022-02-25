@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Javier Palacios
  */
-public class Package implements Serializable{
+public class Packager implements Serializable{
     
     private String nick, ip, info, msg, status, email, pwdcryp;
     private Map<String, String> ips, users;

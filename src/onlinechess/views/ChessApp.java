@@ -22,6 +22,8 @@ import javax.swing.Timer;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 
@@ -35,10 +37,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import onlinechess.controller.ScreenController;
 import onlinechess.controller.chat.ChatController;
 
 import onlinechess.controller.game.Game;
+import onlinechess.controller.socket.Request;
 import onlinechess.controller.socket.SearchServer;
+import onlinechess.helpers.Memory;
 import onlinechess.helpers.ConfigApp;
 
 /**
@@ -125,7 +130,7 @@ public class ChessApp extends JFrame{
         connect.add(scrollGroups);  
         input.add(sendbtn);
         input.add(userinput);
-        input.add(test);
+        input.add(nicklabel);
         screen.add(chatxt);
         chat.add("Center",screen);
         chat.add("South",input); 
@@ -158,10 +163,18 @@ public class ChessApp extends JFrame{
     }
     
 //GETTERS & SETTERS ___________________________________________________________
+    /**
+     * Gets called when session starts. Is the user entre point to the app, 
+     * and comunication with session class.
+     * @param nick user nick
+     * @param id user id -1:local; 0:guest.
+     */
     public void setSessionVariables(String nick, int id) {
         ChessApp.nick = nick; 
         ChessApp.userId = id;
-        test.setText(nick);
+        nicklabel.setText(nick);
+        new ScreenController(this, cnf);
+        if(id > -1){Request.searchUsersOnline(nick);} 
     }
       
 // VARIABLE DECLARATION _______________________________________________________
@@ -175,7 +188,8 @@ public class ChessApp extends JFrame{
     //SESSION VARIABLES _______________________________________________________
     public static String nick = "local";
     private static int userId = -1; //guest has id = 0
-    JLabel test = new JLabel(nick);
+    private JLabel nicklabel = new JLabel(nick);
+    public Map<String, Memory> storage = new HashMap<>();
     
     //CHAT COMPONENTS _________________________________________________________
     private JPanel chat = new JPanel();
@@ -183,12 +197,12 @@ public class ChessApp extends JFrame{
     private JPanel options = new JPanel();
     private JPanel input = new JPanel(); //facilitate adding componnents
     private JPanel connect = new JPanel();
-    private JPanel users = new JPanel();
+    public JPanel users = new JPanel();
     private JPanel groups = new JPanel();
     private JScrollPane scrollUsers;
     private JScrollPane scrollGroups; 
     
-    private ButtonGroup btngrouper = new ButtonGroup();
+    public ButtonGroup btngrouper = new ButtonGroup();
     public JButton sendbtn = new JButton(new ImageIcon("img/send.png"));
     private JButton login = new JButton("Login");
     private JButton register = new JButton("Register");
@@ -196,6 +210,6 @@ public class ChessApp extends JFrame{
     public JTextField userinput = new JTextField(38);
     public JTextArea chatxt = new JTextArea(10,50);
 }
-//(>)ADD MASTERPANEL TO ALLOCATE REGISTER, LOGIN, CONNECT ADN EXIT
+
 //(*>)OPTION PANEL ALLOCATES OPTIONS LIKE: MAKE PUBLIC; DDRAW; FORFEIT
 //(*>)INFOPANEL

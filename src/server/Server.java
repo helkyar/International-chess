@@ -21,7 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import packager.Package;
+import packager.Packager;
 import server.dbconnect.managers.UserManager;
 
 /**
@@ -31,7 +31,7 @@ import server.dbconnect.managers.UserManager;
 public class Server extends JFrame implements Runnable{
     private static int guest = 0;
     public static JTextArea txt = new JTextArea();
-    private Map<String, String[]> ips = new HashMap<>(); 
+    private Map<String, String> ips = new HashMap<>(); 
     private String ip = "";
     
     Server(){
@@ -53,7 +53,7 @@ public class Server extends JFrame implements Runnable{
  // ===========================================================================
     @Override
     public void run() {
-        Package p;
+        Packager p;
         ObjectInputStream input;
         ServerSocket port = null;
 
@@ -63,13 +63,14 @@ public class Server extends JFrame implements Runnable{
         while(true){
             try (Socket request = port.accept()) {
                 input = new ObjectInputStream(request.getInputStream());
-                p = (Package) input.readObject();
+                p = (Packager) input.readObject();
                 request.close();
                 
         //ROUTES ______________________________________________________________
                 switch(p.getStatus()){
                     case "register": setNewRegisterUser(p); break;
                     case "login":    getLoginPassword(p); break;
+                    case "online":   getUsersOnline(p, request); break;
                 }      
 
             } catch (Exception ex) {ex.printStackTrace();}
@@ -78,9 +79,7 @@ public class Server extends JFrame implements Runnable{
  // ===========================================================================
  //                    CONTROLLERS & MIDDLEWARE
  // ===========================================================================
-    private void getLoginPassword(Package p) throws IOException{
-        ObjectOutputStream msgpackage;
-                
+    private void getLoginPassword(Packager p) throws IOException{
         //Send info to database
         Map<Integer, String> resp = UserManager.checkLogin(p.getNick());
         if(resp == null){p.setInfo("");}            
@@ -91,15 +90,10 @@ public class Server extends JFrame implements Runnable{
         //if OK resgister ip as last for this user        
 //         if(resp.equals("OK")){DBConnection.setLastIP(p.getNick(), p.getIp());}
         
-        Socket sendmsg = new Socket(p.getIp(), 9090);
-        msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
-        msgpackage.writeObject(p);
-                        
-        msgpackage.close(); sendmsg.close();
+        response(p, p.getIp());
     }
     
-    private void setNewRegisterUser(Package p) throws IOException{
-        ObjectOutputStream msgpackage;
+    private void setNewRegisterUser(Packager p) throws IOException{
         String resp = UserManager.checkRegister(p.getNick(), p.getEmail());
         
         if(!resp.equals("")){//user or email found   
@@ -116,17 +110,22 @@ public class Server extends JFrame implements Runnable{
         
         //if OK resgister ip as last for this user
 //         if(resp.equals("OK")){DBConnection.setLastIP(p.getNick(), p.getIp());}
-
-        Socket sendmsg = new Socket(p.getIp(), 9090);
-        msgpackage = new ObjectOutputStream(sendmsg.getOutputStream());
-        msgpackage.writeObject(p);
-                        
-        msgpackage.close(); sendmsg.close();  
+        response(p, p.getIp());  
+    }
+    
+    private void getUsersOnline(Packager p, Socket request) throws IOException {
+        InetAddress locateip = request.getInetAddress();
+        String ip = locateip.getHostAddress();        
+        //Sets new user on the map and send the actualized version to all users
+        ips.put(ip, p.getNick());
+        p.setIps(ips);
+        
+        for(String userip : ips.keySet()){response(p, userip);}        
     }
  // ===========================================================================
  //                            RESPONSE
  // ===========================================================================
-    public void response(Package p, String ip) throws IOException{
+    public void response(Packager p, String ip) throws IOException{
         ObjectOutputStream msgpackage;
         
         Socket sendmsg = new Socket(ip, 9090);
@@ -135,5 +134,10 @@ public class Server extends JFrame implements Runnable{
 
         msgpackage.close(); sendmsg.close(); 
     }
+    
+ // ===========================================================================
+ //                            VARIABLES
+ // ===========================================================================    
+
 }
 

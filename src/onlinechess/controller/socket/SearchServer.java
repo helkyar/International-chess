@@ -4,7 +4,7 @@
  */
 package onlinechess.controller.socket;
 
-import packager.Package;
+import packager.Packager;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -57,9 +57,8 @@ public class SearchServer {
         }
         badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
-        String ip = (String) NetUtils.getLocalIp().get(2);
-        Request.ownip = ip; //set Requests ip
-        
+        //(!)CAREFULL VIRTUAL IPS AND ARRAY OUT OF BOUNDS
+        String ip = (String) NetUtils.getLocalIp().get(1);        
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
         if(!loop){return;}        
@@ -101,7 +100,7 @@ public class SearchServer {
             // Alternatively:  while (!Thread.interrupted()) {}
             try {
                 Socket socket = new Socket(ip+i,7777);
-                Package p = new Package();
+                Packager p = new Packager();
                 p.setStatus("online");
                 objp = new ObjectOutputStream(socket.getOutputStream());
                 objp.writeObject(p);
@@ -125,7 +124,7 @@ public class SearchServer {
         public void run() {
             ObjectInputStream input;
             ServerSocket port = null;
-            Package p;
+            Packager p;
             
             try {port = new ServerSocket(7070);}
             catch (Exception e){}
@@ -133,7 +132,7 @@ public class SearchServer {
             while(true){
                 try (Socket response = port.accept()) {
                     input = new ObjectInputStream(response.getInputStream());
-                    p = (Package) input.readObject();
+                    p = (Packager) input.readObject();
             //(!)CHESS HORSE GIF NEEDEEEEED!!
                     setUserMessage(41,"\n\nTying the horses...");
                     if(!p.getStatus().equals("imserver")){return;}
@@ -143,6 +142,7 @@ public class SearchServer {
                     
                     session.setConnecting(false);
                     session.setInfoLabel("SUCCESS");
+                    Request.ownip = p.getIp();
                     Request.server = ip;
                     
                     response.close();

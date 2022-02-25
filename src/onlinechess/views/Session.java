@@ -239,6 +239,7 @@ public class Session extends JDialog{
         message.remove(wait);
         if(swap) {((CardLayout) masterpanel.getLayout()).next(masterpanel);} 
         new Timer(1100, (ActionEvent ev)->{dispose();}).start(); 
+        parent.setSessionVariables("local", -1);
         msgtxt.setText(cnf.LOCAL);
     }    
         
