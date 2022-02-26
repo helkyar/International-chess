@@ -38,7 +38,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
-import onlinechess.controller.ScreenController;
+import onlinechess.controller.ScreenCtrl;
 import onlinechess.controller.chat.ChatController;
 
 import onlinechess.controller.game.Game;
@@ -174,7 +174,7 @@ public class ChessApp extends JFrame{
         ChessApp.nick = nick; 
         ChessApp.userId = id;
         nicklabel.setText(nick);
-        new ScreenController(this, cnf);
+        new ScreenCtrl(this, cnf);
         if(id > -1){Request.searchUsersOnline(nick, id);} 
     }
       
@@ -189,7 +189,7 @@ public class ChessApp extends JFrame{
     //SESSION VARIABLES _______________________________________________________
     public static String nick = "local";
     public static int userId = -1; //guest has id = 0
-    public String adress;
+    public String chatId;
     private JLabel nicklabel = new JLabel(nick);
     public Map<String, Memory> storage = new HashMap<>();
     

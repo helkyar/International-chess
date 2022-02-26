@@ -19,7 +19,7 @@ import onlinechess.views.ChessApp;
  *
  * @author javier
  */
-public class ScreenController {
+public class ScreenCtrl {
 
 //=============================================================================
 //                INSTANTIATE CONTROLLER WITH APP REFERENCE
@@ -27,7 +27,7 @@ public class ScreenController {
     private static ChessApp app;
     private static ConfigApp cnf;
 
-    public ScreenController(ChessApp app, ConfigApp cnf) {
+    public ScreenCtrl(ChessApp app, ConfigApp cnf) {
         this.app = app;
         this.cnf = cnf;
     }
@@ -35,7 +35,7 @@ public class ScreenController {
 //=============================================================================
 //                            CONTROLLER METHODS
 //=============================================================================
-    public static void setUsersOnScreen(String ip, String nick, int id) {
+    public static void setChats(String ip, String nick, int id, String chatid) {
         String space = "                ";
         //Needs also a checker for public ips        
         boolean own = ip.equals(Request.ownip);
@@ -53,7 +53,6 @@ public class ScreenController {
             return;
         }
         
-        String chatid =  "~u~"+new Date().getTime()+Math.random(); 
         JToggleButton btn = new JToggleButton(nick+space, cnf.EYE_OPEN);
         btn.addActionListener((ActionEvent e) -> {renderAllTheShit(e);});  
         
@@ -62,7 +61,7 @@ public class ScreenController {
         users.put(new String[]{Request.ownip, app.nick}, app.userId);
         
         Game g = new Game(0, true);//(!)not all can be whites
-        app.storage.put(ip, new Memory(g, "", chatid, ip, users, btn));
+        app.storage.put(chatid, new Memory(g, "", chatid, users, btn));
         app.btngrouper.add(btn);
         app.users.add(btn);         
         app.users.repaint(); 
@@ -73,7 +72,7 @@ public class ScreenController {
         JToggleButton btn = (JToggleButton) e.getSource();
         for(Memory m : app.storage.values()){
             if(btn != m.btn){continue;}
-            app.adress = m.address;
+            app.chatId = m.chatId;
             app.chatxt.setText(m.msg);            
             app.screen.remove(0);
             app.screen.add(m.game,0);

@@ -63,11 +63,12 @@ public class Request {
     
     public static void sendMessage(Memory m, String msg) {
         m.msg = msg;
-    try {
+        try {
             try (Socket socket = new Socket(server,9999)) {
                 Packager p = new Packager();
                 p.setStatus("message");
                 p.setMemory(m);
+                p.setIp(ownip); //to compare on the server side
                 sendRequest(p, socket);
             }               
         } catch (IOException ex) {ex.printStackTrace();}

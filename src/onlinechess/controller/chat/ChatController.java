@@ -47,7 +47,7 @@ public class ChatController implements ActionListener{
         app.chatxt.append(msg);
 
         String message = app.chatxt.getText() + "\n";
-        Memory m = app.storage.get(app.adress);
+        Memory m = app.storage.get(app.chatId);
         m.msg = message;
         Request.sendMessage(m, msg);
    }

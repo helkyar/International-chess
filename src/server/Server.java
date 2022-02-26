@@ -13,6 +13,7 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,9 +115,13 @@ public class Server extends JFrame implements Runnable{
     }
     
     private void getUsersOnline(Packager p) throws IOException {            
-        //Sets new user on the map and send the actualized version to all users
+        //Sets new user on the map and send the actualized version to all users        
+        String chatid =  "~u~"+new Date().getTime()+Math.random(); 
         ips.put(p.getIp(), p.getNick());
+        
+        p.setInfo(chatid);
         p.setIps(ips);
+        
         System.out.println("User:"+p.getNick() +"@"+ p.getIp());
         for(String userip : ips.keySet()){response(p, userip);}        
     }

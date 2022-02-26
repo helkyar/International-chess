@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import onlinechess.controller.ScreenController;
+import onlinechess.controller.ScreenCtrl;
 import onlinechess.controller.session.InputValidator;
 import onlinechess.views.Session;
 import packager.Packager;
@@ -66,11 +66,11 @@ class Response implements Runnable{
     private void setUsersOnline(Packager p) {
         //Recieves a map ip -> user
         
-        ScreenController.setUsersOnScreen("test", "test", 0);        
-        ScreenController.setUsersOnScreen("test2", "test2", 0);
+        ScreenCtrl.setChats("test", "test", 0,"ww");        
+        ScreenCtrl.setChats("test2", "test2", 0,"ww2");
         for(String ip : p.getIps().keySet()){
             System.out.println("User:"+p.getIps().get(ip) +"@"+ ip);
-            ScreenController.setUsersOnScreen(ip, p.getIps().get(ip), p.getId());
+            ScreenCtrl.setChats(ip, p.getIps().get(ip), p.getId(), p.getInfo());
         }  
     }
 }

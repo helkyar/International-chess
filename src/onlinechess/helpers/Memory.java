@@ -15,12 +15,11 @@ import onlinechess.controller.game.Game;
  */
 public class Memory {
 
-    public Memory(Game game, String message, String chatid, String ip,
+    public Memory(Game game, String message, String chatid, 
      HashMap<String[], Integer> useripmap, JToggleButton button){
         this.game = game;
         this.msg = message;
         this.chatId = chatid;
-        this.address = ip;
         this.users = useripmap;
         this.btn = button;
     }    
@@ -28,13 +27,10 @@ public class Memory {
     public Game game;
     public String msg;
     public String chatId;
-    public String address;
     public JToggleButton btn;
     public Map<String[], Integer> users; 
 }
 
-//(>)GET USERS ONLINE if not local user
-//(>)CREATE USER BUTTONS
 //(>)SEND MESSAGES
 //(>)SEND MOVES
 //(>)STORE MESSAGES AND MOVES
@@ -42,3 +38,4 @@ public class Memory {
 //(>)GET CHATS
 //(>)RENDER CHATS
 //(>)ORDER CHATS BY LAST SPOKEN
+//(>)CREATE GROUP CHAT
