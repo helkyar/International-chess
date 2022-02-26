@@ -7,6 +7,7 @@ package onlinechess.controller.socket;
 import java.io.IOException;  
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import onlinechess.helpers.Memory;
 import onlinechess.views.ChessApp;
 import packager.Packager;
 
@@ -60,6 +61,17 @@ public class Request {
         } catch (IOException ex) {ex.printStackTrace();}
     }
     
+    public static void sendMessage(Memory m, String msg) {
+        m.msg = msg;
+    try {
+            try (Socket socket = new Socket(server,9999)) {
+                Packager p = new Packager();
+                p.setStatus("message");
+                p.setMemory(m);
+                sendRequest(p, socket);
+            }               
+        } catch (IOException ex) {ex.printStackTrace();}
+    }
 //=============================================================================
 //                        SEND REQUEST
 //=============================================================================
@@ -69,4 +81,5 @@ public class Request {
         objp.writeObject(p);
         s.close();
     }
+
 }

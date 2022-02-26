@@ -24,9 +24,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+
 import onlinechess.controller.ScreenController;
 import onlinechess.controller.chat.ChatController;
 
@@ -66,7 +67,7 @@ public class ChessApp extends JFrame{
             }
         });
     }
-
+    
     public ChessApp(ConfigApp cnf){ 
         ChatController chatCtrl = new ChatController(this);
     //INIT COMPONENTS _________________________________________________________
@@ -187,7 +188,8 @@ public class ChessApp extends JFrame{
     
     //SESSION VARIABLES _______________________________________________________
     public static String nick = "local";
-    private static int userId = -1; //guest has id = 0
+    public static int userId = -1; //guest has id = 0
+    public String adress;
     private JLabel nicklabel = new JLabel(nick);
     public Map<String, Memory> storage = new HashMap<>();
     

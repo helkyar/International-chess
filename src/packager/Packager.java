@@ -6,6 +6,7 @@ package packager;
 
 import java.io.Serializable;
 import java.util.Map;
+import onlinechess.helpers.Memory;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Packager implements Serializable{
     
     private String nick, ip, info, msg, status, email, pwdcryp;
     private Map<String, String> ips, users;
+    private Memory m;
     private int id;
 
     public void setIp(String ip){this.ip = ip;}
@@ -39,4 +41,7 @@ public class Packager implements Serializable{
     public String getPaswd(){return pwdcryp;}
     public String getEmail(){return email;}
     public int getId() {return id;}
+
+    public Memory getM() {return m;}
+    public void setMemory(Memory m) {this.m = m;}   
 }

@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import onlinechess.controller.socket.Request;
+import onlinechess.helpers.Memory;
 import onlinechess.views.ChessApp;
 
 /**
@@ -45,8 +47,8 @@ public class ChatController implements ActionListener{
         app.chatxt.append(msg);
 
         String message = app.chatxt.getText() + "\n";
-                
-//        chatstorage.put(chatID, txt);
-//        Send.message( adress, msg, nick, "messaging", chatID);
+        Memory m = app.storage.get(app.adress);
+        m.msg = message;
+        Request.sendMessage(m, msg);
    }
 }
