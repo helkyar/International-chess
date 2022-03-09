@@ -19,7 +19,7 @@ import onlinechess.views.Session;
 
 /**
  *
- * @author admin
+ * @author javier palacios
  */
 public class SearchServer {
     
@@ -57,7 +57,6 @@ public class SearchServer {
         }
         badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
-        //(!)CAREFULL VIRTUAL IPS AND ARRAY OUT OF BOUNDS
         String ip = (String) NetUtils.getLocalIp().get(2);        
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
@@ -105,11 +104,9 @@ public class SearchServer {
                 objp = new ObjectOutputStream(socket.getOutputStream());
                 objp.writeObject(p);
                 socket.close();
-
-                System.out.println("=========================================");
-                System.out.println("Server OK: "+ip+i);
-                System.out.println("=========================================");
-            } catch(IOException ex){}
+           
+            //(!) Further error management needed     
+            } catch(IOException ex){ ex.printStackTrace(); }
         }
     }
 
@@ -127,13 +124,13 @@ public class SearchServer {
             Packager p;
             
             try {port = new ServerSocket(7070);}
-            catch (Exception e){}
+            catch (Exception ex){ ex.printStackTrace(); }
 
             while(true){
                 try (Socket response = port.accept()) {
                     input = new ObjectInputStream(response.getInputStream());
                     p = (Packager) input.readObject();
-            //(!)CHESS HORSE GIF NEEDEEEEED!!
+               //(!)CHESS HORSE GIF NEEDEEEEED!!
                     setUserMessage(41,"\n\nTying the horses...");
                     if(!p.getStatus().equals("imserver")){return;}
                     
@@ -142,18 +139,20 @@ public class SearchServer {
                     
                     session.setConnecting(false);
                     session.setInfoLabel("SUCCESS");
-                    Request.ownip = p.getIp();//(!)why error??
+                    Request.ownip = p.getIp();
                     Request.server = ip;
                     
                     response.close();
-                } catch(Exception e){}                    
+                //(!) Further error management needed
+                } catch(Exception ex){ ex.printStackTrace(); }                    
             }
            
         }                     
     }
     
     private void setUserMessage(int i,String msg){        
-        try { session.doc.insertString(i, msg, null );} 
-        catch (BadLocationException ex) { }
+        try { session.doc.insertString(i, msg, null ); } 
+        //(!) Further error management needed
+        catch (BadLocationException ex) { ex.printStackTrace(); }
     }
 }
