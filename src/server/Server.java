@@ -130,6 +130,7 @@ public class Server extends JFrame implements Runnable{
     
     private void sendMessage(Packager p) throws IOException {
         for(String[] ip : p.getMemory().users.keySet()){
+            if(p.getIp().equals(ip[0])){continue;}
             response(p, ip[0]);
         }
 //        response(p, p.getM().);
