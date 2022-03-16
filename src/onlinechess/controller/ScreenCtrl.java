@@ -80,7 +80,8 @@ public class ScreenCtrl {
     
     private static void appRedrawScreen(JToggleButton btn){
         for(Memory m : app.storage.values()){
-            if(btn != m.btn){continue;}
+            if(btn != m.btn){ continue; }
+            if(!m.btn.isSelected()){ continue; }
             app.chatId = m.chatId;
             app.chatxt.setText(m.msg);            
             app.screen.remove(0);
