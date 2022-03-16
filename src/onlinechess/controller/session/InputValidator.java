@@ -102,6 +102,7 @@ public class InputValidator {
         try {isCorrect = CryptoValidator.validatePassword(password, pwd);} 
         catch (NoSuchAlgorithmException ex) {isCorrect=false;} 
         catch (InvalidKeySpecException ex) {isCorrect=false;}
+        catch (Exception e ){/*(?)Recursive call*/isCorrect=false;}
         
         InputValidator.password = ""; //destroy saved password
         if(!isCorrect){lgnmsg += cnf.WRONG_CREDENTIALS;}

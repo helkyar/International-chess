@@ -79,7 +79,7 @@ public class Game extends JPanel implements ActionListener{
     //test ------------------------------------
         JButton btn = new JButton("T");
         btn.addActionListener(this);  
-        add(btn);
+        //add(btn); //Future implementation
     //----------------------------------------
     }
     
@@ -106,7 +106,8 @@ public class Game extends JPanel implements ActionListener{
             prev.setBackground(ConfigGame.SLCT);  
                       
             selected = true;
-            board.paint(prev, board.w, board.h, board, conf, checkPos, castlingAllowed, pawnPessant, enPessant, posPessant);  
+            board.paint(prev, board.w, board.h, board, conf, checkPos, 
+                    castlingAllowed, pawnPessant, enPessant, posPessant);  
             blackTurn = !blackTurn;
             
         //Move piece if allowed ------------------------------------------------
@@ -146,18 +147,25 @@ public class Game extends JPanel implements ActionListener{
         int from = board.getPosition(prev);
      
         //Pieces allowed moves          
-        if(piece.equalsIgnoreCase("P")){return pawnWithEnpessant(from, to, piece, target);}    
-        else if(piece.equalsIgnoreCase("R")){return Rook.allowed(from, to, piece, target, board.w, board.h, board);}            
-        else if(piece.equalsIgnoreCase("H")){return Horse.allowed(from, to, piece, target, board.w, board.h);}            
-        else if(piece.equalsIgnoreCase("B")){return Bishop.allowed(from, to, piece, target, board.w, board.h, board);}            
-        else if(piece.equalsIgnoreCase("Q")){return Queen.allowed(from, to, piece, target, board.w, board.h, board);}            
-        else if(piece.equalsIgnoreCase("K")){return kingWithCastling(from, to, target);}
+        if(piece.equalsIgnoreCase("P")){
+            return pawnWithEnpessant(from, to, piece, target);}    
+        else if(piece.equalsIgnoreCase("R")){
+            return Rook.allowed(from, to, piece, target, board.w, board.h, board);}            
+        else if(piece.equalsIgnoreCase("H")){
+            return Horse.allowed(from, to, piece, target, board.w, board.h);}            
+        else if(piece.equalsIgnoreCase("B")){
+            return Bishop.allowed(from, to, piece, target, board.w, board.h, board);}            
+        else if(piece.equalsIgnoreCase("Q")){
+            return Queen.allowed(from, to, piece, target, board.w, board.h, board);}            
+        else if(piece.equalsIgnoreCase("K")){
+            return kingWithCastling(from, to, target);}
         
         return false;
     }        
 
     private boolean kingWithCastling(int from, int to, String target) {
-        boolean allowed = King.allowed(from, to, piece, target, board.w, board.h, board, checkPos, castlingAllowed);
+        boolean allowed = King.allowed(from, to, piece, target, board.w, 
+                board.h, board, checkPos, castlingAllowed);
         
         if(from-to == -2 && allowed){ //down               
                 board.setTilePiece((from+to)/2, board.getTilePiece(to+1));
@@ -190,7 +198,11 @@ public class Game extends JPanel implements ActionListener{
         boolean isPawn = piece.equalsIgnoreCase("P");
         if((firstRow || finalRow) && isPawn){  
            Promotion options = new Promotion(piece, conf);
-           JOptionPane.showOptionDialog(this, options, "Select a piece", 1, 1, appicon, new Object[]{},null);
+           JOptionPane.showOptionDialog(
+                this, options, "Select a piece", 1, 1, 
+                appicon, new Object[]{},null
+           );
+           
            String select = options.getSelectedPiece();
            btn.setName(select);
            btn.setIcon(new ImageIcon(conf.getImg(select)));
@@ -212,23 +224,58 @@ public class Game extends JPanel implements ActionListener{
             for(int i = 1; i <= board.w*board.h; i++){
                 String tile = board.getTilePiece(i);
                 
-                if(!board.isTileEmpty(i) && ConfigGame.WHITES.contains(tile) && king.get(pos).equals("K")) {         
-                    if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("H")){check = Horse.allowed(i, pos, tile, king.get(pos), board.w, board.h) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("Q")){check = Queen.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("K")){check = King.allowed(i, pos, tile, king.get(pos), board.w, board.h, board, checkPos, castlingAllowed) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos), board.w, board.h, board, conf) ? true : check;}
+                if(!board.isTileEmpty(i) && ConfigGame.WHITES.contains(tile) && 
+                    king.get(pos).equals("K")) 
+                {         
+                    if(tile.equalsIgnoreCase("R"))     {
+                        check = Rook.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board) ? true : check;
+                    } else if(tile.equalsIgnoreCase("H")){
+                        check = Horse.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("B")){
+                        check = Bishop.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("Q")){
+                        check = Queen.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("K")){
+                        check = King.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board, checkPos, 
+                                castlingAllowed) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("P")){
+                        check = Pawn.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board, conf) ? true : check;
+                    }
+                    
                     if(check){board.paintCheck(pos);checkPos.add(pos);}
                     check = false;
                     
-                } else if(!board.isTileEmpty(i) && ConfigGame.BLACKS.contains(tile) && king.get(pos).equals("k")) {        
-                    if(tile.equalsIgnoreCase("R"))     {check = Rook.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("H")){check = Horse.allowed(i, pos, tile, king.get(pos), board.w, board.h) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("B")){check = Bishop.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("Q")){check = Queen.allowed(i, pos, tile, king.get(pos), board.w, board.h, board) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("K")){check = King.allowed(i, pos, tile, king.get(pos), board.w, board.h, board, checkPos, castlingAllowed) ? true : check;}            
-                    else if(tile.equalsIgnoreCase("P")){check = Pawn.allowed(i, pos, tile, king.get(pos), board.w, board.h, board, conf) ? true : check;} 
+                } else if(!board.isTileEmpty(i) 
+                    && ConfigGame.BLACKS.contains(tile) 
+                    && king.get(pos).equals("k")) 
+                {        
+                    if(tile.equalsIgnoreCase("R"))     {
+                        check = Rook.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("H")){
+                        check = Horse.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("B")){
+                        check = Bishop.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("Q")){
+                        check = Queen.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board) ? true : check;            
+                    } else if(tile.equalsIgnoreCase("K")){
+                        check = King.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board, checkPos, 
+                                castlingAllowed) ? true : check;     
+                    } else if(tile.equalsIgnoreCase("P")){
+                        check = Pawn.allowed(i, pos, tile, king.get(pos), 
+                                board.w, board.h, board, conf) ? true : check;
+                    } 
+                    
                     if(check){board.paintCheck(pos);checkPos.add(pos);}
                     check = false;
                 }                 
@@ -248,9 +295,11 @@ public class Game extends JPanel implements ActionListener{
     private void storeCastlingPairs(String k, int pos) {
         //Store castling pairs
         if(initializing){
-            if(board.getTilePiece(pos-3).equalsIgnoreCase("R") && !PiecesChess.isDiffTeam(k, board.getTilePiece(pos - 3), board.w, board.h))
+            if(board.getTilePiece(pos-3).equalsIgnoreCase("R") && 
+                    !PiecesChess.isDiffTeam(k, board.getTilePiece(pos - 3), board.w, board.h))
             {castlingAllowed.put(pos, pos-3);}
-            if(board.getTilePiece(pos+3).equalsIgnoreCase("R") && !PiecesChess.isDiffTeam(k, board.getTilePiece(pos + 3), board.w, board.h))
+            if(board.getTilePiece(pos+3).equalsIgnoreCase("R") && 
+                    !PiecesChess.isDiffTeam(k, board.getTilePiece(pos + 3), board.w, board.h))
             {castlingAllowed.put(pos, pos+3);}
         //Remove if moved (not working)
         } else if (castlingAllowed.containsKey(pos) && !board.getTilePiece(castlingAllowed.get(pos)).equals("-") &&

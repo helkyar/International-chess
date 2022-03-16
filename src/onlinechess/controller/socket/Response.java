@@ -65,9 +65,8 @@ class Response implements Runnable{
 
     private void setUsersOnline(Packager p) {
         //Recieves a map ip -> user
-        
-        ScreenCtrl.setChats("test", "test", 0,"ww");        
-        ScreenCtrl.setChats("test2", "test2", 0,"ww2");
+        //ScreenCtrl.setChats("test", "test", 0,"ww");        
+        //ScreenCtrl.setChats("test2", "test2", 0,"ww2");
         for(String ip : p.getIps().keySet()){
             System.out.println("User:"+p.getIps().get(ip) +"@"+ ip);
             ScreenCtrl.setChats(ip, p.getIps().get(ip), p.getId(), p.getInfo());

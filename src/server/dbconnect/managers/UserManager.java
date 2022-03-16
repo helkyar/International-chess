@@ -91,7 +91,6 @@ public class UserManager extends Manager{
     public static int registerUser(String nick, String password, String email){
         String query = "INSERT INTO users (`username`, `password`, `email`)"
             + " VALUES ('"+nick+"','"+password+"','"+email+"')";
-        
         connect();
         try{
             ps = conn.prepareStatement(query);      

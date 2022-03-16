@@ -114,7 +114,7 @@ public class ChessApp extends JFrame{
     
     private void initChat(ChatController eventlistener){
         //Dimension and Layout 
-        connect.setLayout(new GridLayout(2,1));
+        connect.setLayout(new GridLayout(1,1)); //future implementation(2,1)
         scrollUsers = new JScrollPane(users, 22,31); 
         scrollGroups = new JScrollPane(groups, 22,31);
         screen.setLayout(new BoxLayout(screen, BoxLayout.Y_AXIS));
@@ -128,7 +128,7 @@ public class ChessApp extends JFrame{
         style.setPreferredSize(new Dimension(2,2));
         //Add them___________________________________________________________
         connect.add(scrollUsers);
-        connect.add(scrollGroups);  
+        //connect.add(scrollGroups); //future implementation  
         input.add(sendbtn);
         input.add(userinput);
         input.add(nicklabel);
@@ -137,7 +137,7 @@ public class ChessApp extends JFrame{
         chat.add("South",input); 
         options.add(login);
         options.add(register);        
-        masterpanel.add("North", options);
+        // masterpanel.add("North", options); //future implementation
         masterpanel.add("Center", chat);
         masterpanel.add("West", connect);
         masterpanel.add("East", style); //Just for style, future game moves
@@ -175,6 +175,7 @@ public class ChessApp extends JFrame{
         ChessApp.userId = id;
         nicklabel.setText(nick);
         new ScreenCtrl(this, cnf);
+        ScreenCtrl.setChats("", "local", 0,""); //init local board 
         if(id > -1){Request.searchUsersOnline(nick, id);} 
     }
       
@@ -212,6 +213,11 @@ public class ChessApp extends JFrame{
     public JTextField userinput = new JTextField(38);
     public JTextArea chatxt = new JTextArea(10,50);
 }
-
+//(>)Send messages
+//(>)Send moves
+//(>)Select color
+//(>)Change turn
+//(>)End of game reset
+//(*>)IF LOCAL HIDE CHAT
 //(*>)OPTION PANEL ALLOCATES OPTIONS LIKE: MAKE PUBLIC; DDRAW; FORFEIT
 //(*>)INFOPANEL

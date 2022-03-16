@@ -106,7 +106,9 @@ public class SearchServer {
                 socket.close();
            
             //(!) Further error management needed     
-            } catch(IOException ex){ ex.printStackTrace(); }
+            } catch(IOException ex){ 
+                System.out.println("Server is not at: "+ip+i);
+            }
         }
     }
 

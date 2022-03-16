@@ -37,10 +37,10 @@ public class ScreenCtrl {
 //=============================================================================
     public static void setChats(String ip, String nick, int id, String chatid) {
         String space = "                ";
-        //Needs also a checker for public ips        
+        //Only checks local ip        
         boolean own = ip.equals(Request.ownip);
          
-       //avoid infinite userbutton adding. Only add it if didn't exist
+       //Avoid infinite userbutton adding. Only add it if didn't exist
         if(own){return;}
         if(app.storage.get(ip)!=null){            
             Memory m = app.storage.get(ip);
@@ -54,7 +54,7 @@ public class ScreenCtrl {
         }
         
         JToggleButton btn = new JToggleButton(nick+space, cnf.EYE_OPEN);
-        btn.addActionListener((ActionEvent e) -> {renderAllTheShit(e);});  
+        btn.addActionListener((ActionEvent e) -> {appRedrawOnChatSelected(e);});  
         
         HashMap<String[], Integer> users = new HashMap<>();
         users.put(new String[]{ip, nick}, id); 
@@ -68,7 +68,7 @@ public class ScreenCtrl {
         app.users.validate();         
     }
     
-    private static void renderAllTheShit(ActionEvent e) {
+    private static void appRedrawOnChatSelected(ActionEvent e) {
         JToggleButton btn = (JToggleButton) e.getSource();
         for(Memory m : app.storage.values()){
             if(btn != m.btn){continue;}

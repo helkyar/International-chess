@@ -27,7 +27,7 @@ import server.dbconnect.managers.UserManager;
 
 /**
  *
- * @author admin
+ * @author javier
  */
 public class Server extends JFrame implements Runnable{
     private static int guest = 0;
@@ -72,6 +72,8 @@ public class Server extends JFrame implements Runnable{
                     case "register": setNewRegisterUser(p); break;
                     case "login":    getLoginPassword(p); break;
                     case "online":   getUsersOnline(p); break;
+                    case "message":  sendMessage(p); break;                    
+                    case "play":     sendMove(p); break;
                 }      
 
             } catch (Exception ex) {ex.printStackTrace();}
@@ -124,6 +126,14 @@ public class Server extends JFrame implements Runnable{
         
         System.out.println("User:"+p.getNick() +"@"+ p.getIp());
         for(String userip : ips.keySet()){response(p, userip);}        
+    }
+    
+    private void sendMessage(Packager p) {
+    
+    }
+
+    private void sendMove(Packager p) {
+    
     }
  // ===========================================================================
  //                            RESPONSE
