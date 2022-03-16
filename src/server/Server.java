@@ -133,11 +133,13 @@ public class Server extends JFrame implements Runnable{
             if(p.getIp().equals(ip[0])){continue;}
             response(p, ip[0]);
         }
-//        response(p, p.getM().);
     }
 
-    private void sendMove(Packager p) {
-    
+    private void sendMove(Packager p)throws IOException {
+        for(String[] ip : p.getMemory().users.keySet()){
+            if(p.getIp().equals(ip[0])){continue;}
+            response(p, ip[0]);
+        }
     }
  // ===========================================================================
  //                            RESPONSE

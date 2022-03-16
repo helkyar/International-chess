@@ -45,7 +45,8 @@ class Response implements Runnable{
                     case "login":    setLoginMessage(p); break;
                     case "register": setRegisterMessage(p); break;                     
                     case "online":   setUsersOnline(p); break;        
-                    case "message":  sendMessage(p); break;                
+                    case "message":  sendMessage(p); break;           
+                    case "play":     sendMove(p); break;                
 //                        case "getusers": setUsersOnline(p); break;
 //                        case "managegroup": serverMembersResponse(p); break;
 //                        case "groupusers":  informChatUsers(p); break;                       
@@ -75,7 +76,11 @@ class Response implements Runnable{
     }
 
     private void sendMessage(Packager p) {
-       ChatController.sendMessageFromServer(p.getMemory());
+       ChatController.setMessageFromServer(p.getMemory());
+    }
+
+    private void sendMove(Packager p) {
+        ChatController.setMoveFromServer(p.getMemory());
     }
 }
     

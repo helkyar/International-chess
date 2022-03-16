@@ -73,6 +73,18 @@ public class Request {
             }               
         } catch (IOException ex) {ex.printStackTrace();}
     }
+    
+    public static void sendMove(Memory m) {     
+        try {
+            try (Socket socket = new Socket(server,9999)) {
+                Packager p = new Packager();
+                p.setStatus("play");
+                p.setMemory(m);
+                p.setIp(ownip); //to compare on the server side
+                sendRequest(p, socket);
+            }               
+        } catch (IOException ex) {ex.printStackTrace();}
+    }
 //=============================================================================
 //                        SEND REQUEST
 //=============================================================================
@@ -82,5 +94,4 @@ public class Request {
         objp.writeObject(p);
         s.close();
     }
-
 }

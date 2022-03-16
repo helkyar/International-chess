@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import onlinechess.controller.chat.ChatController;
 import onlinechess.controller.game.pieces.PiecesChess;
 import onlinechess.views.ChessApp;
 import static onlinechess.views.ChessApp.appicon;
@@ -88,8 +89,6 @@ public class Game extends JPanel implements ActionListener{
         JButton btn = (JButton) e.getSource();
         String tile = btn.getName();
         //Test -----------------------------------------------------------------
-//        System.out.println(board.getPosition(btn));      
-//        System.out.println(board.getTilePiece(board.getPosition(btn)));
         if(e.getActionCommand().equals("T")){test();return;}
         
         //Turn checker ---------------------------------------------------------
@@ -125,6 +124,7 @@ public class Game extends JPanel implements ActionListener{
             
             isThereaWinner();
             isPawnInTheEnd(btn);
+            ChatController.sendMoveMade();//(!)Agnosticism break
             
         //deselect without move ------------------------------------------------   
         } else if (selected) {

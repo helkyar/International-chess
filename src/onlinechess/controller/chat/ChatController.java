@@ -44,7 +44,7 @@ public class ChatController implements ActionListener{
     }
     
     private void sendMessageToChat(String txt){        
-        String msg = df.format(new Date())+" ["+app.nick+"]:\n"+txt + "\n";
+        String msg = df.format(new Date())+" ["+app.nick+"]:\n"+txt + "\n\n";
 
         try{
             System.out.println(app.chatId);
@@ -61,11 +61,23 @@ public class ChatController implements ActionListener{
         }
    }
     
-    public static void sendMessageFromServer(Memory m){
+    public static void setMessageFromServer(Memory m){
         Memory mem = app.storage.get(m.chatId);
         mem.msg +=  m.msg;
-        mem.game = m.game;
+        app.storage.put(m.chatId, mem);
+        ScreenCtrl.appRedrawOnChatSelected(mem.btn);
+    }
+    
+    public static void sendMoveMade() {
+        Memory m = app.storage.get(app.chatId);
+        Request.sendMove(m);
+    }
+    
+    public static void setMoveFromServer(Memory m) {
+         Memory mem = app.storage.get(m.chatId);
+        mem.game =  m.game;
         app.storage.put(m.chatId, mem);
         ScreenCtrl.appRedrawOnChatSelected(mem.btn);
     }
 }
+//(>)Group consecutive same user messages 
