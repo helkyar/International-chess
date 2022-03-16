@@ -57,7 +57,7 @@ public class SearchServer {
         }
         badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
-        String ip = (String) NetUtils.getLocalIp().get(2);        
+        String ip = (String) NetUtils.getLocalIp().get(1); //(!)needs dynamic ip
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
         if(!loop){return;}        

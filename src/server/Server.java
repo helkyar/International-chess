@@ -128,8 +128,11 @@ public class Server extends JFrame implements Runnable{
         for(String userip : ips.keySet()){response(p, userip);}        
     }
     
-    private void sendMessage(Packager p) {
-    
+    private void sendMessage(Packager p) throws IOException {
+        for(String[] ip : p.getMemory().users.keySet()){
+            response(p, ip[0]);
+        }
+//        response(p, p.getM().);
     }
 
     private void sendMove(Packager p) {

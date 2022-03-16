@@ -19,7 +19,7 @@ import onlinechess.views.ChessApp;
  * @author javier
  */
 public class ChatController implements ActionListener{
-    ChessApp app;    
+    static ChessApp app;    
     private DateFormat df;
     
     public ChatController(ChessApp app){
@@ -51,4 +51,8 @@ public class ChatController implements ActionListener{
         m.msg = message;
         Request.sendMessage(m, msg);
    }
+    
+    public static void sendMessageFromServer(Memory m){
+        app.chatxt.append(m.msg);
+    }
 }

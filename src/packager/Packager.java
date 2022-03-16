@@ -42,6 +42,6 @@ public class Packager implements Serializable{
     public String getEmail(){return email;}
     public int getId() {return id;}
 
-    public Memory getM() {return m;}
+    public Memory getMemory() {return m;}
     public void setMemory(Memory m) {this.m = m;}   
 }

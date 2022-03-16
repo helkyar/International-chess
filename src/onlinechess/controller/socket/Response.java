@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import onlinechess.controller.ScreenCtrl;
+import onlinechess.controller.chat.ChatController;
 import onlinechess.controller.session.InputValidator;
 import onlinechess.views.Session;
 import packager.Packager;
@@ -43,9 +44,9 @@ class Response implements Runnable{
                 switch(p.getStatus()){
                     case "login":    setLoginMessage(p); break;
                     case "register": setRegisterMessage(p); break;                     
-                    case "online":   setUsersOnline(p); break;                        
+                    case "online":   setUsersOnline(p); break;        
+                    case "message":  sendMessage(p); break;                
 //                        case "getusers": setUsersOnline(p); break;
-//                        case "message":  sendMessage(p); break;
 //                        case "managegroup": serverMembersResponse(p); break;
 //                        case "groupusers":  informChatUsers(p); break;                       
 //                        case "changeusers": refreshGroups(p); break;                
@@ -71,6 +72,10 @@ class Response implements Runnable{
             System.out.println("User:"+p.getIps().get(ip) +"@"+ ip);
             ScreenCtrl.setChats(ip, p.getIps().get(ip), p.getId(), p.getInfo());
         }  
+    }
+
+    private void sendMessage(Packager p) {
+       ChatController.sendMessageFromServer(p.getMemory());
     }
 }
     
