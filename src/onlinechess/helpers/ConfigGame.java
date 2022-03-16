@@ -6,6 +6,7 @@ package onlinechess.helpers;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  *
  * @author Javier Palacios Botejara
  */
-public class ConfigGame {
+public class ConfigGame implements Serializable {
 
     public static Dimension context;
     private final int rows = 0; //extra-minus rows
