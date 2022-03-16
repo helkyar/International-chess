@@ -51,6 +51,7 @@ public class ChatController implements ActionListener{
             app.chatxt.append(msg);
             String message = app.chatxt.getText() + "\n";
             m.msg = message;
+            if(app.chatId.equals("")){ return; }
             Request.sendMessage(m, msg);
             
         }catch(java.lang.NullPointerException e){
@@ -59,7 +60,7 @@ public class ChatController implements ActionListener{
    }
     
     public static void sendMessageFromServer(Memory m){
-        System.out.println("mesagesend");
+        System.out.println(m.chatId);
         Memory mem = app.storage.get(m.chatId);
 //        app.chatxt.append(m.msg);
         m.msg = mem.msg + m.msg;
