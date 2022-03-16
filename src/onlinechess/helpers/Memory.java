@@ -4,6 +4,7 @@
  */
 package onlinechess.helpers;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JToggleButton;
@@ -13,7 +14,7 @@ import onlinechess.controller.game.Game;
  *
  * @author javier
  */
-public class Memory {
+public class Memory implements Serializable {
 
     public Memory(Game game, String message, String chatid, 
      HashMap<String[], Integer> useripmap, JToggleButton button){

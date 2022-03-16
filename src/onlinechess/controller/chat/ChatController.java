@@ -53,6 +53,7 @@ public class ChatController implements ActionListener{
    }
     
     public static void sendMessageFromServer(Memory m){
+        System.out.println("mesagesend");
         app.chatxt.append(m.msg);
     }
 }

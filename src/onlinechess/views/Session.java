@@ -398,3 +398,4 @@ public class Session extends JDialog{
 //(>)ENTER SENDS REQUEST
 //(>)VALIDATE FORM
 //(>)VALIDATION ERROR
+//(>)SEND ON INTRO
