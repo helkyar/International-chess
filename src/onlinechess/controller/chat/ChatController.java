@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import onlinechess.controller.ScreenCtrl;
 import onlinechess.controller.socket.Request;
 import onlinechess.helpers.Memory;
 import onlinechess.views.ChessApp;
@@ -61,12 +62,10 @@ public class ChatController implements ActionListener{
    }
     
     public static void sendMessageFromServer(Memory m){
-        System.out.println(m.chatId);
         Memory mem = app.storage.get(m.chatId);
-//        app.chatxt.append(m.msg);
         mem.msg +=  m.msg;
         mem.game = m.game;
         app.storage.put(m.chatId, mem);
-        System.out.println(app.storage.get(m.chatId).msg);
+        ScreenCtrl.appRedrawOnChatSelected(mem.btn);
     }
 }

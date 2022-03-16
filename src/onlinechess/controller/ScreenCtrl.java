@@ -70,6 +70,15 @@ public class ScreenCtrl {
     
     private static void appRedrawOnChatSelected(ActionEvent e) {
         JToggleButton btn = (JToggleButton) e.getSource();
+        appRedrawScreen(btn);
+        //when message send include chatid, adressip, 
+    }    
+    
+    public static void appRedrawOnChatSelected(JToggleButton btn){
+        appRedrawScreen(btn);
+    }
+    
+    private static void appRedrawScreen(JToggleButton btn){
         for(Memory m : app.storage.values()){
             if(btn != m.btn){continue;}
             app.chatId = m.chatId;
@@ -79,8 +88,7 @@ public class ScreenCtrl {
         }
         app.screen.repaint();
         app.screen.validate();
-        //when message send include chatid, adressip, 
-    }    
+    }
     //Function: Inserts buttons into a referenced panel and groupbutton
     //Problem: setting variables adress and chat
 }
