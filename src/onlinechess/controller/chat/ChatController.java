@@ -64,7 +64,9 @@ public class ChatController implements ActionListener{
         System.out.println(m.chatId);
         Memory mem = app.storage.get(m.chatId);
 //        app.chatxt.append(m.msg);
-        m.msg = mem.msg + m.msg;
-        app.storage.put(m.chatId, m);
+        mem.msg +=  m.msg;
+        mem.game = m.game;
+        app.storage.put(m.chatId, mem);
+        System.out.println(app.storage.get(m.chatId).msg);
     }
 }
