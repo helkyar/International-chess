@@ -53,7 +53,7 @@ public class ScreenCtrl {
             return;
         }
         
-        JToggleButton btn = new JToggleButton(nick+space, cnf.EYE_OPEN);
+        JToggleButton btn = new JToggleButton(nick+space, cnf.USER);
         btn.addActionListener((ActionEvent e) -> {appRedrawOnChatSelected(e);});  
         
         HashMap<String[], Integer> users = new HashMap<>();

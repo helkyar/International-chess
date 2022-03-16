@@ -132,7 +132,7 @@ public class ChessApp extends JFrame{
         input.add(sendbtn);
         input.add(userinput);
         input.add(nicklabel);
-        screen.add(chatxt);
+        screen.add(new JScrollPane(chatxt));
         chat.add("Center",screen);
         chat.add("South",input); 
         options.add(login);

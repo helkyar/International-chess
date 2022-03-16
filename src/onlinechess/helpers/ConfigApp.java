@@ -24,6 +24,7 @@ public class ConfigApp {
     public final ImageIcon EYE_OPEN = new ImageIcon("img/+eye.png");
     public final ImageIcon LOAD_ICON = new ImageIcon("img/load.gif");
     public final ImageIcon DESCONNECTED = new ImageIcon("img/disconnect.png");
+    public final ImageIcon USER = new ImageIcon("img/user.png");
     public final ImageIcon MINICONNECTED = new ImageIcon("img/minidesco.png");
     private final String warning = "\n\nChats & Boards \nwont be saved!";
     public final String enter = "\n\n\n\n\n\n\n\n";
