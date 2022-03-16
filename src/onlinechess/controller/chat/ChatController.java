@@ -21,8 +21,9 @@ import onlinechess.views.ChessApp;
  * @author javier
  */
 public class ChatController implements ActionListener{
-    static ChessApp app;    
+    private static ChessApp app;    
     private DateFormat df;
+    public static boolean userturn = true;
     
     public ChatController(ChessApp app){
         this.app = app;
@@ -71,6 +72,7 @@ public class ChatController implements ActionListener{
     public static void sendMoveMade() {
         Memory m = app.storage.get(app.chatId);
         Request.sendMove(m);
+        userturn = false;
     }
     
     public static void setMoveFromServer(Memory m) {
@@ -78,6 +80,7 @@ public class ChatController implements ActionListener{
         mem.game =  m.game;
         app.storage.put(m.chatId, mem);
         ScreenCtrl.appRedrawOnChatSelected(mem.btn);
+        userturn = true;
     }
 }
 //(>)Group consecutive same user messages 

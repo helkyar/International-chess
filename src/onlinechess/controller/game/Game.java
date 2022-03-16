@@ -110,7 +110,7 @@ public class Game extends JPanel implements ActionListener{
             blackTurn = !blackTurn;
             
         //Move piece if allowed ------------------------------------------------
-        } else if(selected && allowedMove(btn, tile)){  
+        } else if(selected && allowed(btn, tile) && ChatController.userturn){  
             if(enPessant && reset==0){enPessant = false;}
             reset = 0;
             prev.setIcon(null);
@@ -142,7 +142,7 @@ public class Game extends JPanel implements ActionListener{
      * @param target tile to move to.
      * @return 
      */
-    private boolean allowedMove(JButton btn, String target){
+    private boolean allowed(JButton btn, String target){
         int to = board.getPosition(btn);
         int from = board.getPosition(prev);
      
