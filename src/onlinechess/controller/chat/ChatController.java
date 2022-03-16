@@ -46,6 +46,7 @@ public class ChatController implements ActionListener{
         String msg = df.format(new Date())+" ["+app.nick+"]:\n"+txt + "\n";
 
         try{
+            System.out.println(app.chatId);
             Memory m = app.storage.get(app.chatId);
             app.userinput.setText("");
             app.chatxt.append(msg);
