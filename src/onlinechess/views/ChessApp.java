@@ -176,6 +176,7 @@ public class ChessApp extends JFrame{
         nicklabel.setText(nick);
         new ScreenCtrl(this, cnf);
         ScreenCtrl.setChats("", "local", 0,""); //init local board 
+        ScreenCtrl.setChats(".", "juan", 0,"."); //init local board 
         if(id > -1){Request.searchUsersOnline(nick, id);} 
     }
       
@@ -220,4 +221,9 @@ public class ChessApp extends JFrame{
 //(>)End of game reset
 //(*>)IF LOCAL HIDE CHAT
 //(*>)OPTION PANEL ALLOCATES OPTIONS LIKE: MAKE PUBLIC; DDRAW; FORFEIT
-//(*>)INFOPANEL
+//(*>)SIDE INFOPANEL
+//(*>)GROUP BROADCAST
+//(*>)ABOUT SECTION
+//(*>)LOGIN AND REGISTER OPTIONS
+//(*>)RECONNCET -> RETRY
+//(*>)STYLE

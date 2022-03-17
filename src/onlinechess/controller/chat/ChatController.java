@@ -70,17 +70,18 @@ public class ChatController implements ActionListener{
     }
     
     public static void sendMoveMade() {
+        if(app.chatId.equals("")){ return; }
         Memory m = app.storage.get(app.chatId);
+        m.game.userturn = false;
         Request.sendMove(m);
-        userturn = false;
     }
     
     public static void setMoveFromServer(Memory m) {
-         Memory mem = app.storage.get(m.chatId);
+        Memory mem = app.storage.get(m.chatId);
         mem.game =  m.game;
         app.storage.put(m.chatId, mem);
         ScreenCtrl.appRedrawOnChatSelected(mem.btn);
-        userturn = true;
+        m.game.userturn = true;
     }
 }
 //(>)Group consecutive same user messages 

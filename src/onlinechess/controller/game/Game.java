@@ -29,7 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import onlinechess.controller.chat.ChatController;
 import onlinechess.controller.game.pieces.PiecesChess;
-import onlinechess.views.ChessApp;
 import static onlinechess.views.ChessApp.appicon;
 
 /**
@@ -47,6 +46,7 @@ public class Game extends JPanel implements ActionListener{
     public Board board;
     private boolean blackTurn;
     
+    public boolean userturn = true;
     public String pawnPessant; //pawn reference (*)
     public boolean enPessant; //en pessant possibility
     public int posPessant; //position of phantom pawn
@@ -96,7 +96,7 @@ public class Game extends JPanel implements ActionListener{
             (ConfigGame.WHITES.contains(tile) && !blackTurn)||
             (ConfigGame.BLACKS.contains(tile) && blackTurn)
         );
-        
+               
         //Select tile ----------------------------------------------------------
         if(!selected && !tile.equals("-") && correctTurn){ 
             prev = btn;
@@ -110,7 +110,7 @@ public class Game extends JPanel implements ActionListener{
             blackTurn = !blackTurn;
             
         //Move piece if allowed ------------------------------------------------
-        } else if(selected && allowed(btn, tile) && ChatController.userturn){  
+        } else if(selected && allowed(btn, tile) && userturn){  
             if(enPessant && reset==0){enPessant = false;}
             reset = 0;
             prev.setIcon(null);
@@ -302,9 +302,13 @@ public class Game extends JPanel implements ActionListener{
                     !PiecesChess.isDiffTeam(k, board.getTilePiece(pos + 3), board.w, board.h))
             {castlingAllowed.put(pos, pos+3);}
         //Remove if moved (not working)
-        } else if (castlingAllowed.containsKey(pos) && !board.getTilePiece(castlingAllowed.get(pos)).equals("-") &&
-          !PiecesChess.isDiffTeam(board.getTilePiece(pos), board.getTilePiece(castlingAllowed.get(pos)), board.w, board.h)){
-            castlingDef.put(pos, castlingAllowed.get(pos));
+        } else if (
+            castlingAllowed.containsKey(pos) 
+            && !board.getTilePiece(castlingAllowed.get(pos)).equals("-") 
+            && !PiecesChess.isDiffTeam(board.getTilePiece(pos),
+            board.getTilePiece(castlingAllowed.get(pos)), board.w, board.h)
+        ){
+                castlingDef.put(pos, castlingAllowed.get(pos));
         }        
     }
 
@@ -313,10 +317,12 @@ public class Game extends JPanel implements ActionListener{
             JOptionPane.showMessageDialog(this, "End-Game", "Black Wins!", 0, appicon);
             board.setState(board.record.get(0));
             blackTurn = false;
+            board.setState(board.record.get(0));
         }else if(!board.getState().contains("K")){
             JOptionPane.showMessageDialog(this, "End-Game", "White Wins!", 0, appicon);
             board.setState(board.record.get(0));
             blackTurn = false;
+            board.setState(board.record.get(0));
         }
         
     }
