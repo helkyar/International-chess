@@ -51,13 +51,15 @@ public class SearchServer {
         boolean localNet = NetUtils.getLocalIp().size() > 0;
         if(!localNet || !NetUtils.isConnected()){
             session.badConnection(); 
-            System.out.println("Local: " + localNet + "Internet:" +!NetUtils.isConnected());
             badconnection = true; 
             return;
         }
         badconnection = false;
     //SEARCH SERVER IP IN CLIENT NET __________________________________________
-        String ip = (String) NetUtils.getLocalIp().get(1); //(!)needs dynamic ip
+        String ip = (String) NetUtils.getLocalIp().get(1);
+        System.out.println("ip"+ip);
+        String iface = ip.split(".")[3];
+        if(iface.equals("1")){ip = (String) NetUtils.getLocalIp().get(2);}
         ip = ip.substring(0, ip.lastIndexOf(".")+1);
         //Check 255 local ips searching for server
         if(!loop){return;}        
@@ -81,6 +83,7 @@ public class SearchServer {
             
             session.serverResponseTimeout();
             session.setInfoLabel("TIMEOUT");
+            ((Timer)e.getSource()).stop();
         }).start();       
     }
         
