@@ -22,7 +22,7 @@ public class ConfigApp {
     public final ImageIcon CLOSE_ICON = new ImageIcon("img/cross.png");
     public final ImageIcon EYE_CLOSE = new ImageIcon("img/-eye.png");
     public final ImageIcon EYE_OPEN = new ImageIcon("img/+eye.png");
-    public final ImageIcon LOAD_ICON = new ImageIcon("img/load.gif");
+    public final ImageIcon LOAD_ICON = new ImageIcon("img/load.png");
     public final ImageIcon DESCONNECTED = new ImageIcon("img/disconnect.png");
     public final ImageIcon USER = new ImageIcon("img/user.png");
     public final ImageIcon MINICONNECTED = new ImageIcon("img/minidesco.png");

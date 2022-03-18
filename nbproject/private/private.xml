@@ -3,11 +3,29 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/javier/Desktop/chess/ChessOnline/src/onlinechess/views/ChessApp.java</file>
-            <file>file:/C:/Users/javier/Desktop/chess/ChessOnline/src/onlinechess/helpers/Memory.java</file>
-            <file>file:/C:/Users/javier/Desktop/chess/ChessOnline/src/onlinechess/controller/chat/ChatController.java</file>
-            <file>file:/C:/Users/javier/Desktop/chess/ChessOnline/src/onlinechess/controller/game/Game.java</file>
-            <file>file:/C:/Users/javier/Desktop/chess/ChessOnline/src/onlinechess/controller/socket/SearchServer.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/helpers/ConfigGame.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/models/GameModel.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/controller/socket/SearchServer.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/models/ChatModel.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/views/ChessApp.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/controller/ScreenCtrl.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/managers/ChatManager.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/README.md</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/controller/chat/ChatController.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/controller/socket/Response.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/managers/GameManager.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/models/MessageModel.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/NewUser.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/controller/socket/Request.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/helpers/Memory.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/managers/MessageManager.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/controller/game/Game.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/views/Session.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/packager/Packager.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/managers/MoveManager.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/dbconnect/models/MoveManager.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/server/Server.java</file>
+            <file>file:/E:/0Formación/NetBeans/onlinechess/src/onlinechess/helpers/ConfigApp.java</file>
         </group>
     </open-files>
 </project-private>

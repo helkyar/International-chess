@@ -4,6 +4,8 @@
  */
 package server;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,6 +23,8 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import onlinechess.helpers.LogGen;
 
 import packager.Packager;
 import server.dbconnect.managers.UserManager;
@@ -42,7 +46,16 @@ public class Server extends JFrame implements Runnable{
         
         add(new JScrollPane(txt));
         setSize(400,100);
-        setVisible(true);
+        setVisible(true);   
+        
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                LogGen.info("Session ended");
+                System.exit(0);
+            }
+        });
     }
     
     public static void main(String[] args) {

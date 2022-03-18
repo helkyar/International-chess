@@ -129,7 +129,7 @@ public class Session extends JDialog{
         setResizable(false);
         setSize(w,h);
         
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parent);
         setUndecorated(true);
                 
     //INIT SEARCH SERVER ______________________________________________________

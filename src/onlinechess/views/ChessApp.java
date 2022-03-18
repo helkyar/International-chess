@@ -85,8 +85,9 @@ public class ChessApp extends JFrame{
         setIconImage(appicon.getImage());
         
         setSize(800,800);    
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setVisible(true);
+        setLocationRelativeTo(null);
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -176,7 +177,6 @@ public class ChessApp extends JFrame{
         nicklabel.setText(nick);
         new ScreenCtrl(this, cnf);
         ScreenCtrl.setChats("", "local", 0,""); //init local board 
-        ScreenCtrl.setChats(".", "juan", 0,"."); //init local board 
         if(id > -1){Request.searchUsersOnline(nick, id);} 
     }
       
