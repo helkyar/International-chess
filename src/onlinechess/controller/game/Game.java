@@ -333,9 +333,3 @@ public class Game extends JPanel implements ActionListener{
         if(Integer.parseInt(choose) % 2 == 0){blackTurn = false;}
     }
 }
-
-/**
- * Pawn bounds
- * Bishop bugs
- * Castling **
- */
