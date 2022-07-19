@@ -9,7 +9,13 @@
 ## Design
 ## Next steps
 **Efficiency**  
-> Minimize number of calculation (such as loops)
-> Evaluate fast calculations for allowed positions first
-> Search more efficient ways for time consuming evaluations such as check-mate
-> Try to avoid entire board evaluations
+> Minimize number of calculation (such as loops)  
+> Evaluate fast calculations for allowed positions first  
+> Search more efficient ways for time consuming evaluations such as check-mate  
+> Try to avoid entire board evaluations  
+  
+**IA**  
+> Implement autoplay with IA* algorithm  
+  
+**Refactoring**  
+> Aply design patterns to current class structure  
